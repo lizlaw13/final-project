@@ -11,9 +11,13 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    first_name = db.Column(db.String(200), nullable=True)
-    last_name = db.Column(db.String(200), nullable=True)
+    user_id = db.Column(db.Integer, 
+        autoincrement=True, 
+        primary_key=True)
+    first_name = db.Column(db.String(200), 
+        nullable=True)
+    last_name = db.Column(db.String(200), 
+        nullable=True)
     email = db.Column(db.String(200))
     password = db.Column(db.String(20))
 
@@ -27,7 +31,9 @@ class Mood(db.Model):
 
     __tablename__ = "moods"
 
-    mood_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    mood_id = db.Column(db.Integer, 
+        autoincrement=True, 
+        primary_key=True)
     mood = db.Column(db.String(15))
 
     def _repr__(self):
@@ -40,9 +46,10 @@ class Activity_Category(db.Model):
 
     __tablename__ = "activities"
 
-    activity_category_id = db.Column(db.Integer, autoincrement=True, 
+    activity_category_id = db.Column(db.Integer, 
+        autoincrement=True, 
         primary_key=True)
-    category = db.Column(db.String_(15))
+    category = db.Column(db.String(15))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -55,17 +62,25 @@ class Activity_Category_Description(db.Model):
 
     __tablename__ = "descriptions"
 
-    description_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    activity_category_id = (db.Integer, 
+    description_id = db.Column(db.Integer, 
+        autoincrement=True, 
+        primary_key=True)
+    user_id = db.Column(db.Integer, 
+        db.ForeignKey("users.user_id"))
+    activity_category_id = db.Column(db.Integer, 
         db.ForeignKey("activities.activity_category_id"))
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text, 
+        nullable=True)
+
+    users = db.relationship('User', backref = "descriptions")
+    categories = db.relationship('Activity_Category', backref = "descriptions")
+
 
     def __repr__(self):
-    """Provide helpful representation when printed."""
+        """Provide helpful representation when printed."""
 
-    return f"""<Activity Category Description description_id={self.description_id}
-        user_id= {self.user_id}ctivity_category_id={self.activity_category_id}>"""
+        return f"""<Activity Category Description description_id={self.description_id}
+            user_id= {self.user_id}ctivity_category_id={self.activity_category_id}>"""
 
 
 class User_Mood(db.Model):
@@ -73,15 +88,22 @@ class User_Mood(db.Model):
 
     __tablename__ = "user_moods"
 
-    user_mood_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    mood_id = db.Column(db.Integer, db.ForeignKey("moods.mood_id"))
+    user_mood_id = db.Column(db.Integer, 
+        autoincrement=True, 
+        primary_key=True)
+    user_id = db.Column(db.Integer, 
+        db.ForeignKey("users.user_id"))
+    mood_id = db.Column(db.Integer, 
+        db.ForeignKey("moods.mood_id"))
+
+    users = db.relationship('User', backref = "user_moods")
+    moods = db.relationship('Mood', backref = "user_moods")
 
     def __repr__(self):
-    """Provide helpful representation when printed."""
+        """Provide helpful representation when printed."""
 
-    return f"""<User Mood user_mood_id={self.user_mood_id}
-        user_id={self.user_id} mood_id={self.mood_id}>"""
+        return f"""<User Mood user_mood_id={self.user_mood_id}
+            user_id={self.user_id} mood_id={self.mood_id}>"""
 
 
 class User_Activity(db.Model):
@@ -90,9 +112,16 @@ class User_Activity(db.Model):
 
     __tablename__ = "user_activities"
 
-    user_activity_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    activity_category_id = db.Column(db.Integer, db.ForeignKey("activities.activity_category_id"))
+    user_activity_id = db.Column(db.Integer,  
+        autoincrement=True, 
+        primary_key=True)
+    user_id = db.Column(db.Integer, 
+        db.ForeignKey("users.user_id"))
+    activity_category_id = db.Column(db.Integer, 
+        db.ForeignKey("activities.activity_category_id"))
+
+    users = db.relationship('User', backref ="user_activities")
+    categories = db.relationship('Activity_Category', backref = "user_activities")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -105,9 +134,15 @@ class Mood_Enhancer(db.Model):
 
     __tablename__ = "mood_enhancers"
 
-    mood_enhancer_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    mood_enhancer = db.Column(db.Text, nullable=True)
+    mood_enhancer_id = db.Column(db.Integer, 
+        autoincrement=True, 
+        primary_key=True)
+    user_id = db.Column(db.Integer, 
+        db.ForeignKey("users.user_id"))
+    mood_enhancer = db.Column(db.Text, 
+        nullable=True)
+
+    users = db.relationship('User', backref = "mood_enhancers")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -120,9 +155,15 @@ class User_Brain_Dump(db.Model):
 
     __tablename__ = "user_brain_dumps"
 
-    user_brain_dump_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    brain_dump_entry = db.Column(db.Text, nullable=True)
+    user_brain_dump_id = db.Column(db.Integer, 
+        autoincrement=True, 
+        primary_key=True)
+    user_id = db.Column(db.Integer, 
+        db.ForeignKey("users.user_id"))
+    brain_dump_entry = db.Column(db.Text, 
+        nullable=True)
+
+    users = db.relationship('User', backref = "user_brain_dumps")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -141,6 +182,10 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
+
+    # Used to recreate my database if I need to drop
+    # db.create_all()
+
 
 
 if __name__ == "__main__":

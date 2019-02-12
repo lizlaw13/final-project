@@ -3,7 +3,10 @@
 from flask import (Flask, render_template, redirect, request, flash,
                    session, url_for)
 from flask_sqlalchemy import SQLAlchemy
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
+
+from model import *
+
 
 app = Flask(__name__)
 
@@ -28,6 +31,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(port=5000, host='0.0.0.0')
