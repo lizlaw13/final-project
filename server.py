@@ -20,13 +20,42 @@ def index():
 
     return render_template("index.html")
 
+@app.route('/login', methods=['GET'])
+def login():
+    """Show login form."""
+
+    return render_template("login.html")
+
+@app.route('/login', methods=["POST"])
+def login_form():
+    """Allow users to login"""
+
+    # retrieving email and password from user
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    user = User.query.filter_by(password=password).first()
+
+    session["user_id"] = user.user_id
+
+    return redirect(f"/user/{user.user_id}")
+
+
+@app.route("/user/<int:user_id>")
+def user_homepage(user_id):
+    """Show user specific homepage."""
+
+    user = User.query.get(user_id)
+    return render_template("user-homepage.html", user=user)
+
+
 @app.route('/add-entry', methods=["POST"])
 def add_entry():
 
     # query to get the values of the moods from database
     moods = Mood.query.all()
 
-    # retreiving mood and activities from the user
+    # retrieving mood and activities from the user
     mood = request.form.get("mood")
     print(mood)
     activities = request.form.get("activity_category")
