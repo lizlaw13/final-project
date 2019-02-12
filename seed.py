@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     # db.session.rollback()
 
-    # Import different types of data
-    # load_moods()
+    # Import  data
+    load_moods()
     load_cateogories()
     load_users()

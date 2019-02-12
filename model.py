@@ -36,7 +36,7 @@ class Mood(db.Model):
         primary_key=True)
     mood = db.Column(db.String(15))
 
-    def _repr__(self):
+    def __repr__(self):
         """Provide helpful representation when printed."""
        
         return f"<Mood mood_id={self.mood_id} mood={self.mood}>"
