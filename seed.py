@@ -49,8 +49,8 @@ Ashley = User(email="ash@gmail.com", password="corg123")
 Jess = User(email="jess@gmail.com", password="hm123")
 Sarah = User(email="sarah@gmail.com", password="mentor122")
 Eric = User(email="eric@gmail.com", password="mentor123")
-Jess.entries.append(Entry(mood=Fantastic, activity_category=Work))
-Liz.entries.append(Entry(mood=Terrible, activity_category=Social))
+# Jess.entries.append(Entry(mood=Fantastic, activity_category=Work))
+# Liz.entries.append(Entry(mood=Terrible, activity_category=Social))
 
 db.session.add(Liz)
 db.session.add(Ashley)
@@ -61,15 +61,3 @@ db.session.add(Eric)
 db.session.commit()
 
     
-
-# if __name__ == "__main__":
-#     connect_to_db(app)
-
-#     # In case tables haven't been created, create them
-
-#     # db.session.rollback()
-
-#     # Import  data
-#     load_moods()
-#     # load_cateogories()
-#     # load_users()

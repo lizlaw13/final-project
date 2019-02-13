@@ -66,7 +66,7 @@ class Activity_Category(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"{self.activity_category_id}"
+        return f"<Activity activity_category_id={self.activity_category_id} category={self.category}>"
 
 
 class Entry(db.Model):

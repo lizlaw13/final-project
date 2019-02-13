@@ -47,11 +47,13 @@ def user_homepage(user_id):
     """Show user specific homepage."""
 
     user = User.query.get(user_id)
+    moods = Mood.query.all()
 
-    return render_template("user-homepage.html", user=user)
+
+    return render_template("user-homepage.html", user=user, moods=moods)
 
 
-@app.route('/add-entry', methods=["POST"])
+@app.route('/add-entry', methods=["POST", "GET"])
 def add_entry():
 
     # retreive logged in user_id from the database
@@ -65,7 +67,7 @@ def add_entry():
     user = User.query.get(user_id)
 
     # grab the mood and activities from the database
-    mood = Mood.query.filter_by(mood=user_mood).first()
+    mood = Mood.query.filter_by(mood_id=user_mood).first()
 
     activity = Activity_Category.query.filter_by(category=user_activities).first()
 
@@ -78,7 +80,11 @@ def add_entry():
 
     db.session.commit()
 
-    return render_template("add-entry.html", user=user)
+    # pass the infromation the user submitted to the template
+    info = user.entries[0]
+
+
+    return render_template("add-entry.html", info=info)
 
 
 if __name__ == "__main__":

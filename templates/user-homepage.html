@@ -2,14 +2,12 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<form action="/add-entry" method="POST">
+<form action="/add-entry" method= "GET" method="POST">
     Select a mood: <br> <br>
-    Fantastic <input type="radio" name= "mood" value="fantastic">
-    Good <input type="radio" name= "mood" value="good">
-    Neutral <input type="radio" name= "mood" value="neutral">
-    Sad/Bad <input type="radio" name= "mood" value="sad_bad">
-    Terrible <input type="radio" name= "mood" value="terrible">
+    {% for mood in moods %}
+    {{ mood.mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
 
+    {% endfor %}
     <br> <br>
     Select activities: <br> <br>
     Work <input type="checkbox" name= "activity_category" value="work">
