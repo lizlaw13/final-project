@@ -7,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 from model import *
 
-
 app = Flask(__name__)
 
 app.secret_key = "ZILWAL"
@@ -34,8 +33,10 @@ def login_form():
     email = request.form.get("email")
     password = request.form.get("password")
 
+    # querying by the password provided by the user
     user = User.query.filter_by(password=password).first()
 
+    # created a session to store the user id
     session["user_id"] = user.user_id
 
     return redirect(f"/user/{user.user_id}")
@@ -46,22 +47,38 @@ def user_homepage(user_id):
     """Show user specific homepage."""
 
     user = User.query.get(user_id)
+
     return render_template("user-homepage.html", user=user)
 
 
 @app.route('/add-entry', methods=["POST"])
 def add_entry():
 
-    # query to get the values of the moods from database
-    moods = Mood.query.all()
+    # retreive logged in user_id from the database
+    user_id = session.get("user_id")
 
     # retrieving mood and activities from the user
-    mood = request.form.get("mood")
-    print(mood)
-    activities = request.form.get("activity_category")
-    print(activities)
+    user_mood = request.form.get("mood")
+    user_activities = request.form.get("activity_category")
 
-    return render_template("add-entry.html", moods=moods)
+    # get user_id from the database
+    user = User.query.get(user_id)
+
+    # grab the mood and activities from the database
+    mood = Mood.query.filter_by(mood=user_mood).first()
+
+    activity = Activity_Category.query.filter_by(category=user_activities).first()
+
+    # add an entry to the database for the user logged in
+    entry = Entry(mood=mood, activity_category=activity)
+
+    user.entries.append(entry)
+
+    db.session.add(user)
+
+    db.session.commit()
+
+    return render_template("add-entry.html", user=user)
 
 
 if __name__ == "__main__":

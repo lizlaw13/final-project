@@ -2,27 +2,6 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<form action="/add-entry" method="POST">
-    Select a mood: <br> <br>
-    Fantastic <input type="radio" name= "mood" value="fantastic">
-    Good <input type="radio" name= "mood" value="good">
-    Neutral <input type="radio" name= "mood" value="neutral">
-    Sad/Bad <input type="radio" name= "mood" value="sad_bad">
-    Terrible <input type="radio" name= "mood" value="terrible">
-
-    <br> <br>
-    Select activities: <br> <br>
-    Work <input type="checkbox" name= "activity_category" value="work">
-    School Work <input type="checkbox" name= "activity_category" value="school_work">
-    Social <input type="checkbox" name= "activity_category" value="social">
-    Leisure/ Relaxation <input type="checkbox" name= "activity_category" value="leisure_relaxation">
-    Exercise <input type="checkbox" name= "activity_category" value="exercise">
-    House Work <input type="checkbox" name= "activity_category" value="house_work">
-
-    <br> <br>
-    Submit: <input type="submit" name="submit">
-
-
-</form>
+<a href="/login"> Please log in</a>
 
 {% endblock %}

@@ -1,4 +1,5 @@
 """Models and database functions for final project."""
+import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -12,14 +13,21 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, 
-        autoincrement=True, 
-        primary_key=True)
-    first_name = db.Column(db.String(200), 
-        nullable=True)
-    last_name = db.Column(db.String(200), 
+                        autoincrement=True, 
+                        primary_key=True)
+    first_name = db.Column(
+        db.String(200), 
+        nullable=True
+        )
+    last_name = db.Column(db.String(200),   
         nullable=True)
     email = db.Column(db.String(200))
     password = db.Column(db.String(20))
+
+    # many to many relationship
+    moods = db.relationship("Mood", backref="users", secondary="entries")
+    activities = db.relationship("Activity_Category", backref="users", secondary="entries")
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -36,10 +44,13 @@ class Mood(db.Model):
         primary_key=True)
     mood = db.Column(db.String(15))
 
+
     def __repr__(self):
         """Provide helpful representation when printed."""
        
         return f"<Mood mood_id={self.mood_id} mood={self.mood}>"
+
+
 
 class Activity_Category(db.Model):
     """"Activties users can select from"""
@@ -51,83 +62,36 @@ class Activity_Category(db.Model):
         primary_key=True)
     category = db.Column(db.String(15))
 
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"""<Activity Category activity_category_id={self.activity_category_id}
-            category={self.category}"""
+        return f"{self.activity_category_id}"
 
-class Activity_Category_Description(db.Model):
-    """"Optional activity description users can input"""
 
-    __tablename__ = "descriptions"
+class Entry(db.Model):
+    """Daily entries for each user"""
 
-    description_id = db.Column(db.Integer, 
+    __tablename__ = "entries"
+
+    entry_id = db.Column(db.Integer,  
         autoincrement=True, 
         primary_key=True)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column(db.Integer, 
         db.ForeignKey("users.user_id"))
     activity_category_id = db.Column(db.Integer, 
         db.ForeignKey("activities.activity_category_id"))
+    mood_id = db.Column(db.Integer, 
+        db.ForeignKey("moods.mood_id"))
     description = db.Column(db.Text, 
         nullable=True)
 
-    users = db.relationship('User', backref = "descriptions")
-    categories = db.relationship('Activity_Category', backref = "descriptions")
+    # one to many relationship
+    user = db.relationship("User", backref="entries")
+    mood = db.relationship("Mood", backref="entries")
+    activity_category = db.relationship("Activity_Category", backref="entries")
 
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return f"""<Activity Category Description description_id={self.description_id}
-            user_id= {self.user_id}ctivity_category_id={self.activity_category_id}>"""
-
-
-class User_Mood(db.Model):
-    """Relationship table between user and their selected moods"""
-
-    __tablename__ = "user_moods"
-
-    user_mood_id = db.Column(db.Integer, 
-        autoincrement=True, 
-        primary_key=True)
-    user_id = db.Column(db.Integer, 
-        db.ForeignKey("users.user_id"))
-    mood_id = db.Column(db.Integer, 
-        db.ForeignKey("moods.mood_id"))
-
-    users = db.relationship('User', backref = "user_moods")
-    moods = db.relationship('Mood', backref = "user_moods")
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return f"""<User Mood user_mood_id={self.user_mood_id}
-            user_id={self.user_id} mood_id={self.mood_id}>"""
-
-
-class User_Activity(db.Model):
-    """Relationship table between user and their selected activities and optional 
-    descriptions"""
-
-    __tablename__ = "user_activities"
-
-    user_activity_id = db.Column(db.Integer,  
-        autoincrement=True, 
-        primary_key=True)
-    user_id = db.Column(db.Integer, 
-        db.ForeignKey("users.user_id"))
-    activity_category_id = db.Column(db.Integer, 
-        db.ForeignKey("activities.activity_category_id"))
-
-    users = db.relationship('User', backref ="user_activities")
-    categories = db.relationship('Activity_Category', backref = "user_activities")
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return f"""<User Activity user_activity_id={self.user_activity_id}
-            user_id={self.user_id} activity_category_id={self.activity_category_i}>"""
 
 class Mood_Enhancer(db.Model):
     """Optional inputed description from user to enhance mood"""
@@ -184,7 +148,7 @@ def connect_to_db(app):
     db.init_app(app)
 
     # Used to recreate my database if I need to drop
-    # db.create_all()
+    db.create_all()
 
 
 
