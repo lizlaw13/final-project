@@ -19,7 +19,7 @@ def index():
 
     return render_template("index.html")
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=["GET"])
 def login():
     """Show login form."""
 
@@ -48,12 +48,38 @@ def user_homepage(user_id):
 
     user = User.query.get(user_id)
     moods = Mood.query.all()
+    activities = Activity_Category.query.all()
 
 
-    return render_template("user-homepage.html", user=user, moods=moods)
+    return render_template("user-homepage.html", user=user, moods=moods,
+                           activities= activities)
+
+@app.route("/all-entries")
+def generate_all_entries():
+    """Generate user specific URL"""
+
+    # retreive logged in user_id from the database
+    user_id = session.get("user_id")
+
+    # querying by user_id from the session
+    user = User.query.filter_by(user_id=user_id).first()
+
+    return redirect(f"/all-entries/{user.user_id}")
 
 
-@app.route('/add-entry', methods=["POST", "GET"])
+@app.route("/all-entries/<int:user_id>")
+def show_all_entries(user_id):
+    """Show all entries for a specific user """
+
+    # grab all the users entries
+    entries = Entry.query.filter_by(user_id=user_id).all()
+    print(entries)
+
+    return render_template("all-entries.html", entries=entries)
+
+
+
+@app.route('/add-entry', methods=["POST"])
 def add_entry():
 
     # retreive logged in user_id from the database
@@ -61,15 +87,19 @@ def add_entry():
 
     # retrieving mood and activities from the user
     user_mood = request.form.get("mood")
+    # print(user_mood)
+
     user_activities = request.form.get("activity_category")
+    # print(user_activities)
 
     # get user_id from the database
     user = User.query.get(user_id)
 
     # grab the mood and activities from the database
     mood = Mood.query.filter_by(mood_id=user_mood).first()
+    print(mood)
 
-    activity = Activity_Category.query.filter_by(category=user_activities).first()
+    activity = Activity_Category.query.filter_by(activity_category_id=user_activities).first()
 
     # add an entry to the database for the user logged in
     entry = Entry(mood=mood, activity_category=activity)
@@ -80,11 +110,14 @@ def add_entry():
 
     db.session.commit()
 
-    # pass the infromation the user submitted to the template
-    info = user.entries[0]
+    # pass the information the user submitted to the template
+    # info = user.entries[0]
+    info = entry
+    print(info)
 
 
     return render_template("add-entry.html", info=info)
+
 
 
 if __name__ == "__main__":

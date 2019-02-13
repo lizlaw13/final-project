@@ -2,25 +2,29 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<form action="/add-entry" method= "GET" method="POST">
+<form action="/add-entry" method="POST">
     Select a mood: <br> <br>
+
     {% for mood in moods %}
+
     {{ mood.mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
 
     {% endfor %}
+
     <br> <br>
     Select activities: <br> <br>
-    Work <input type="checkbox" name= "activity_category" value="work">
-    School Work <input type="checkbox" name= "activity_category" value="school_work">
-    Social <input type="checkbox" name= "activity_category" value="social">
-    Leisure/ Relaxation <input type="checkbox" name= "activity_category" value="leisure_relaxation">
-    Exercise <input type="checkbox" name= "activity_category" value="exercise">
-    House Work <input type="checkbox" name= "activity_category" value="house_work">
+
+    {% for activity in activities %} 
+
+    {{ activity.category }} <input type="checkbox" name= "activity_category" value="{{ activity.activity_category_id }}">
+
+    {% endfor %}
 
     <br> <br>
-    Submit: <input type="submit" name="submit">
-
+    <input type="submit" name="submit">
 
 </form>
+
+<a href="/all-entries">View All Entries</a>
 
 {% endblock %}
