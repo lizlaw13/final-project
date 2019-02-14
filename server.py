@@ -72,9 +72,21 @@ def show_all_entries(user_id):
     """Show all entries for a specific user """
 
     # grab all the users entries
+    user = User.query.get(user_id)
     entries = Entry.query.filter_by(user_id=user_id).all()
-    print(entries)
+    
+    entry_list = []
+    for entry in entries:
+        entry_id = entry.entry_id 
+        entry_list.append(entry_id)
+    print(entry_list)
 
+    # activity_list = []
+    # for entry_id in entry_list:
+    #     activity = Entry_Activity.query.filter_by(entry_id=entry_id)
+    #     activity_list.append(activity.category)
+
+    # print(activity_list)
     return render_template("all-entries.html", entries=entries)
 
 
@@ -89,34 +101,43 @@ def add_entry():
     user_mood = request.form.get("mood")
     # print(user_mood)
 
-    user_activities = request.form.get("activity_category")
+    user_activities = request.form.getlist("activity_category")
+    # print('\n\n\n\n\n\n\n')
     # print(user_activities)
 
+    activities = []
+    for activity_id in user_activities:
+        activities.append(Activity_Category.query.get(int(activity_id)))
     # get user_id from the database
     user = User.query.get(user_id)
 
     # grab the mood and activities from the database
-    mood = Mood.query.filter_by(mood_id=user_mood).first()
-    print(mood)
-
-    activity = Activity_Category.query.filter_by(activity_category_id=user_activities).first()
+    mood = Mood.query.get(int(user_mood))
+    # print(mood)
 
     # add an entry to the database for the user logged in
-    entry = Entry(mood=mood, activity_category=activity)
+    entry = Entry(mood=mood, user=user)
+
+    entry.activities.extend(activities)
 
     user.entries.append(entry)
 
+
     db.session.add(user)
+
 
     db.session.commit()
 
     # pass the information the user submitted to the template
-    # info = user.entries[0]
-    info = entry
-    print(info)
+    # info = user.entries
+    print(entry.activities)
+    print(user.entries[-1])
+    # info = entry
+    # info = activties
+    # print(info)
 
 
-    return render_template("add-entry.html", info=info)
+    return render_template("add-entry.html")
 
 
 
