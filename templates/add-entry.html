@@ -2,8 +2,17 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<h2>Thank you for submitting!</h2>
+<h2>The following entry has been added!</h2>
 
+<p>Date: {{ entry.date_created }}</p>
 
+<p> Mood: {{ entry.mood.mood }}</p>
+
+{% for activity in activities %}
+<p> Activity: {{ activity.verbose.category }}</p>
+
+{% endfor %}
+
+<a href="/all-entries">View All Entries</a>
 
 {% endblock %}

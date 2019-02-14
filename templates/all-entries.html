@@ -6,9 +6,13 @@
 
 <ul>
 {% for entry in entries %}
-<li>Date: {{ entry.date_created }} | Mood: {{ entry.mood.mood }}</li>
-
+<li>Date: {{ entry.date_created }} | Mood: {{ entry.mood.mood }} 
+Activity/ Activities: {% for activity in entry.activities %}
+{{ activity.verbose_category }}
+</li>
 {% endfor %}
+{% endfor %}
+
 </ul>
 
 {% endblock %}

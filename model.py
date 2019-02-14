@@ -25,8 +25,6 @@ class User(db.Model):
     # many to many relationship
     moods = db.relationship("Mood", backref="users", secondary="entries")
 
-    # activities = db.relationship("Activity_Category", backref="users", secondary="entry_activities")
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -41,7 +39,8 @@ class Mood(db.Model):
     mood_id = db.Column(db.Integer, 
                         autoincrement=True, 
                         primary_key=True)
-    mood = db.Column(db.String(15))
+    mood = db.Column(db.String(30))
+    verbose_mood = db.Column(db.String(30))
 
 
     def __repr__(self):
@@ -49,39 +48,40 @@ class Mood(db.Model):
        
         return f"<Mood mood_id={self.mood_id} mood={self.mood}>"
 
+
 class Activity_Category(db.Model):
     """"Activties users can select from"""
 
     __tablename__ = "activities"
 
     activity_category_id = db.Column(db.Integer, 
-        autoincrement=True, 
-        primary_key=True)
-    category = db.Column(db.String(15))
-
+                                    autoincrement=True, 
+                                    primary_key=True)
+    category = db.Column(db.String(30))
+    verbose_category = db.Column(db.String(30))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return f"<Activity activity_category_id={self.activity_category_id} category={self.category}>"
 
+
 class Entry_Activity(db.Model):
 
     __tablename__ = "entry_activities"
 
     entry_activity_id = db.Column(db.Integer, 
-                    autoincrement=True, 
-                    primary_key=True)
+                                  autoincrement=True, 
+                                  primary_key=True)
     entry_id = db.Column(db.Integer, db.ForeignKey("entries.entry_id"))
     activity_category_id = db.Column(db.Integer, 
-        db.ForeignKey("activities.activity_category_id"))
-
-    
+                                    db.ForeignKey("activities.activity_category_id"))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return f"<Entry_Activity entry_id={self.entry_id} activity_category_id={self.activity_category_id}>"
+
 
 class Entry(db.Model):
     """Daily entries for each user"""
@@ -89,15 +89,15 @@ class Entry(db.Model):
     __tablename__ = "entries"
 
     entry_id = db.Column(db.Integer,  
-        autoincrement=True, 
-        primary_key=True)
+                        autoincrement=True, 
+                        primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column(db.Integer, 
-        db.ForeignKey("users.user_id"))
+                        db.ForeignKey("users.user_id"))
     mood_id = db.Column(db.Integer, 
-        db.ForeignKey("moods.mood_id"))
+                        db.ForeignKey("moods.mood_id"))
     description = db.Column(db.Text, 
-        nullable=True)
+                            nullable=True)
 
     # one to many relationship
     user = db.relationship("User", backref="entries")
@@ -107,7 +107,7 @@ class Entry(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"<Entry date_created={self.date_created} user_id={self.user_id} mood_id={self.mood_id} description={self.description}>"
+        return f"<Entry entry_id={self.entry_id} date_created={self.date_created} user_id={self.user_id} mood_id={self.mood_id} description={self.description}>"
 
 
     # activity_category = db.relationship("Activity_Category", backref="entries")
@@ -120,12 +120,12 @@ class Mood_Enhancer(db.Model):
     __tablename__ = "mood_enhancers"
 
     mood_enhancer_id = db.Column(db.Integer, 
-        autoincrement=True, 
-        primary_key=True)
+                                autoincrement=True, 
+                                primary_key=True)
     user_id = db.Column(db.Integer, 
-        db.ForeignKey("users.user_id"))
+                        db.ForeignKey("users.user_id"))
     mood_enhancer = db.Column(db.Text, 
-        nullable=True)
+                        nullable=True)
 
     users = db.relationship('User', backref = "mood_enhancers")
 
@@ -141,12 +141,12 @@ class User_Brain_Dump(db.Model):
     __tablename__ = "user_brain_dumps"
 
     user_brain_dump_id = db.Column(db.Integer, 
-        autoincrement=True, 
-        primary_key=True)
+                                    autoincrement=True, 
+                                    primary_key=True)
     user_id = db.Column(db.Integer, 
-        db.ForeignKey("users.user_id"))
+                        db.ForeignKey("users.user_id"))
     brain_dump_entry = db.Column(db.Text, 
-        nullable=True)
+                        nullable=True)
 
     users = db.relationship('User', backref = "user_brain_dumps")
 

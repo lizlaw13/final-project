@@ -7,7 +7,7 @@
 
     {% for mood in moods %}
 
-    {{ mood.mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
+    {{ mood.verbose_mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
 
     {% endfor %}
 
@@ -16,7 +16,7 @@
 
     {% for activity in activities %} 
 
-    {{ activity.category }} <input type="checkbox" name= "activity_category" value="{{ activity.activity_category_id }}">
+    {{ activity.verbose_category }} <input type="checkbox" name= "activity_category" value="{{ activity.activity_category_id }}">
 
     {% endfor %}
 

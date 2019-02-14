@@ -74,19 +74,11 @@ def show_all_entries(user_id):
     # grab all the users entries
     user = User.query.get(user_id)
     entries = Entry.query.filter_by(user_id=user_id).all()
-    
-    entry_list = []
+
     for entry in entries:
-        entry_id = entry.entry_id 
-        entry_list.append(entry_id)
-    print(entry_list)
+        for activity in entry.activities:
+            print(activity.category)
 
-    # activity_list = []
-    # for entry_id in entry_list:
-    #     activity = Entry_Activity.query.filter_by(entry_id=entry_id)
-    #     activity_list.append(activity.category)
-
-    # print(activity_list)
     return render_template("all-entries.html", entries=entries)
 
 
@@ -108,12 +100,12 @@ def add_entry():
     activities = []
     for activity_id in user_activities:
         activities.append(Activity_Category.query.get(int(activity_id)))
+
     # get user_id from the database
     user = User.query.get(user_id)
 
     # grab the mood and activities from the database
     mood = Mood.query.get(int(user_mood))
-    # print(mood)
 
     # add an entry to the database for the user logged in
     entry = Entry(mood=mood, user=user)
@@ -129,15 +121,13 @@ def add_entry():
     db.session.commit()
 
     # pass the information the user submitted to the template
-    # info = user.entries
-    print(entry.activities)
-    print(user.entries[-1])
-    # info = entry
-    # info = activties
-    # print(info)
+    entry = user.entries[-1]
+    mood = entry.mood.mood
+    print(mood)
+    activities = entry.activities
 
 
-    return render_template("add-entry.html")
+    return render_template("add-entry.html", entry=entry, activities=activities)
 
 
 
