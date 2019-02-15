@@ -6,10 +6,10 @@
 
 <p>Date: {{ entry.date_created }}</p>
 
-<p> Mood: {{ entry.mood.mood }}</p>
+<p> Mood: {{ entry.mood.verbose_mood }}</p>
 
 {% for activity in activities %}
-<p> Activity: {{ activity.verbose.category }}</p>
+<p> Activity: {{ activity.verbose_category }}</p>
 
 {% endfor %}
 

@@ -4,15 +4,20 @@
 
 <h1>Here are all your entries:</h1>
 
-<ul>
+
 {% for entry in entries %}
-<li>Date: {{ entry.date_created }} | Mood: {{ entry.mood.mood }} 
-Activity/ Activities: {% for activity in entry.activities %}
-{{ activity.verbose_category }}
-</li>
+<p>Date: {{ entry.date_created }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br> <br>
+Activity/ Activities:
+<ul> {% for activity in entry.activities %}
+
+<li>{{ activity.verbose_category }}</li>
+
 {% endfor %}
+</ul>
+<a href="/update-entry/{{entry.entry_id}}">Update Entry</a>
+</p>
+<hr>
 {% endfor %}
 
-</ul>
 
 {% endblock %}

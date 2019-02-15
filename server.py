@@ -5,6 +5,8 @@ from flask import (Flask, render_template, redirect, request, flash,
 from flask_sqlalchemy import SQLAlchemy
 # from flask_debugtoolbar import DebugToolbarExtension
 
+import datetime
+
 from model import *
 
 app = Flask(__name__)
@@ -45,14 +47,18 @@ def login_form():
 @app.route("/user/<int:user_id>")
 def user_homepage(user_id):
     """Show user specific homepage."""
+    if session["user_id"] is not user_id:
+        return redirect("/")
 
     user = User.query.get(user_id)
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
 
+    now = datetime.datetime.today().strftime('%Y-%m-%d')
+    print (now)
 
     return render_template("user-homepage.html", user=user, moods=moods,
-                           activities= activities)
+                           activities= activities, now=now)
 
 @app.route("/all-entries")
 def generate_all_entries():
@@ -70,22 +76,61 @@ def generate_all_entries():
 @app.route("/all-entries/<int:user_id>")
 def show_all_entries(user_id):
     """Show all entries for a specific user """
+    if session["user_id"] is not user_id:
+        return redirect("/")
 
     # grab all the users entries
     user = User.query.get(user_id)
     entries = Entry.query.filter_by(user_id=user_id).all()
 
+    activity_list = []
     for entry in entries:
         for activity in entry.activities:
-            print(activity.category)
+            activity_list.append(activity.verbose_category)
+
+    print(activity_list)
 
     return render_template("all-entries.html", entries=entries)
 
+@app.route("/update-entry/<int:entry_id>")
+def show_update_form(entry_id):
+    entry = Entry.query.get(entry_id)
 
+    if session["user_id"] is not entry.user.user_id:
+        return redirect("/")
+
+    user = User.query.get(entry.user.user_id)
+    moods = Mood.query.all()
+    activities = Activity_Category.query.all()
+
+
+    return render_template("update-entry.html", entry=entry, user=user, moods=moods, activities=activities)
+
+@app.route("/updated-entry/<int:entry_id>", methods=["POST", "GET"])
+def update_entry(entry_id):
+    entry = Entry.query.get(entry_id)
+
+    user_id = session.get("user_id")
+
+    user_mood = request.form.get("mood")
+
+    mood = Mood.query.get(int(user_mood))
+
+
+    if session["user_id"] is not entry.user.user_id:
+        return redirect("/")
+
+    # update the existing entry's mood
+    entry = Entry.query.get(entry_id)
+    entry.mood = mood
+    db.session.commit()
+
+
+
+    return render_template("updated_entry.html")
 
 @app.route('/add-entry', methods=["POST"])
 def add_entry():
-
     # retreive logged in user_id from the database
     user_id = session.get("user_id")
 
@@ -110,6 +155,7 @@ def add_entry():
     # add an entry to the database for the user logged in
     entry = Entry(mood=mood, user=user)
 
+
     entry.activities.extend(activities)
 
     user.entries.append(entry)
@@ -128,7 +174,6 @@ def add_entry():
 
 
     return render_template("add-entry.html", entry=entry, activities=activities)
-
 
 
 if __name__ == "__main__":

@@ -65,7 +65,8 @@ entryThree.activities.append(leisureRelaxation)
 entryThree.activities.append(exercise)
 entryFour = Entry(mood_id= 2, user_id= 1, date_created='2019-02-4 20:31:05.974887')
 entryFour.activities.append(schoolWork)
-# Entry_Five = Entry(mood_id= 4, user_id= 1, date_created='2019-02-5 20:31:05.974887')
+entryFive = Entry(mood_id= 4, user_id= 1, date_created='2019-02-5 20:31:05.974887')
+entryFive.activities.append(exercise)
 # Entry_Six = Entry(mood_id= 5, user_id= 1, date_created='2019-02-6 20:31:05.974887')
 # Entry_Seven = Entry(mood_id= 3, user_id= 1, date_created='2019-02-7 20:31:05.974887')
 # Entry_Seven = Entry(mood_id= 4, user_id= 1, date_created='2019-02-8 20:31:05.974887')
@@ -79,6 +80,8 @@ db.session.add(entryTwo)
 db.session.add(entryOne)
 db.session.add(entryThree)
 db.session.add(entryFour)
+db.session.add(entryFive)
+
 
 
 

@@ -2,6 +2,8 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
+<h2>Add an entry for today!</h2>
+<h3>Today's Date: {{ now }}</h5>
 <form action="/add-entry" method="POST">
     Select a mood: <br> <br>
 
