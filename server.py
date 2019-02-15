@@ -81,16 +81,27 @@ def show_all_entries(user_id):
 
     # grab all the users entries
     user = User.query.get(user_id)
-    entries = Entry.query.filter_by(user_id=user_id).all()
+    entries = Entry.query.filter_by(user_id=user_id).order_by('date_created').all()
 
-    activity_list = []
-    for entry in entries:
-        for activity in entry.activities:
-            activity_list.append(activity.verbose_category)
-
-    print(activity_list)
 
     return render_template("all-entries.html", entries=entries)
+
+@app.route("/delete-entry/<int:entry_id>")
+def delete_entry(entry_id):
+
+    entry = Entry.query.get(entry_id)
+
+    user_id = session.get("user_id")
+
+
+    if session["user_id"] is not user_id:
+        return redirect("/")
+
+    db.session.delete(entry)
+    db.session.commit()
+
+
+    return render_template("delete-entry.html")
 
 @app.route("/update-entry/<int:entry_id>")
 def show_update_form(entry_id):
@@ -108,6 +119,7 @@ def show_update_form(entry_id):
 
 @app.route("/updated-entry/<int:entry_id>", methods=["POST", "GET"])
 def update_entry(entry_id):
+
     entry = Entry.query.get(entry_id)
 
     user_id = session.get("user_id")
@@ -116,6 +128,11 @@ def update_entry(entry_id):
 
     mood = Mood.query.get(int(user_mood))
 
+    user_activities = request.form.getlist("activity_category")
+
+    form_activities = []
+    for activity_id in user_activities:
+        form_activities.append(Activity_Category.query.get(int(activity_id)))
 
     if session["user_id"] is not entry.user.user_id:
         return redirect("/")
@@ -123,9 +140,17 @@ def update_entry(entry_id):
     # update the existing entry's mood
     entry = Entry.query.get(entry_id)
     entry.mood = mood
+    
+
+    # for activity in entry.activities:
+    #     for form_activity in form_activities:
+    #         if activity != form_activity:
+    #                 entry.activities.extend(form_activity)
+
+    entry.activities.extend(form_activities)
+
+
     db.session.commit()
-
-
 
     return render_template("updated_entry.html")
 
