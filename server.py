@@ -56,7 +56,7 @@ def user_homepage(user_id):
 
     if session.get("user_id") == None or session["user_id"] is not user_id: 
         return redirect("/")
-        
+
     user = User.query.get(user_id)
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
@@ -90,6 +90,8 @@ def show_all_entries(user_id):
     user = User.query.get(user_id)
     entries = Entry.query.filter_by(user_id=user_id).order_by('date_created').all()
 
+    for entry in entries:
+        print(entry.date_created.strftime("%A, %B %d, %Y"))
 
     return render_template("all-entries.html", entries=entries)
 

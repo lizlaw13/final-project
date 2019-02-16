@@ -6,7 +6,7 @@
 
 
 {% for entry in entries %}
-<p>Date: {{ entry.date_created }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br> <br>
+<p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br> <br>
 Activity/ Activities:
 <ul> {% for activity in entry.activities %}
 
