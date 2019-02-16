@@ -43,13 +43,20 @@ def login_form():
 
     return redirect(f"/user/{user.user_id}")
 
+@app.route('/logout')
+def logout():
+    """Log out."""
+
+    del session["user_id"]
+    return redirect("/")
 
 @app.route("/user/<int:user_id>")
 def user_homepage(user_id):
     """Show user specific homepage."""
-    if session["user_id"] is not user_id:
-        return redirect("/")
 
+    if session.get("user_id") == None or session["user_id"] is not user_id: 
+        return redirect("/")
+        
     user = User.query.get(user_id)
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
@@ -103,6 +110,11 @@ def delete_entry(entry_id):
 
     return render_template("delete-entry.html")
 
+@app.route("/modified-entry/<int:entry_id>")
+def modify_activitiy(entry_id):
+
+    return render_template("modified-entry.html")
+
 @app.route("/update-entry/<int:entry_id>")
 def show_update_form(entry_id):
     entry = Entry.query.get(entry_id)
@@ -113,6 +125,9 @@ def show_update_form(entry_id):
     user = User.query.get(entry.user.user_id)
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
+
+    for activity in entry.activities:
+        print(activity.activity_category_id)
 
 
     return render_template("update-entry.html", entry=entry, user=user, moods=moods, activities=activities)
@@ -151,6 +166,7 @@ def update_entry(entry_id):
 
 
     db.session.commit()
+
 
     return render_template("updated_entry.html")
 
