@@ -4,7 +4,7 @@
 
 <h2>Update Your Entry:</h2>
 
-<h3>Your mood for {{ entry.date_created }} was {{ entry.mood.verbose_mood }}!</h3>
+<h3>Your mood for {{ entry.date_created.strftime("%A, %B %d, %Y") }} was {{ entry.mood.verbose_mood }}!</h3>
 
 <p>Your activity/ activities:</p>
     <ul>
@@ -12,8 +12,8 @@
 <!--         <input type="checkbox" name= "activity_category" value="{{activity.activity_category_id }}">
  -->    
             <li><strong>{{ activity.verbose_category}}</strong></li> 
-    <a href="/modified-entry/{{entry.entry_id}}">Delete Activity</a>
-    {% endfor %}
+<!--     <a href="/modified-entry/{{entry.entry_id}}">Delete Activity</a>
+ -->    {% endfor %}
     </ul>
 <hr>
 

@@ -7,7 +7,7 @@ from model import *
 from server import app
 
 connect_to_db(app)
-
+ # add functions
 
 # Add moods
 fantastic = Mood(mood="fantastic", verbose_mood="Fantastic")

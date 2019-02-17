@@ -4,7 +4,7 @@
 
 <h2>The following entry has been added!</h2>
 
-<p>Date: {{ entry.date_created }}</p>
+<p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }}</p>
 
 <p> Mood: {{ entry.mood.verbose_mood }}</p>
 

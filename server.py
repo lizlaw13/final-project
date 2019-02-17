@@ -47,6 +47,7 @@ def login_form():
 def logout():
     """Log out."""
 
+    # removing the user id from the session
     del session["user_id"]
     return redirect("/")
 
@@ -54,15 +55,19 @@ def logout():
 def user_homepage(user_id):
     """Show user specific homepage."""
 
-    if session.get("user_id") == None or session["user_id"] is not user_id: 
+    # prevents the public for accessing user specific information
+    if not session.get("user_id") or session["user_id"] != user_id:
         return redirect("/")
+    # if session.get("user_id") == None or session["user_id"] is not user_id: 
+    #     return redirect("/")
 
+    # retreiving user id and all moods and activities to be able to use in a form
     user = User.query.get(user_id)
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
 
+    # generating today's date
     now = datetime.datetime.today().strftime('%Y-%m-%d')
-    print (now)
 
     return render_template("user-homepage.html", user=user, moods=moods,
                            activities= activities, now=now)
@@ -71,7 +76,7 @@ def user_homepage(user_id):
 def generate_all_entries():
     """Generate user specific URL"""
 
-    # retreive logged in user_id from the database
+    # retrieve logged in user_id from the database
     user_id = session.get("user_id")
 
     # querying by user_id from the session
@@ -83,29 +88,37 @@ def generate_all_entries():
 @app.route("/all-entries/<int:user_id>")
 def show_all_entries(user_id):
     """Show all entries for a specific user """
-    if session["user_id"] is not user_id:
+
+    # prevents the public for accessing user specific information
+    # if session["user_id"] is not user_id:
+    #     return redirect("/")
+    if session["user_id"] != user_id:
         return redirect("/")
 
     # grab all the users entries
     user = User.query.get(user_id)
     entries = Entry.query.filter_by(user_id=user_id).order_by('date_created').all()
 
-    for entry in entries:
-        print(entry.date_created.strftime("%A, %B %d, %Y"))
 
-    return render_template("all-entries.html", entries=entries)
+    return render_template("all-entries.html", entries=entries, user=user)
 
 @app.route("/delete-entry/<int:entry_id>")
 def delete_entry(entry_id):
-
+    """Confirmation that a user deleted an entry"""
+    
+    # grabs the specific entry id 
     entry = Entry.query.get(entry_id)
 
+    # grabs the user id in the session 
     user_id = session.get("user_id")
 
-
-    if session["user_id"] is not user_id:
+    # prevents the public for accessing user specific information
+    # if session["user_id"] is not user_id:
+    #     return redirect("/")
+    if session["user_id"] != user_id:
         return redirect("/")
 
+    # removes an entry from the database
     db.session.delete(entry)
     db.session.commit()
 
@@ -114,58 +127,67 @@ def delete_entry(entry_id):
 
 @app.route("/modified-entry/<int:entry_id>")
 def modify_activitiy(entry_id):
+    """Confirmation that a user has deleted an activity from their entry"""
 
     return render_template("modified-entry.html")
 
 @app.route("/update-entry/<int:entry_id>")
 def show_update_form(entry_id):
+    """Displays the update form for a user"""
+
+    # grabs the specific entry id 
     entry = Entry.query.get(entry_id)
 
-    if session["user_id"] is not entry.user.user_id:
+    # prevents the public for accessing user specific information
+    # if session["user_id"] is not entry.user.user_id:
+    #     return redirect("/")
+
+    if session["user_id"] != entry.user.user_id:
         return redirect("/")
 
+    # grabs the user's information 
     user = User.query.get(entry.user.user_id)
+
+    # grabs all moods and activities 
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
-
-    for activity in entry.activities:
-        print(activity.activity_category_id)
 
 
     return render_template("update-entry.html", entry=entry, user=user, moods=moods, activities=activities)
 
 @app.route("/updated-entry/<int:entry_id>", methods=["POST", "GET"])
 def update_entry(entry_id):
+    """Confirmation that a user has added an activity or updated their mood on their entry"""
 
+    # grabs entry id
     entry = Entry.query.get(entry_id)
 
+    # grabs user id in the session
     user_id = session.get("user_id")
 
+    # grabs information for the form
     user_mood = request.form.get("mood")
 
     mood = Mood.query.get(int(user_mood))
 
     user_activities = request.form.getlist("activity_category")
 
+    # appends each acitivity to a list
     form_activities = []
     for activity_id in user_activities:
         form_activities.append(Activity_Category.query.get(int(activity_id)))
 
-    if session["user_id"] is not entry.user.user_id:
+    # prevents the public from accessing user specific information
+    # if session["user_id"] is not entry.user.user_id:
+    #     return redirect("/")
+    if session["user_id"] != user_id:
         return redirect("/")
 
     # update the existing entry's mood
     entry = Entry.query.get(entry_id)
     entry.mood = mood
     
-
-    # for activity in entry.activities:
-    #     for form_activity in form_activities:
-    #         if activity != form_activity:
-    #                 entry.activities.extend(form_activity)
-
     entry.activities.extend(form_activities)
-
 
     db.session.commit()
 
@@ -174,16 +196,15 @@ def update_entry(entry_id):
 
 @app.route('/add-entry', methods=["POST"])
 def add_entry():
+    """Adds a new entry for a user"""
+
     # retreive logged in user_id from the database
     user_id = session.get("user_id")
 
     # retrieving mood and activities from the user
     user_mood = request.form.get("mood")
-    # print(user_mood)
 
     user_activities = request.form.getlist("activity_category")
-    # print('\n\n\n\n\n\n\n')
-    # print(user_activities)
 
     activities = []
     for activity_id in user_activities:
@@ -198,23 +219,15 @@ def add_entry():
     # add an entry to the database for the user logged in
     entry = Entry(mood=mood, user=user)
 
-
     entry.activities.extend(activities)
-
     user.entries.append(entry)
-
-
     db.session.add(user)
-
-
     db.session.commit()
 
     # pass the information the user submitted to the template
-    entry = user.entries[-1]
-    mood = entry.mood.mood
-    print(mood)
+    # entry = user.entries[-1]
+    # mood = entry.mood.mood
     activities = entry.activities
-
 
     return render_template("add-entry.html", entry=entry, activities=activities)
 
