@@ -1,7 +1,8 @@
 """Models and database functions for final project."""
-import datetime
+# from SQLAlchemy import timestamp
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
@@ -91,7 +92,8 @@ class Entry(db.Model):
     entry_id = db.Column(db.Integer,  
                         autoincrement=True, 
                         primary_key=True)
-    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    # date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    date_created = db.Column(db.TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
     user_id = db.Column(db.Integer, 
                         db.ForeignKey("users.user_id"))
     mood_id = db.Column(db.Integer, 

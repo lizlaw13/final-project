@@ -15,19 +15,39 @@ app.secret_key = "ZILWAL"
 
 # app.jinja_env.undefined = StrictUndefined
 
-@app.route('/')
+@app.route("/")
 def index():
     """Homepage"""
 
     return render_template("index.html")
 
-@app.route('/login', methods=["GET"])
+@app.route("/register", methods=["GET"])
+def register_form():
+    """Show new user registeration form"""
+
+    return render_template("register-form.html")
+
+app.route("/register", methods=["POST"])
+def register_new_user():
+
+    # grab the email and password from the form
+    new_user_email = request.form.get("new_email")
+    new_user_password = request.form.get("new_password")
+
+    new_user = User(email=new_user_email, password=new_user_password)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return redirect("/")
+
+@app.route("/login", methods=["GET"])
 def login():
     """Show login form."""
 
     return render_template("login.html")
 
-@app.route('/login', methods=["POST"])
+@app.route("/login", methods=["POST"])
 def login_form():
     """Allow users to login"""
 
@@ -43,7 +63,7 @@ def login_form():
 
     return redirect(f"/user/{user.user_id}")
 
-@app.route('/logout')
+@app.route("/logout")
 def logout():
     """Log out."""
 
@@ -67,7 +87,7 @@ def user_homepage(user_id):
     activities = Activity_Category.query.all()
 
     # generating today's date
-    now = datetime.datetime.today().strftime('%Y-%m-%d')
+    now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
     return render_template("user-homepage.html", user=user, moods=moods,
                            activities= activities, now=now)
@@ -125,9 +145,35 @@ def delete_entry(entry_id):
 
     return render_template("delete-entry.html")
 
-@app.route("/modified-entry/<int:entry_id>")
+# @app.route("/modified-entry/<int:entry_id>")
+# def modify_activitiy(entry_id):
+#     """Confirmation that a user has deleted an activity from their entry"""
+
+#     return render_template("modified-entry.html")
+
+@app.route("/modified-entry/<int:entry_id>",  methods=["POST", "GET"])
 def modify_activitiy(entry_id):
-    """Confirmation that a user has deleted an activity from their entry"""
+    """Deletes selected activities from an entry"""
+
+    # grabs user id in the session
+    user_id = session.get("user_id")
+
+    # grabs information for the form
+    user_activities = request.form.getlist("activity_category")
+
+    # grabs the specifc entry to delete from
+    entry = Entry.query.get(entry_id)
+
+    # appends each acitivity to a list from the form
+    form_activities = []
+    for activity_id in user_activities:
+        form_activities.append(Activity_Category.query.get(int(activity_id)))
+
+    # deletes each activitiy from the entry one by one
+    for activity in form_activities:
+        entry.activities.remove(activity)
+
+    db.session.commit()
 
     return render_template("modified-entry.html")
 
@@ -142,8 +188,8 @@ def show_update_form(entry_id):
     # if session["user_id"] is not entry.user.user_id:
     #     return redirect("/")
 
-    if session["user_id"] != entry.user.user_id:
-        return redirect("/")
+    # if session["user_id"] != entry.user.user_id:
+    #     return redirect("/")
 
     # grabs the user's information 
     user = User.query.get(entry.user.user_id)
@@ -159,11 +205,17 @@ def show_update_form(entry_id):
 def update_entry(entry_id):
     """Confirmation that a user has added an activity or updated their mood on their entry"""
 
-    # grabs entry id
-    entry = Entry.query.get(entry_id)
-
     # grabs user id in the session
     user_id = session.get("user_id")
+
+    # prevents the public from accessing user specific information
+    # if session["user_id"] is not entry.user.user_id:
+    #     return redirect("/")
+    if session["user_id"] != user_id:
+        return redirect("/")
+
+    # grabs entry id
+    entry = Entry.query.get(entry_id)
 
     # grabs information for the form
     user_mood = request.form.get("mood")
@@ -177,22 +229,18 @@ def update_entry(entry_id):
     for activity_id in user_activities:
         form_activities.append(Activity_Category.query.get(int(activity_id)))
 
-    # prevents the public from accessing user specific information
-    # if session["user_id"] is not entry.user.user_id:
-    #     return redirect("/")
-    if session["user_id"] != user_id:
-        return redirect("/")
+    activities = entry.activities
 
     # update the existing entry's mood
     entry = Entry.query.get(entry_id)
     entry.mood = mood
-    
+
     entry.activities.extend(form_activities)
 
     db.session.commit()
 
 
-    return render_template("updated_entry.html")
+    return render_template("updated_entry.html", activities=activities)
 
 @app.route('/add-entry', methods=["POST"])
 def add_entry():
@@ -225,8 +273,6 @@ def add_entry():
     db.session.commit()
 
     # pass the information the user submitted to the template
-    # entry = user.entries[-1]
-    # mood = entry.mood.mood
     activities = entry.activities
 
     return render_template("add-entry.html", entry=entry, activities=activities)
