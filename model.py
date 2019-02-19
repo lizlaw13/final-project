@@ -3,6 +3,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+import datetime
 
 db = SQLAlchemy()
 
@@ -92,7 +93,7 @@ class Entry(db.Model):
     entry_id = db.Column(db.Integer,  
                         autoincrement=True, 
                         primary_key=True)
-    date_created = db.Column(db.TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
+    date_created = db.Column(db.DateTime, default=datetime.datetime.now)
     user_id = db.Column(db.Integer, 
                         db.ForeignKey("users.user_id"))
     mood_id = db.Column(db.Integer, 

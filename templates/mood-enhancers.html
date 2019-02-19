@@ -2,13 +2,14 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<h2>You have added mood enhancers!</h2>
+<h2>You have added the following mood enhancers!</h2>
 
 <ul>
-{% for enhancer in enhancer %}
-<li>{{ enhancer }}</li>
-</ul>
+{% for mood in mood_enhancers %}
+<li>{{ mood.mood_enhancer }}</li>
 {% endfor %}
+</ul>
+
 <a href="/all-entries">View All Entries</a>
 
 {% endblock %}

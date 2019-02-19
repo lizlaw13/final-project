@@ -56,7 +56,7 @@ db.session.commit()
 entryOne = Entry(mood_id= 1, user_id= 1, date_created='2019-02-01 19:33:54.99179+00')
 entryOne.activities.append(leisureRelaxation)
 entryOne.activities.append(exercise)
-entryTwo = Entry(mood_id= 4, user_id= 1, date_created='2019-02-02 19:33:54.99179+00')
+entryTwo = Entry(mood_id= 2, user_id= 1, date_created='2019-02-02 19:33:54.99179+00')
 entryTwo.activities.append(houseWork)
 entryTwo.activities.append(exercise)
 entryThree = Entry(mood_id= 3, user_id= 1, date_created='2019-02-03 19:33:54.99179+00', 
@@ -66,7 +66,7 @@ entryThree.activities.append(leisureRelaxation)
 entryThree.activities.append(exercise)
 entryFour = Entry(mood_id= 2, user_id= 1, date_created='2019-02-04 19:33:54.99179+00')
 entryFour.activities.append(schoolWork)
-entryFive = Entry(mood_id= 4, user_id= 1, date_created='2019-02-05 19:33:54.99179+00', 
+entryFive = Entry(mood_id= 3, user_id= 1, date_created='2019-02-05 19:33:54.99179+00', 
                     description='hiking with my dog')
 entryFive.activities.append(exercise)
 

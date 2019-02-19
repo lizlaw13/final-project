@@ -16,7 +16,7 @@
 <form action="/modified-entry/{{ entry.entry_id}}" method="POST">
     <h4>Delete Activity/ Activities: </h4>
 
-    {% for activity in activities %} 
+    {% for activity in entry.activities %} 
 
     {{ activity.verbose_category }} 
         <input type="checkbox" name= "activity_category" value="{{activity.activity_category_id }}">
@@ -31,8 +31,8 @@
 
 {% if entry.description %}
 <h4>Delete Note:</h4>
-{{ entry.description }} <input type="checkbox" value ="{{ entry.description }}">
-<input type="submit" name="submit" name="description">
+{{ entry.description }}
+<input type="submit" name="Delete" name="description" value="Delete">
 {% endif %}
  <br> <br>
 

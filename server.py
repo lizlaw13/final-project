@@ -176,6 +176,8 @@ def modify_activitiy(entry_id):
 def delete_note(entry_id):
 
     entry = Entry.query.get(entry_id)
+
+
     entry.description = None
 
     db.session.commit()
@@ -284,6 +286,9 @@ def add_entry():
     # add an entry to the database for the user logged in
     entry = Entry(mood=mood, user=user, description=description)
 
+    if mood.mood_id == 4 or mood.mood_id == 5:
+        entry.mood_status = 'Yes'
+
     entry.activities.extend(activities)
     user.entries.append(entry)
     db.session.add(user)
@@ -292,7 +297,7 @@ def add_entry():
     # pass the information the user submitted to the template
     activities = entry.activities
 
-    return render_template("add-entry.html", entry=entry, activities=activities, mood=mood)
+    return render_template("add-entry.html", user=user, entry=entry, activities=activities, mood=mood)
 
 @app.route("/mood-enhancers", methods=["POST", "GET"])
 def mood_enhancer_input():
@@ -318,12 +323,10 @@ def mood_enhancer_input():
     db.session.add(mood_enhancer_entry_3)
 
 
-    # db.session.commit()
+    db.session.commit()
+    mood_enhancers = user.mood_enhancers
 
-    enhancer = Mood_Enhancer.query.filter_by(user_id=1)
-    print(enhancer)
-
-    return render_template("mood-enhancers.html")
+    return render_template("mood-enhancers.html", mood_enhancers=mood_enhancers)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

@@ -15,7 +15,14 @@
 {% endfor %}
 </ul>
 
-{% if mood.mood_id == 4 %} 
+{% if user.mood_enhancers %} 
+<h3>Comeplete your mood enhancers to have a better day!</h3>
+<ul>
+{% for mood in user.mood_enhancers %}
+<li>{{ mood.mood_enhancer }}</li>
+{% endfor %}
+</ul>
+{% else %}
 <form action="/mood-enhancers" method="POST">
     <h3>Please input three ways you can enhance your mood:</h3>
     1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.."> <br>
@@ -25,6 +32,8 @@
     <input type="submit" name="submit">
 </form>
 {% endif %}
+
+
 <br>
 <a href="/all-entries">View All Entries</a>
 
