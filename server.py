@@ -122,6 +122,20 @@ def show_all_entries(user_id):
 
     return render_template("all-entries.html", entries=entries, user=user)
 
+@app.route("/line_chart/<int:user_id>")
+def chart(user_id):
+
+    # grab all the users entries
+    entries = Entry.query.filter_by(user_id=user_id).all()
+    values = []
+    for entry in entries:
+        values.append(entry.mood.mood_id)
+
+    legend = 'Mood Data'
+    labels = [1, 2, 3, 4, 5]
+    values = values
+    return render_template('chart.html', values=values, labels=labels, legend=legend)
+
 @app.route("/delete-entry/<int:entry_id>")
 def delete_entry(entry_id):
     """Confirmation that a user deleted an entry"""
@@ -227,13 +241,21 @@ def update_entry(entry_id):
 
     # grabs information for the form
     user_mood = request.form.get("mood")
-
-    mood = Mood.query.get(int(user_mood))
+    if user_mood == None:
+        pass
+    else:
+        mood = Mood.query.get(int(user_mood))
+        entry.mood = mood
 
     user_activities = request.form.getlist("activity_category")
 
     description = request.form.get("description")
-
+    if description == None and entry.description == None:
+        pass
+    elif description != None and entry.description == None:
+        entry.description = description 
+    elif description != None and entry.description != None:
+        entry.description += ', ' + description
 
     # appends each acitivity to a list
     form_activities = []
@@ -242,17 +264,7 @@ def update_entry(entry_id):
 
     activities = entry.activities
 
-    # update the existing entry's mood
-    entry = Entry.query.get(entry_id)
-    entry.mood = mood
-
     entry.activities.extend(form_activities)
-
-    if entry.description == None:
-        entry.description = description 
-    else:
-        entry.description += ', ' + description
-
 
     db.session.commit()
 
@@ -285,9 +297,6 @@ def add_entry():
 
     # add an entry to the database for the user logged in
     entry = Entry(mood=mood, user=user, description=description)
-
-    if mood.mood_id == 4 or mood.mood_id == 5:
-        entry.mood_status = 'Yes'
 
     entry.activities.extend(activities)
     user.entries.append(entry)
@@ -327,6 +336,36 @@ def mood_enhancer_input():
     mood_enhancers = user.mood_enhancers
 
     return render_template("mood-enhancers.html", mood_enhancers=mood_enhancers)
+
+@app.route("/update-mood-enhancers/<int:user_id>", methods=["POST", "GET"])
+def show_mood_enhancers(user_id):
+
+    user = User.query.get(user_id)
+    mood_enhancers = user.mood_enhancers
+
+    user = User.query.get(user_id)
+
+
+    return render_template("update-mood-enhancers.html", mood_enhancers=mood_enhancers, user=user)
+
+@app.route("/update-mood-enhancer/<int:user_id>",  methods=["POST", "GET"])
+def update_mood_enhancer(user_id):
+
+    user = User.query.get(user_id)
+
+    delete_enhancer = request.form.getlist("delete_mood_enhancer")
+
+    to_delete = []
+    for enhancer in delete_enhancer:
+        to_delete.append(int(enhancer))
+
+    for mood_enhancer_id in to_delete:
+        mood_enhancer = Mood_Enhancer.query.get(mood_enhancer_id)
+        db.session.delete(mood_enhancer)
+
+    db.session.commit()
+
+    return redirect("/update-mood-enhancers/{}".format(user.user_id))
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

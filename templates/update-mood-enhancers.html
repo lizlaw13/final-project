@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<h2>Mood Enhancers</h2>
+<form action="/update-mood-enhancer/{{user.user_id}}", method="POST">
+
+{% if mood_enhancers %}
+<h3>Delete mood enhancers!!</h3>
+{% for mood in mood_enhancers %}
+{{ mood.mood_enhancer }} <input type="checkbox" name="delete_mood_enhancer" value="{{mood.mood_enhancer_id}}">
+<br><br>
+{% endfor %}
+<input type="submit" name="submit">
+{% else %}
+<h4>Looks like you don't have any mood enhancers...</h4>
+{% endif %}
+</form>
+<form action="/mood-enhancers" method="POST">
+    <h3>Update mood enhancers:</h3>
+    1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.."> <br>
+    2) <input type="text" name="mood_enhancer_2" placeholder="watch netflix.."> <br>
+    3) <input type="text" name="mood_enhancer_3" placeholder="listen to one direction.."> <br>
+    <br>
+    <input type="submit" name="submit">
+</form>
+<br>
+<a href="/all-entries">View All Entries</a>
+
+{% endblock %}

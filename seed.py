@@ -100,6 +100,14 @@ db.session.add(entryFour)
 db.session.add(entryFive)
 
 
+mood_enhancer_entry_1 = Mood_Enhancer(user_id=1, mood_enhancer='Go for a walk')
+mood_enhancer_entry_2 = Mood_Enhancer(user_id=1, mood_enhancer='Call best friend')
+mood_enhancer_entry_3 = Mood_Enhancer(user_id=1, mood_enhancer='Listen to music')
+
+db.session.add(mood_enhancer_entry_1)
+db.session.add(mood_enhancer_entry_2)
+db.session.add(mood_enhancer_entry_3)
+
 
 
 
