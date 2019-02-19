@@ -92,7 +92,6 @@ class Entry(db.Model):
     entry_id = db.Column(db.Integer,  
                         autoincrement=True, 
                         primary_key=True)
-    # date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     date_created = db.Column(db.TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
     user_id = db.Column(db.Integer, 
                         db.ForeignKey("users.user_id"))
@@ -110,10 +109,6 @@ class Entry(db.Model):
         """Provide helpful representation when printed."""
 
         return f"<Entry entry_id={self.entry_id} date_created={self.date_created} user_id={self.user_id} mood_id={self.mood_id} description={self.description}>"
-
-
-    # activity_category = db.relationship("Activity_Category", backref="entries")
-
 
 
 class Mood_Enhancer(db.Model):
@@ -135,7 +130,7 @@ class Mood_Enhancer(db.Model):
         """Provide helpful representation when printed."""
 
         return f"""<Mood Enhancer mood_enhancer_id={self.mood_enhancer_id}
-            user_id={self.user_id}>"""
+            user_id={self.user_id} mood_enhancer={self.mood_enhancer}>"""
 
 class User_Brain_Dump(db.Model):
     """Optional inputed description from user as a diary entry """

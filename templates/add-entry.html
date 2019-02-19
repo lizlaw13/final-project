@@ -8,11 +8,24 @@
 
 <p> Mood: {{ entry.mood.verbose_mood }}</p>
 
+<h3>Activity/ Activities Added:</h3>
+<ul>
 {% for activity in activities %}
-<p> Activity: {{ activity.verbose_category }}</p>
-
+<li>{{ activity.verbose_category }}</li>
 {% endfor %}
+</ul>
 
+{% if mood.mood_id == 4 %} 
+<form action="/mood-enhancers" method="POST">
+    <h3>Please input three ways you can enhance your mood:</h3>
+    1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.."> <br>
+    2) <input type="text" name="mood_enhancer_2" placeholder="watch netflix.."> <br>
+    3) <input type="text" name="mood_enhancer_3" placeholder="listen to one direction.."> <br>
+    <br>
+    <input type="submit" name="submit">
+</form>
+{% endif %}
+<br>
 <a href="/all-entries">View All Entries</a>
 
 {% endblock %}

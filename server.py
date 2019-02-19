@@ -27,7 +27,7 @@ def register_form():
 
     return render_template("register-form.html")
 
-app.route("/register", methods=["POST"])
+@app.route("/register", methods=["POST"])
 def register_new_user():
 
     # grab the email and password from the form
@@ -102,7 +102,7 @@ def generate_all_entries():
     # querying by user_id from the session
     user = User.query.filter_by(user_id=user_id).first()
 
-    return redirect(f"/all-entries/{user.user_id}")
+    return redirect("/all-entries/{}".format(user.user_id))
 
 
 @app.route("/all-entries/<int:user_id>")
@@ -133,10 +133,10 @@ def delete_entry(entry_id):
     user_id = session.get("user_id")
 
     # prevents the public for accessing user specific information
-    # if session["user_id"] is not user_id:
-    #     return redirect("/")
-    if session["user_id"] != user_id:
+    if session["user_id"] is not user_id:
         return redirect("/")
+    # if session["user_id"] != user_id:
+    #     return redirect("/")
 
     # removes an entry from the database
     db.session.delete(entry)
@@ -144,12 +144,6 @@ def delete_entry(entry_id):
 
 
     return render_template("delete-entry.html")
-
-# @app.route("/modified-entry/<int:entry_id>")
-# def modify_activitiy(entry_id):
-#     """Confirmation that a user has deleted an activity from their entry"""
-
-#     return render_template("modified-entry.html")
 
 @app.route("/modified-entry/<int:entry_id>",  methods=["POST", "GET"])
 def modify_activitiy(entry_id):
@@ -173,9 +167,21 @@ def modify_activitiy(entry_id):
     for activity in form_activities:
         entry.activities.remove(activity)
 
+
     db.session.commit()
 
     return render_template("modified-entry.html")
+
+@app.route("/delete-note-entry/<int:entry_id>", methods= ["POST", "GET"])
+def delete_note(entry_id):
+
+    entry = Entry.query.get(entry_id)
+    entry.description = None
+
+    db.session.commit()
+
+    return render_template("delete-note-entry.html")
+
 
 @app.route("/update-entry/<int:entry_id>")
 def show_update_form(entry_id):
@@ -224,6 +230,9 @@ def update_entry(entry_id):
 
     user_activities = request.form.getlist("activity_category")
 
+    description = request.form.get("description")
+
+
     # appends each acitivity to a list
     form_activities = []
     for activity_id in user_activities:
@@ -237,12 +246,18 @@ def update_entry(entry_id):
 
     entry.activities.extend(form_activities)
 
+    if entry.description == None:
+        entry.description = description 
+    else:
+        entry.description += ', ' + description
+
+
     db.session.commit()
 
 
     return render_template("updated_entry.html", activities=activities)
 
-@app.route('/add-entry', methods=["POST"])
+@app.route('/add-entry', methods=["POST", "GET"])
 def add_entry():
     """Adds a new entry for a user"""
 
@@ -253,6 +268,8 @@ def add_entry():
     user_mood = request.form.get("mood")
 
     user_activities = request.form.getlist("activity_category")
+
+    description = request.form.get("description")
 
     activities = []
     for activity_id in user_activities:
@@ -265,7 +282,7 @@ def add_entry():
     mood = Mood.query.get(int(user_mood))
 
     # add an entry to the database for the user logged in
-    entry = Entry(mood=mood, user=user)
+    entry = Entry(mood=mood, user=user, description=description)
 
     entry.activities.extend(activities)
     user.entries.append(entry)
@@ -275,8 +292,38 @@ def add_entry():
     # pass the information the user submitted to the template
     activities = entry.activities
 
-    return render_template("add-entry.html", entry=entry, activities=activities)
+    return render_template("add-entry.html", entry=entry, activities=activities, mood=mood)
 
+@app.route("/mood-enhancers", methods=["POST", "GET"])
+def mood_enhancer_input():
+
+    user_id = session.get("user_id")
+
+
+
+    user = User.query.get(user_id)
+
+    entry = Entry.query.filter_by(user_id=user_id)
+
+    user_mood_enhancer_1 = request.form.get("mood_enhancer_1")
+    user_mood_enhancer_2 = request.form.get("mood_enhancer_2")
+    user_mood_enhancer_3 = request.form.get("mood_enhancer_3")
+
+    mood_enhancer_entry_1 = Mood_Enhancer(user_id=user_id, mood_enhancer=user_mood_enhancer_1)
+    mood_enhancer_entry_2 = Mood_Enhancer(user_id=user_id, mood_enhancer=user_mood_enhancer_2)
+    mood_enhancer_entry_3 = Mood_Enhancer(user_id=user_id, mood_enhancer=user_mood_enhancer_3)
+
+    db.session.add(mood_enhancer_entry_1)
+    db.session.add(mood_enhancer_entry_2)
+    db.session.add(mood_enhancer_entry_3)
+
+
+    # db.session.commit()
+
+    enhancer = Mood_Enhancer.query.filter_by(user_id=1)
+    print(enhancer)
+
+    return render_template("mood-enhancers.html")
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

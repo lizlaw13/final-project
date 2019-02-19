@@ -2,8 +2,13 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<h4>You have deleted your entry!</h4>
+<h2>You have added mood enhancers!</h2>
 
+<ul>
+{% for enhancer in enhancer %}
+<li>{{ enhancer }}</li>
+</ul>
+{% endfor %}
 <a href="/all-entries">View All Entries</a>
 
 {% endblock %}

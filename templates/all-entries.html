@@ -14,12 +14,21 @@ Activity/ Activities:
 
 {% endfor %}
 </ul>
+
+{% if entry.description %}
+<p>Note:</p>
+<p> {{ entry.description }}</p>
+{% endif %}
 <a href="/update-entry/{{entry.entry_id}}">Update Entry</a> <br>
 <a href="/delete-entry/{{entry.entry_id}}">Delete Entry</a>
+
 </p>
 <hr>
 {% endfor %}
 
-<!-- <a href="/user/ {{ user.user_id }} ">Add An Entry</a>
- -->
+
+
+
+<a href="/user/{{ user.user_id }}">Homepage</a>
+
 {% endblock %}

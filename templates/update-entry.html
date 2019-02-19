@@ -13,8 +13,8 @@
     {% endfor %}
     </ul>
 
-<h4>Delete Activity/ Activities: </h4>
 <form action="/modified-entry/{{ entry.entry_id}}" method="POST">
+    <h4>Delete Activity/ Activities: </h4>
 
     {% for activity in activities %} 
 
@@ -23,9 +23,20 @@
     {% endfor %}
 
     <br> <br>
+
     <input type="submit" name="submit">
 </form>
 
+<form action="/delete-note-entry/{{ entry.entry_id}}" method="POST">
+
+{% if entry.description %}
+<h4>Delete Note:</h4>
+{{ entry.description }} <input type="checkbox" value ="{{ entry.description }}">
+<input type="submit" name="submit" name="description">
+{% endif %}
+ <br> <br>
+
+</form>
 
 <hr>
 <h4>Update Entry:</h4>
@@ -46,6 +57,9 @@
     {{ activity.verbose_category }} 
         <input type="checkbox" name= "activity_category" value="{{activity.activity_category_id }}">
     {% endfor %}
+
+    <br> <br>
+    Optional Note: <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends" size="40">
 
     <br> <br>
     <input type="submit" name="submit">
