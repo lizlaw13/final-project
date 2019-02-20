@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<form action="/associated-moods" method="POST">
+    <h3>Select a mood to view all associated entries:</h3>
+    {% for mood in moods %}
+    {{ mood.verbose_mood }}: <input type="radio" name="mood" value="{{ mood.mood_id }}">
+    {% endfor %}
+    <br> <br>
+    <input type="submit" name="submit">
+
+</form>
+
+{% endblock %}

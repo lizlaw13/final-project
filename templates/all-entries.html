@@ -7,20 +7,20 @@
 
 {% for entry in entries %}
 <p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br> <br>
-Activity/ Activities:
-<ul> {% for activity in entry.activities %}
+    Activity/ Activities:
+    <ul> {% for activity in entry.activities %}
 
-<li>{{ activity.verbose_category }}</li>
+        <li>{{ activity.verbose_category }}</li>
 
-{% endfor %}
-</ul>
+        {% endfor %}
+    </ul>
 
-{% if entry.description %}
-<p>Note:</p>
-<p> {{ entry.description }}</p>
-{% endif %}
-<a href="/update-entry/{{entry.entry_id}}">Update Entry</a> <br>
-<a href="/delete-entry/{{entry.entry_id}}">Delete Entry</a>
+    {% if entry.description %}
+    <p>Note:</p>
+    <p> {{ entry.description }}</p>
+    {% endif %}
+    <a href="/update-entry/{{entry.entry_id}}">Update Entry</a> <br>
+    <a href="/delete-entry/{{entry.entry_id}}">Delete Entry</a>
 
 </p>
 <hr>
@@ -29,6 +29,7 @@ Activity/ Activities:
 
 
 <a href="/user/{{ user.user_id }}">Homepage</a> <br> <br>
+<a href="/associated-moods/{{ user.user_id }}">Associated Activities and Mood</a> <br><br>
 <a href="/line_chart/{{ user.user_id }}">View Mood Over Time</a> <br><br>
 <a href="/update-mood-enhancers/{{ user.user_id }}">View Mood Enhancers</a>
 

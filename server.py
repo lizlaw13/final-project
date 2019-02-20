@@ -397,8 +397,33 @@ def update_mood_enhancer(user_id):
     return redirect("/update-mood-enhancers/{}".format(user.user_id))
 
 
-@app.route("/moods/<int:mood_id>/entries")
+@app.route("/associated-moods/<int:user_id>")
+def show_associated_moods_form(user_id):
+
+    # grabs all moods and activities
+    moods = Mood.query.all()
+
+    return render_template("associated-moods.html", moods=moods)
+
+
+@app.route("/associated-moods", methods=["GET", "POST"])
+def redirect_associated_mood():
+
+    # grab the mood_id from the form
+    user_mood_id = request.form.get("mood")
+
+    # set the mood_id to id grabbed from the form
+    mood_id = user_mood_id
+
+    return redirect("/moods/{}/entries".format(mood_id))
+
+
+@app.route("/moods/<int:mood_id>/entries", methods=["GET", "POST"])
 def show_mood(mood_id):
+
+    user_id = session.get("user_id")
+    user = User.query.get(user_id)
+
     entries = (
         Entry.query.filter_by(mood_id=mood_id, user_id=session["user_id"])
         .limit(10)
@@ -413,7 +438,10 @@ def show_mood(mood_id):
             activities.append(activity.verbose_category)
 
     return render_template(
-        "show-mood.html", verbose_mood=verbose_mood, activities=set(activities)
+        "show-mood.html",
+        verbose_mood=verbose_mood,
+        activities=set(activities),
+        user=user,
     )
 
 
