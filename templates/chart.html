@@ -4,7 +4,13 @@
 
 <h1>Simple Line Chart</h1>
 <!-- bar chart canvas element -->
-<canvas id="myChart" width="600" height="400"></canvas>
+<canvas
+    data-labels='{{ labels | tojson }}'
+    data-label="{{ legend }}"
+    id="myChart"
+    width="600"
+    height="400"
+></canvas>
 <canvas id="myDoughnutChart" width="600" height="400"></canvas>
 
 <p id="caption">The chart is displaying a simple line chart.</p>
@@ -15,11 +21,9 @@ Chart.defaults.global.responsive = false;
  
 // define the chart data
 let chartData = {
-  labels : [{% for item in labels %}
-             "{{item}}",
-            {% endfor %}],
+  labels : JSON.parse(document.querySelector('#myChart').dataset.labels),
   datasets : [{
-      label: '{{ legend }}',
+      label: document.querySelector('#myChart').dataset.label,
       fill: true,
       lineTension: 0.1,
       backgroundColor: "rgba(75,192,192,0.4)",

@@ -67,8 +67,43 @@ entryThree.activities.append(exercise)
 entryFour = Entry(mood_id= 2, user_id= 1, date_created='2019-02-04 19:33:54.99179+00')
 entryFour.activities.append(schoolWork)
 entryFive = Entry(mood_id= 3, user_id= 1, date_created='2019-02-05 19:33:54.99179+00', 
-                    description='hiking with my dog')
+                    )
 entryFive.activities.append(exercise)
+
+entrySix = Entry(mood_id= 1, user_id= 1, date_created='2019-02-06 19:33:54.99179+00')
+entrySix.activities.append(leisureRelaxation)
+entrySix.activities.append(exercise)
+entrySeven = Entry(mood_id= 2, user_id= 1, date_created='2019-02-07 19:33:54.99179+00')
+entrySeven.activities.append(houseWork)
+entrySeven.activities.append(exercise)
+entryEight = Entry(mood_id= 3, user_id= 1, date_created='2019-02-08 19:33:54.99179+00', 
+                    description='drinks with no one')
+entryEight.activities.append(social)
+entryEight.activities.append(leisureRelaxation)
+entryEight.activities.append(exercise)
+entryNine = Entry(mood_id= 2, user_id= 1, date_created='2019-02-09 19:33:54.99179+00')
+entryNine.activities.append(schoolWork)
+entryNine = Entry(mood_id= 3, user_id= 1, date_created='2019-02-10 19:33:54.99179+00', 
+                    description='hiking with my me')
+entryNine.activities.append(exercise)
+entryNine.activities.append(social)
+entryNine.activities.append(leisureRelaxation)
+entryNine.activities.append(exercise)
+entryTen = Entry(mood_id= 2, user_id= 1, date_created='2019-02-11 19:33:54.99179+00')
+entryTen.activities.append(schoolWork)
+entryEleven = Entry(mood_id= 1, user_id= 1, date_created='2019-02-12 19:33:54.99179+00', 
+                    description='hiking with my dog')
+entryEleven.activities.append(exercise)
+entryTwelve = Entry(mood_id= 1, user_id= 1, date_created='2019-02-13 19:33:54.99179+00', 
+                    description='hiking with my cat')
+entryTwelve.activities.append(exercise)
+entryThirteen = Entry(mood_id= 2, user_id= 1, date_created='2019-02-14 19:33:54.99179+00', 
+                    description='hiking with maddie')
+entryThirteen.activities.append(exercise)
+entryFourteen = Entry(mood_id= 4, user_id= 1, date_created='2019-02-15 19:33:54.99179+00', 
+                    description='hiking with myself')
+entryFourteen.activities.append(exercise)
+
 
 # entryOne = Entry(mood_id= 1, user_id= 1, date_created='2019-02-1 20:31:05.974887')
 # entryOne.activities.append(leisureRelaxation)
@@ -98,6 +133,18 @@ db.session.add(entryOne)
 db.session.add(entryThree)
 db.session.add(entryFour)
 db.session.add(entryFive)
+db.session.add(entrySix)
+db.session.add(entrySeven)
+db.session.add(entryEight)
+db.session.add(entryNine)
+db.session.add(entryTen)
+db.session.add(entryEleven)
+db.session.add(entryTwelve)
+db.session.add(entryThirteen)
+db.session.add(entryFourteen)
+
+
+
 
 
 mood_enhancer_entry_1 = Mood_Enhancer(user_id=1, mood_enhancer='Go for a walk')

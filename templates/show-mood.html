@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<h1>{{ verbose_mood }}</h1>
+
+<ul>
+    {% for activity in activities %}
+    <li>{{activity}}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
