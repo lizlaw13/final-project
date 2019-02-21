@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 
 # from flask_debugtoolbar import DebugToolbarExtension
 from database import connect_to_db, db
@@ -134,12 +135,25 @@ def show_all_entries(user_id):
     return render_template("all-entries.html", entries=entries, user=user)
 
 
-@app.route("/line_chart/<int:user_id>")
-def chart(user_id):
+@app.route("/line-chart/<int:user_id>")
+def line_chart(user_id):
     """"Shows line chart of user's mood over time"""
+
+    # MOOD OVER TIME
+
+    # grab user in the session
+    user_id = session.get("user_id")
 
     # grab all the users entries
     entries = Entry.query.filter_by(user_id=user_id).all()
+
+    # create a list of every date and append just the day for each entry
+    labels = []
+    for entry in entries:
+        labels.append(entry.date_created.day)
+
+    # sort the list
+    sorted_dates = sorted(labels)
 
     # create a list of all user moods
     values = []
@@ -148,10 +162,60 @@ def chart(user_id):
 
     # create values to pass to the tempplate
     legend = "Mood Data"
-    labels = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    labels = sorted_dates
     values = values
 
-    return render_template("chart.html", values=values, labels=labels, legend=legend)
+    return render_template(
+        "line-chart.html", values=values, labels=sorted_dates, legend=legend
+    )
+
+
+@app.route("/donut-chart/<int:user_id>")
+def doughnut_chart(user_id):
+
+    # TOTAL MOOD COUNT
+
+    # grab user in the session
+    user_id = session.get("user_id")
+
+    # grab all the users entries
+    entries = Entry.query.filter_by(user_id=user_id).all()
+
+    # grab a list of all the moods for the user
+    all_moods = []
+    for entry in entries:
+        all_moods.append(entry.mood.verbose_mood)
+
+    # create a dictionary with keys being the mood and values being their count
+    mood_dictionary = {}
+    for mood in all_moods:
+        if mood == "Fantastic":
+            mood_dictionary["Fantastic"] = mood_dictionary.get("Fantastic", 0) + 1
+        elif mood == "Good":
+            mood_dictionary["Good"] = mood_dictionary.get("Good", 0) + 1
+        elif mood == "Neutral":
+            mood_dictionary["Neutral"] = mood_dictionary.get("Neutral", 0) + 1
+        elif mood == "Sad/Bad":
+            mood_dictionary["Sad/Bad"] = mood_dictionary.get("Sad/Bad", 0) + 1
+        elif mood == "Terrible":
+            mood_dictionary["Terrible"] = mood_dictionary.get("Terrible", 0) + 1
+
+    # seperate the keys from the values
+    json_moods = []
+    moods = mood_dictionary.keys()
+    json_count = []
+    for mood in moods:
+        json_moods.append(mood)
+
+    count = mood_dictionary.values()
+    for number in count:
+        json_count.append(number)
+
+    legend = "Total Mood Count"
+
+    return render_template(
+        "/donut-chart.html", labels=json_moods, values=json_count, legend=legend
+    )
 
 
 @app.route("/delete-entry/<int:entry_id>")

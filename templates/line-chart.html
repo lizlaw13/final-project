@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<h1>Mood Over Time</h1>
+<!-- bar chart canvas element -->
+<canvas data-labels='{{ labels | tojson }}' data-label="{{ legend }}" data-data="{{ values | tojson}}" id="myChart"
+  width="600" height="400"></canvas>
+
+<p id="caption">The chart is displaying your mood over time.</p>
+
+
+<script src="/static/line-chart.js"></script>
+{% endblock %}
