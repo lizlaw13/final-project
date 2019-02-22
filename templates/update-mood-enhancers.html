@@ -3,18 +3,20 @@
 {% block content %}
 
 <h2>Mood Enhancers</h2>
-<form action="/update-mood-enhancer/{{user.user_id}}", method="POST">
+<form action="/update-mood-enhancer/{{user.user_id}}" , method="POST">
 
-{% if mood_enhancers %}
-<h3>Delete mood enhancers!!</h3>
-{% for mood in mood_enhancers %}
-{{ mood.mood_enhancer }} <input type="checkbox" name="delete_mood_enhancer" value="{{mood.mood_enhancer_id}}">
-<br><br>
-{% endfor %}
-<input type="submit" name="submit">
-{% else %}
-<h4>Looks like you don't have any mood enhancers...</h4>
-{% endif %}
+
+    {% if mood_enhancers %}
+    <h3>Delete mood enhancers!!</h3>
+    {% for mood in mood_enhancers %}
+    {{ mood.mood_enhancer }} <input type="checkbox" name="delete_mood_enhancer" value="{{mood.mood_enhancer_id}}">
+    <br><br>
+    {% endfor %}
+    <input type="submit" name="submit">
+    {% else %}
+    <h4>Looks like you don't have any mood enhancers...</h4>
+    {% endif %}
+
 </form>
 <form action="/mood-enhancers" method="POST">
     <h3>Update mood enhancers:</h3>

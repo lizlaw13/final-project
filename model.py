@@ -1,7 +1,7 @@
 """Models and database functions for final project."""
 # from SQLAlchemy import timestamp
 import datetime
-from database import db
+from database import *
 
 # Model definitions
 

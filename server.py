@@ -258,14 +258,13 @@ def modify_activitiy(entry_id):
     form_activities = []
     for activity_id in user_activities:
         form_activities.append(Activity_Category.query.get(int(activity_id)))
-
     # deletes each activitiy from the entry one by one
     for activity in form_activities:
         entry.activities.remove(activity)
 
     db.session.commit()
 
-    return render_template("modified-entry.html")
+    return redirect(f"/update-entry/{entry.entry_id}")
 
 
 @app.route("/delete-note-entry/<int:entry_id>", methods=["POST", "GET"])
@@ -312,16 +311,16 @@ def update_entry(entry_id):
     """Confirmation that a user has added an activity or updated their mood on their entry"""
 
     # grabs user id in the session
-    user_id = session.get("user_id")
 
     # prevents the public from accessing user specific information
     # if session["user_id"] is not entry.user.user_id:
     #     return redirect("/")
-    if session["user_id"] != user_id:
-        return redirect("/")
 
     # grabs entry id
     entry = Entry.query.get(entry_id)
+    user_id = session["user_id"]
+    if user_id != entry.user.user_id:
+        return redirect("/")
 
     # grabs information for the form
     user_mood = request.form.get("mood")
@@ -334,11 +333,11 @@ def update_entry(entry_id):
     user_activities = request.form.getlist("activity_category")
 
     description = request.form.get("description")
-    if description == None and entry.description == None:
+    if description is None and entry.description is None:
         pass
-    elif description != None and entry.description == None:
+    elif description is None and entry.description is None:
         entry.description = description
-    elif description != None and entry.description != None:
+    elif description is None and entry.description is None:
         entry.description += ", " + description
 
     # appends each acitivity to a list
@@ -352,7 +351,9 @@ def update_entry(entry_id):
 
     db.session.commit()
 
-    return render_template("updated_entry.html", activities=activities)
+    return redirect(f"/all-entries/{user_id}")
+
+    # return render_template("updated_entry.html", activities=activities)
 
 
 @app.route("/add-entry", methods=["POST", "GET"])
@@ -523,3 +524,4 @@ if __name__ == "__main__":
 
     app.run(port=5000, host="0.0.0.0")
 
+connect_to_db(app)
