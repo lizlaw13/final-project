@@ -6,13 +6,18 @@
 
 
 {% for entry in entries %}
-<p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br> <br>
+<p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br>
+    {% if entry.activities %}
+    <br>
     Activity/ Activities:
     <ul> {% for activity in entry.activities %}
 
         <li>{{ activity.verbose_category }}</li>
 
         {% endfor %}
+        {% else %}
+        <p>No activities recorded for this entry</p>
+        {% endif %}
     </ul>
 
     {% if entry.description %}
@@ -31,6 +36,7 @@
 <a href="/user/{{ user.user_id }}">Homepage</a> <br> <br>
 <a href="/associated-moods/{{ user.user_id }}">Associated Activities and Mood</a> <br><br>
 <a href="/line-chart/{{ user.user_id }}">View Mood Over Time</a> <br><br>
+<a href="/donut-chart/{{ user.user_id }}">View Total Mood Count</a> <br> <br>
 <a href="/update-mood-enhancers/{{ user.user_id }}">View Mood Enhancers</a>
 
 {% endblock %}

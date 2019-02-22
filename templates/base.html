@@ -9,6 +9,12 @@
 </head>
 
 <body>
+    {% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
+    {% endwith %}
+
     {% block content %} BODY CONTENT GOES HERE {% endblock %}
 </body>
 

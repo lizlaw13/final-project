@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, asc
 
 # from flask_debugtoolbar import DebugToolbarExtension
 from database import connect_to_db, db
@@ -135,8 +135,8 @@ def show_all_entries(user_id):
     return render_template("all-entries.html", entries=entries, user=user)
 
 
-@app.route("/line-chart/<int:user_id>")
-def line_chart(user_id):
+@app.route("/line-chart")
+def line_chart():
     """"Shows line chart of user's mood over time"""
 
     # MOOD OVER TIME
@@ -145,25 +145,13 @@ def line_chart(user_id):
     user_id = session.get("user_id")
 
     # grab all the users entries
-    entries = Entry.query.filter_by(user_id=user_id).all()
+    entries = Entry.query.filter_by(user_id=user_id).order_by(Entry.date_created).all()
 
-    # create a list of every date and append just the day for each entry
-    labels = []
-    for entry in entries:
-        labels.append(entry.date_created.day)
-
-    # sort the list
-    sorted_dates = sorted(labels)
-
-    # create a list of all user moods
-    values = []
-    for entry in entries:
-        values.append(entry.mood.mood_id)
+    values = [entry.mood.mood_id for entry in entries]
+    sorted_dates = [entry.date_created.day for entry in entries]
 
     # create values to pass to the tempplate
     legend = "Mood Data"
-    labels = sorted_dates
-    values = values
 
     return render_template(
         "line-chart.html", values=values, labels=sorted_dates, legend=legend
@@ -220,7 +208,7 @@ def doughnut_chart(user_id):
 
 @app.route("/delete-entry/<int:entry_id>")
 def delete_entry(entry_id):
-    """Confirmation that a user deleted an entry"""
+    """Deletes a selected entry"""
 
     # grabs the specific entry id
     entry = Entry.query.get(entry_id)
@@ -238,7 +226,11 @@ def delete_entry(entry_id):
     db.session.delete(entry)
     db.session.commit()
 
-    return render_template("delete-entry.html")
+    # flash a message to show confirmation for the user
+    flash("You have successfully deleted an entry!")
+
+    return redirect(f"all-entries/{user_id}")
+    # return render_template("delete-entry.html")
 
 
 @app.route("/modified-entry/<int:entry_id>", methods=["POST", "GET"])
@@ -279,8 +271,6 @@ def delete_note(entry_id):
 
     return redirect(f"/update-entry/{entry.entry_id}")
 
-    # return render_template("delete-note-entry.html")
-
 
 @app.route("/update-entry/<int:entry_id>")
 def show_update_form(entry_id):
@@ -302,6 +292,7 @@ def show_update_form(entry_id):
     # grabs all moods and activities
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
+    print(entry.activities)
 
     return render_template(
         "update-entry.html", entry=entry, user=user, moods=moods, activities=activities
@@ -352,6 +343,8 @@ def update_entry(entry_id):
     entry.activities.extend(form_activities)
 
     db.session.commit()
+
+    flash("You have successfully updated an entry!")
 
     return redirect(f"/all-entries/{user_id}")
 
