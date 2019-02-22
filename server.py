@@ -277,7 +277,9 @@ def delete_note(entry_id):
 
     db.session.commit()
 
-    return render_template("delete-note-entry.html")
+    return redirect(f"/update-entry/{entry.entry_id}")
+
+    # return render_template("delete-note-entry.html")
 
 
 @app.route("/update-entry/<int:entry_id>")
@@ -352,8 +354,6 @@ def update_entry(entry_id):
     db.session.commit()
 
     return redirect(f"/all-entries/{user_id}")
-
-    # return render_template("updated_entry.html", activities=activities)
 
 
 @app.route("/add-entry", methods=["POST", "GET"])
