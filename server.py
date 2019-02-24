@@ -1,17 +1,17 @@
-# from jinja2 import StrictUndefined
+import datetime
+import hashlib
 
+# from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, asc
 
-# from flask_debugtoolbar import DebugToolbarExtension
-from database import connect_to_db, db
-import datetime
-
-from model import *
-
+# from jinja2 import StrictUndefined
 import indicoio
 
+
+from database import connect_to_db, db
+from model import *
 
 app = Flask(__name__)
 
@@ -42,8 +42,12 @@ def register_new_user():
     new_user_email = request.form.get("new_email")
     new_user_password = request.form.get("new_password")
 
+    hash_object = hashlib.md5(new_user_password.encode())
+
+    password = hash_object.hexdigest()
+
     # creates new user in database
-    new_user = User(email=new_user_email, password=new_user_password)
+    new_user = User(email=new_user_email, password=password)
 
     # adds new user to database
     db.session.add(new_user)
@@ -65,15 +69,23 @@ def login_form():
 
     # retrieving email and password from user
     email = request.form.get("email")
-    password = request.form.get("password")
+    form_password = request.form.get("password")
+
+    hash_object = hashlib.md5(form_password.encode())
 
     # querying by the password provided by the user
-    user = User.query.filter_by(password=password).first()
+    user = User.query.filter_by(email=email).first()
+    password = user.password
 
-    # created a session to store the user id
-    session["user_id"] = user.user_id
+    if hash_object.hexdigest() == password:
 
-    return redirect(f"/user/{user.user_id}")
+        # created a session to store the user id
+        session["user_id"] = user.user_id
+
+        return redirect(f"/user/{user.user_id}")
+    else:
+        flash("Sorry, wrong password!")
+        return redirect("/")
 
 
 @app.route("/logout")
@@ -104,7 +116,6 @@ def user_homepage(user_id):
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
     brain_dumps = User_Brain_Dump.query.filter_by(user_id=user.user_id).all()
-    print(brain_dumps)
 
     return render_template(
         "user-homepage.html",
@@ -196,14 +207,21 @@ def brain_dump_entry(user_brain_dump_id):
     return redirect(f"/brain-dump-details/{user_brain_dump_id}")
 
 
-@app.route("/brain-dump-details/<int:user_brain_dump_id>", methods=["GET", "POST"])
+@app.route("/brain-dump-details/<int:user_brain_dump_id>/", methods=["GET", "POST"])
 def show_brain_dump_details(user_brain_dump_id):
 
     id = int(user_brain_dump_id)
     brain_dump = User_Brain_Dump.query.filter_by(user_brain_dump_id=id).first()
-    print(brain_dump)
 
-    return render_template("/brain-dump-details.html", brain_dump=brain_dump)
+    positive = request.args.get("positive")
+    negative = request.args.get("negative")
+
+    return render_template(
+        "/brain-dump-details.html",
+        brain_dump=brain_dump,
+        positive=positive,
+        negative=negative,
+    )
 
 
 @app.route("/analyze-entry/<int:user_brain_dump_id>", methods=["GET", "POST"])
@@ -226,21 +244,25 @@ def analyze_entry(user_brain_dump_id):
     for value in sentiment_value:
         num_value = float(value)
 
-    postive = False
+    positive = False
     negative = False
     if num_value > 0.5:
-        postive = True
+        positive = True
     elif num_value < 0.5:
         negative = True
 
-    print(negative, postive)
-    return redirect(url_for("show_brain_dump_details")user_brain_dump_id=id,
-            postive=postive,
-            negative=negative )
+    return redirect(
+        url_for(
+            "show_brain_dump_details",
+            user_brain_dump_id=id,
+            positive=positive,
+            negative=negative,
+        )
+    )
 
 
-@app.route("/line-chart")
-def line_chart():
+@app.route("/line-chart/<int:user_id>")
+def line_chart(user_id):
     """"Shows line chart of user's mood over time"""
 
     # MOOD OVER TIME

@@ -20,7 +20,7 @@ class User(db.Model):
     first_name = db.Column(db.String(200), nullable=True)
     last_name = db.Column(db.String(200), nullable=True)
     email = db.Column(db.String(200))
-    password = db.Column(db.String(20))
+    password = db.Column(db.String(100))
 
     # many to many relationship
     moods = db.relationship("Mood", backref="users", secondary="entries")
