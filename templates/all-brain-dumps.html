@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<h1>All Brain Dumps</h1>
+
+{% for brain_dump in brain_dumps %}
+<a href="/brain-dump-details/{{ brain_dump.user_brain_dump_id }}">
+    <p>Date: {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}</p>
+</a> <br>
+<p>Brain Dump Entry: {{ brain_dump.brain_dump_entry }}</p>
+
+
+<hr>
+{% endfor %}
+<a href="/user/{{ user_id }}">Homepage</a> <br> <br>
+{% endblock %}

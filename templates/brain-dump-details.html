@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<h3>Date: {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}</h3>
+<h2>Entry:</h2>
+<p>{{ brain_dump.brain_dump_entry}}</p>
+
+
+<hr>
+
+<form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">
+    Click the button below to analyze your entry: <br> <br>
+    <input type="submit" name="submit" value="analyze">
+
+</form>
+
+<h2>{{ positive }} </h2>
+
+{% endblock %}

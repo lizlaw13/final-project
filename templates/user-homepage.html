@@ -4,33 +4,42 @@
 
 <h2>Add an entry for today!</h2>
 <h3>Today's Date: {{ now }}</h5>
-<form action="/add-entry" method="POST">
-    Select a mood: <br> <br>
+    <form action="/add-entry" method="POST">
+        Select a mood: <br> <br>
 
-    {% for mood in moods %}
+        {% for mood in moods %}
 
-    {{ mood.verbose_mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
+        {{ mood.verbose_mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
 
-    {% endfor %}
+        {% endfor %}
 
-    <br> <br>
-    Select activities: <br> <br>
+        <br> <br>
+        Select activities: <br> <br>
 
-    {% for activity in activities %} 
+        {% for activity in activities %}
 
-    {{ activity.verbose_category }} <input type="checkbox" name= "activity_category" value="{{ activity.activity_category_id }}">
+        {{ activity.verbose_category }} <input type="checkbox" name="activity_category"
+            value="{{ activity.activity_category_id }}">
 
-    {% endfor %}
+        {% endfor %}
 
-    <br> <br>
-    Optional Note: <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends" size="40">
+        <br> <br>
+        Optional Note: <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends"
+            size="40">
 
-    <br> <br>
-    <input type="submit" name="submit">
+        <br> <br>
+        <input type="submit" name="submit">
 
-</form>
-<br>
-<a href="/all-entries">View All Entries</a> <br> <br>
-<a href="/logout">Log Out</a>
+    </form>
+    <br>
+    <a href="/all-entries">View All Entries</a> <br> <br>
+    <a href="/brain-dump/{{ user.user_id }}">Add New Brain Dump</a> <br> <br>
 
-{% endblock %}
+    {% if brain_dumps %}
+    <a href="/all-brain-dumps/{{ user.user_id }}">All Brain Dumps</a> <br><br>
+    {% else %}
+    {% endif %}
+
+    <a href="/logout">Log Out</a>
+
+    {% endblock %}

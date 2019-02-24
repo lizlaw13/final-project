@@ -10,6 +10,9 @@ import datetime
 
 from model import *
 
+import indicoio
+
+
 app = Flask(__name__)
 
 app.secret_key = "ZILWAL"
@@ -100,8 +103,16 @@ def user_homepage(user_id):
     # generating today's date
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
+    brain_dumps = User_Brain_Dump.query.filter_by(user_id=user.user_id).all()
+    print(brain_dumps)
+
     return render_template(
-        "user-homepage.html", user=user, moods=moods, activities=activities, now=now
+        "user-homepage.html",
+        user=user,
+        moods=moods,
+        activities=activities,
+        now=now,
+        brain_dumps=brain_dumps,
     )
 
 
@@ -133,6 +144,99 @@ def show_all_entries(user_id):
     entries = Entry.query.filter_by(user_id=user_id).order_by("date_created").all()
 
     return render_template("all-entries.html", entries=entries, user=user)
+
+
+@app.route("/brain-dump/<int:user_id>", methods=["POST", "GET"])
+def show_brain_dump_form(user_id):
+
+    # grab user in the session
+    user_id = session.get("user_id")
+
+    now = datetime.datetime.today().strftime("%A, %B %d, %Y")
+
+    return render_template("brain-dump.html", user_id=user_id, now=now)
+
+
+@app.route("/brain-dump", methods=["POST", "GET"])
+def add_brain_dump():
+
+    # grab user in the session
+    user_id = session.get("user_id")
+
+    user_brain_dump = request.form["brain_dump"]
+
+    brain_dump = User_Brain_Dump(user_id=user_id, brain_dump_entry=user_brain_dump)
+
+    db.session.add(brain_dump)
+    db.session.commit()
+
+    flash("You have successfully added a brain dump entry!")
+
+    return redirect(f"/brain-dump/{user_id}")
+
+
+@app.route("/all-brain-dumps/<int:user_id>", methods=["POST", "GET"])
+def show_all_brain_dumps(user_id):
+
+    # grab user in the session
+    user_id = session.get("user_id")
+
+    brain_dumps = (
+        User_Brain_Dump.query.filter_by(user_id=user_id).order_by("date_created").all()
+    )
+
+    return render_template(
+        "all-brain-dumps.html", brain_dumps=brain_dumps, user_id=user_id
+    )
+
+
+@app.route("/brain-dump-details")
+def brain_dump_entry(user_brain_dump_id):
+
+    return redirect(f"/brain-dump-details/{user_brain_dump_id}")
+
+
+@app.route("/brain-dump-details/<int:user_brain_dump_id>", methods=["GET", "POST"])
+def show_brain_dump_details(user_brain_dump_id):
+
+    id = int(user_brain_dump_id)
+    brain_dump = User_Brain_Dump.query.filter_by(user_brain_dump_id=id).first()
+    print(brain_dump)
+
+    return render_template("/brain-dump-details.html", brain_dump=brain_dump)
+
+
+@app.route("/analyze-entry/<int:user_brain_dump_id>", methods=["GET", "POST"])
+def analyze_entry(user_brain_dump_id):
+
+    id = int(user_brain_dump_id)
+    brain_dump = User_Brain_Dump.query.filter_by(user_brain_dump_id=id).first()
+
+    text = brain_dump.brain_dump_entry
+
+    indicoio.config.api_key = "08ab282670a12fabb9e9fcf8219955f5"
+
+    # this function will return a number between 0 and 1. This number is a probability representing the likelihood that the analyzed text
+    # is positive or negative. Values greater than 0.5 indicate positive sentiment, while values less than 0.5 indicate negative sentiment.
+
+    indicoio.config.api_key = "08ab282670a12fabb9e9fcf8219955f5"
+
+    sentiment_value = indicoio.sentiment([text])
+
+    for value in sentiment_value:
+        num_value = float(value)
+
+    postive = False
+    negative = False
+    if num_value > 0.5:
+        postive = True
+    elif num_value < 0.5:
+        negative = True
+
+    print(negative, postive)
+    return redirect(url_for("show_brain_dump_details")user_brain_dump_id=id,
+            postive=postive,
+            negative=negative )
 
 
 @app.route("/line-chart")
@@ -517,4 +621,3 @@ if __name__ == "__main__":
 
     app.run(port=5000, host="0.0.0.0")
 
-connect_to_db(app)

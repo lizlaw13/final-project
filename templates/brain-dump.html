@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} Homepage {% endblock %}
+{% block content %}
+
+<form action="/brain-dump" method="POST">
+    <h2>Date: {{ now }}</h2>
+    <h3>How was your day?</h3>
+    <h4>Dump every and any feelings you may have and save them to your profile.
+    </h4>
+
+    <textarea name="brain_dump" placeholder="Enter text here..."></textarea>
+
+    <br> <br>
+    <input type="submit" name="submit">
+
+</form>
+<br>
+<a href="/user/{{ user_id }}">Homepage</a> <br> <br>
+{% endblock %}
