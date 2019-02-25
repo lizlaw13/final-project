@@ -8,6 +8,7 @@ from sqlalchemy import func, asc
 
 # from jinja2 import StrictUndefined
 import indicoio
+import os
 
 
 from database import connect_to_db, db
@@ -232,12 +233,12 @@ def analyze_entry(user_brain_dump_id):
 
     text = brain_dump.brain_dump_entry
 
-    indicoio.config.api_key = "08ab282670a12fabb9e9fcf8219955f5"
+    KEY = os.getenv("indicoio_key")
+
+    indicoio.config.api_key = KEY
 
     # this function will return a number between 0 and 1. This number is a probability representing the likelihood that the analyzed text
     # is positive or negative. Values greater than 0.5 indicate positive sentiment, while values less than 0.5 indicate negative sentiment.
-
-    indicoio.config.api_key = "08ab282670a12fabb9e9fcf8219955f5"
 
     sentiment_value = indicoio.sentiment([text])
 
@@ -255,8 +256,8 @@ def analyze_entry(user_brain_dump_id):
         url_for(
             "show_brain_dump_details",
             user_brain_dump_id=id,
-            positive=positive,
-            negative=negative,
+            positive_entry=positive,
+            negative_entry=negative,
         )
     )
 

@@ -130,6 +130,7 @@ class User_Brain_Dump(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     brain_dump_entry = db.Column(db.Text, nullable=True)
+    analysis_confirmation = db.Column(db.String(10), nullable=True)
 
     users = db.relationship("User", backref="user_brain_dumps")
 
