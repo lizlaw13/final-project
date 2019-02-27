@@ -10,7 +10,6 @@ from sqlalchemy import func, asc
 import indicoio
 import os
 
-
 from database import connect_to_db, db
 from model import *
 
@@ -166,7 +165,9 @@ def show_brain_dump_form(user_id):
 
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
-    return render_template("brain-dump.html", user_id=user_id, now=now)
+    updated = request.args.get("updated")
+
+    return render_template("brain-dump.html", user_id=user_id, now=now, updated=updated)
 
 
 @app.route("/brain-dump", methods=["POST", "GET"])
@@ -175,6 +176,7 @@ def add_brain_dump():
     # grab user in the session
     user_id = session.get("user_id")
 
+    # grab the user text from form
     user_brain_dump = request.form["brain_dump"]
 
     brain_dump = User_Brain_Dump(user_id=user_id, brain_dump_entry=user_brain_dump)
@@ -185,6 +187,27 @@ def add_brain_dump():
     flash("You have successfully added a brain dump entry!")
 
     return redirect(f"/brain-dump/{user_id}")
+
+
+@app.route("/update-brain-dump/<int:brain_dump_id>", methods=["POST", "GET"])
+def update_brain_dump(brain_dump_id):
+
+    entry_id = brain_dump_id
+
+    # grab the user text from form
+    user_brain_dump = request.form["brain_dump"]
+    current_entry = User_Brain_Dump.query.get(entry_id)
+
+    current_entry.brain_dump_entry = user_brain_dump
+    db.session.commit()
+
+    updated = "yes"
+
+    flash("You have successfully updated your brain dump entry!")
+
+    return redirect(
+        url_for("show_brain_dump_details", user_brain_dump_id=entry_id, updated=updated)
+    )
 
 
 @app.route("/all-brain-dumps/<int:user_id>", methods=["POST", "GET"])
@@ -216,25 +239,31 @@ def show_brain_dump_details(user_brain_dump_id):
 
     positive = request.args.get("positive")
     negative = request.args.get("negative")
+    value = request.args.get("value")
+    confirmation = request.args.get("confirmation")
+    updated = request.args.get("updated")
 
     return render_template(
         "/brain-dump-details.html",
+        user_brain_dump_id=id,
         brain_dump=brain_dump,
         positive=positive,
         negative=negative,
+        value=value,
+        confirmation=confirmation,
     )
 
 
 @app.route("/analyze-entry/<int:user_brain_dump_id>", methods=["GET", "POST"])
 def analyze_entry(user_brain_dump_id):
 
+    # ANALYZING ENTRY
     id = int(user_brain_dump_id)
     brain_dump = User_Brain_Dump.query.filter_by(user_brain_dump_id=id).first()
 
     text = brain_dump.brain_dump_entry
 
-    KEY = os.getenv("indicoio_key")
-
+    KEY = os.getenv("I_KEY")
     indicoio.config.api_key = KEY
 
     # this function will return a number between 0 and 1. This number is a probability representing the likelihood that the analyzed text
@@ -245,19 +274,44 @@ def analyze_entry(user_brain_dump_id):
     for value in sentiment_value:
         num_value = float(value)
 
-    positive = False
-    negative = False
-    if num_value > 0.5:
+    value = num_value
+
+    positive = None
+    negative = None
+    if value > 0.5:
         positive = True
-    elif num_value < 0.5:
+    elif value < 0.5:
         negative = True
+
+    # UPDATING BRAIN DUMP ENTRY
+    brain_dump.analysis = value
+    confirmation = request.form.get("yesNo")
+
+    if confirmation == "yes" and positive == True:
+        brain_dump.analysis_confirmation = "yes"
+        brain_dump.verbose_analysis = "positive"
+    elif confirmation == "yes" and negative == True:
+        brain_dump.analysis_confirmation = "yes"
+        brain_dump.verbose_analysis = "negative"
+    elif confirmation == "no":
+        brain_dump.analysis_confirmation = "no"
+        brain_dump.verbose_analysis = None
+        brain_dump.analysis = None
+        flash(
+            """We are sorry your analysis does not reflect how you feel. Your analysis will not be saved. If you update your entry, 
+            feel free to analyze again."""
+        )
+
+    db.session.commit()
 
     return redirect(
         url_for(
             "show_brain_dump_details",
             user_brain_dump_id=id,
-            positive_entry=positive,
-            negative_entry=negative,
+            positive=positive,
+            negative=negative,
+            value=value,
+            confirmation=confirmation,
         )
     )
 

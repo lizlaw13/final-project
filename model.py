@@ -131,11 +131,13 @@ class User_Brain_Dump(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     brain_dump_entry = db.Column(db.Text, nullable=True)
     analysis_confirmation = db.Column(db.String(10), nullable=True)
+    verbose_analysis = db.Column(db.String(10), nullable=True)
+    analysis = db.Column(db.DECIMAL(18, 4), nullable=True)
 
     users = db.relationship("User", backref="user_brain_dumps")
 
     def __repr__(self):
-        """Provid   e helpful representation when printed."""
+        """Provide helpful representation when printed."""
 
         return f"""<User Brain Dump user_brain_dump_id={self.user_brain_dump_id}
             user_id={self.user_id}>"""

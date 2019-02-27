@@ -4,18 +4,67 @@
 
 <h3>Date: {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}</h3>
 <h2>Entry:</h2>
-<p>{{ brain_dump.brain_dump_entry}}</p>
+<p>{{ brain_dump.brain_dump_entry }}</p>
+
+{% if brain_dump.analysis_confirmation == 'yes' and brain_dump.verbose_analysis == 'positive' %}
+<img src="https://image.flaticon.com/icons/png/512/70/70420.png" height="42" width="42">
+{% elif brain_dump.analysis_confirmation == 'yes' and brain_dump.verbose_analysis == 'negative' %}
+<img src="https://image.flaticon.com/icons/svg/25/25237.svg" height="42" width="42">
+{% endif %}
+
+{% if brain_dump.brain_dump_entry %}
+<form action="/update-brain-dump/{{ brain_dump.user_brain_dump_id }}" method="POST">
+    <h4>Update your entry:</h4>
+
+    <textarea name="brain_dump" value="brain-dump">{{ brain_dump.brain_dump_entry }}</textarea>
+
+    <br> <br>
+    <input type="submit" name="submit">
+
+</form>
+{% endif %}
+
+
 
 
 <hr>
 
+{% if brain_dump.verbose_analysis %}
+<p>Your saved analysis: {{ brain_dump.analysis }}</p>
+
+{% else %}
+
 <form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">
-    Click the button below to analyze your entry: <br> <br>
-    <input type="submit" name="submit" value="analyze">
+    Entry Analysis: <br> <br>
+    You will be returned a number between 0 and 1 which is a probability representing the likelihood that your entry
+    is positive or negative. Values greater than 0.5 indicate a positive entry, while values less than 0.5 indicate
+    a
+    negative entry. <br> <br>
+    Click the button below to analyze your entry:
+    <br>
+    <br>
+    <input type="submit" name="submit" value="Analyze">
 
 </form>
 
-<h2>{{ positive }} </h2>
-<h2>{{ negative }}</h2>
 
+{% if value %}
+<h3>Probability: {{ value }} </h3>
+{% if positive %}
+<h4>Positively Skewed</h4>
+{% elif negative %}
+<h4>Negatively Skewed</h4>
+{% endif %}
+<form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">
+    Is this analysis correct? <br>
+    Yes <input type="radio" name="yesNo" value="yes">
+    No <input type="radio" name="yesNo" value="no">
+
+    <input type="submit" name="submit">
+</form>
+{% endif %}
+{% endif %}
+
+
+<a href="/all-brain-dumps/{{ brain_dump.user_id }}">All Brain Dumps</a> <br><br>
 {% endblock %}

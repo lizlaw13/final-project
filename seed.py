@@ -218,7 +218,7 @@ mood_entry_three = User_Brain_Dump(
 
 db.session.add(mood_entry_one)
 db.session.add(mood_entry_two)
-db.session.add(mood_entry_one)
+db.session.add(mood_entry_three)
 
 
 db.session.commit()
