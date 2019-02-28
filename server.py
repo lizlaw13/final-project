@@ -1,12 +1,12 @@
 import datetime
 import hashlib
 
-# from flask_debugtoolbar import DebugToolbarExtension
+from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
+from jinja2 import StrictUndefined
 from sqlalchemy import func, asc
 
-# from jinja2 import StrictUndefined
 import indicoio
 import os
 
@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 app.secret_key = "ZILWAL"
 
-# app.jinja_env.undefined = StrictUndefined
+app.jinja_env.undefined = StrictUndefined
 
 
 @app.route("/")
@@ -42,8 +42,10 @@ def register_new_user():
     new_user_email = request.form.get("new_email")
     new_user_password = request.form.get("new_password")
 
+    # hash the password
     hash_object = hashlib.md5(new_user_password.encode())
 
+    # grab the hashed password
     password = hash_object.hexdigest()
 
     # creates new user in database
@@ -71,18 +73,22 @@ def login_form():
     email = request.form.get("email")
     form_password = request.form.get("password")
 
+    # hash the password provided
     hash_object = hashlib.md5(form_password.encode())
 
     # querying by the password provided by the user
     user = User.query.filter_by(email=email).first()
     password = user.password
 
+    # if the hash password matches the password in the database then
+    # log user in and create a session
     if hash_object.hexdigest() == password:
 
         # created a session to store the user id
         session["user_id"] = user.user_id
 
         return redirect(f"/user/{user.user_id}")
+
     else:
         flash("Sorry, wrong password!")
         return redirect("/")
@@ -94,6 +100,7 @@ def logout():
 
     # removing the user id from the session
     del session["user_id"]
+
     return redirect("/")
 
 
@@ -104,22 +111,25 @@ def user_homepage(user_id):
     # prevents the public for accessing user specific information
     if not session.get("user_id") or session["user_id"] != user_id:
         return redirect("/")
-    # if session.get("user_id") == None or session["user_id"] is not user_id:
-    #     return redirect("/")
 
     # retreiving user id and all moods and activities to be able to use in a form
     user = User.query.get(user_id)
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
 
-    # generating today's date
+    # generating today's date to display on the page
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
+    # if a user has already entered an entry for today's date- do not let then add another entry
+    # >>
+    # generate today's date to use as a compare date
     time = datetime.datetime.now()
     compare_time = time.date()
 
+    # query to find all brain dumps
     brain_dumps = User_Brain_Dump.query.filter_by(user_id=user.user_id).all()
 
+    # if there is an entry that exists with todays date set show_form to false
     show_form = True
     entries = Entry.query.filter_by(user_id=user_id)
     for entry in entries:
@@ -155,9 +165,7 @@ def show_all_entries(user_id):
     """Show all entries for a specific user """
 
     # prevents the public for accessing user specific information
-    # if session["user_id"] is not user_id:
-    #     return redirect("/")
-    if session["user_id"] != user_id:
+    if not session.get("user_id") or session["user_id"] != user_id:
         return redirect("/")
 
     # grab all the users entries
@@ -169,12 +177,15 @@ def show_all_entries(user_id):
 
 @app.route("/brain-dump/<int:user_id>", methods=["POST", "GET"])
 def show_brain_dump_form(user_id):
+    """Show brain dump form to add a brain dump entry"""
 
     # grab user in the session
     user_id = session.get("user_id")
 
+    # generate today's date
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
+    # grab infomration from params to check if a user is updating or created a new entry
     updated = request.args.get("updated")
 
     return render_template("brain-dump.html", user_id=user_id, now=now, updated=updated)
@@ -182,6 +193,7 @@ def show_brain_dump_form(user_id):
 
 @app.route("/brain-dump", methods=["POST", "GET"])
 def add_brain_dump():
+    """Adds a brain dump to the database"""
 
     # grab user in the session
     user_id = session.get("user_id")
@@ -189,6 +201,7 @@ def add_brain_dump():
     # grab the user text from form
     user_brain_dump = request.form["brain_dump"]
 
+    # add brain dump to database
     brain_dump = User_Brain_Dump(user_id=user_id, brain_dump_entry=user_brain_dump)
 
     db.session.add(brain_dump)
@@ -201,16 +214,20 @@ def add_brain_dump():
 
 @app.route("/update-brain-dump/<int:brain_dump_id>", methods=["POST", "GET"])
 def update_brain_dump(brain_dump_id):
+    """Shows the brain dump form to update a brain dump entry"""
 
+    # grab brain dump entry id
     entry_id = brain_dump_id
 
     # grab the user text from form
     user_brain_dump = request.form["brain_dump"]
     current_entry = User_Brain_Dump.query.get(entry_id)
 
+    # udpate the current entry
     current_entry.brain_dump_entry = user_brain_dump
     db.session.commit()
 
+    # set variable to pass to method show_brain_dump_details()
     updated = "yes"
 
     flash("You have successfully updated your brain dump entry!")
@@ -222,10 +239,12 @@ def update_brain_dump(brain_dump_id):
 
 @app.route("/all-brain-dumps/<int:user_id>", methods=["POST", "GET"])
 def show_all_brain_dumps(user_id):
+    """Show all user brain dumps"""
 
     # grab user in the session
     user_id = session.get("user_id")
 
+    # grabs all the brain dumps from the user and order them by date created
     brain_dumps = (
         User_Brain_Dump.query.filter_by(user_id=user_id).order_by("date_created").all()
     )
@@ -237,16 +256,20 @@ def show_all_brain_dumps(user_id):
 
 @app.route("/brain-dump-details")
 def brain_dump_entry(user_brain_dump_id):
+    """Generate URL for brain dump details"""
 
     return redirect(f"/brain-dump-details/{user_brain_dump_id}")
 
 
 @app.route("/brain-dump-details/<int:user_brain_dump_id>/", methods=["GET", "POST"])
 def show_brain_dump_details(user_brain_dump_id):
+    """Shows brain dump details for specific entry for a user"""
 
+    # converting id entry id to an integer and querying to grab specific entry
     id = int(user_brain_dump_id)
     brain_dump = User_Brain_Dump.query.filter_by(user_brain_dump_id=id).first()
 
+    # grabs all the necessary params passed in
     positive = request.args.get("positive")
     negative = request.args.get("negative")
     value = request.args.get("value")
@@ -268,24 +291,30 @@ def show_brain_dump_details(user_brain_dump_id):
 def analyze_entry(user_brain_dump_id):
 
     # ANALYZING ENTRY
+    # >>
+    # converting id entry id to an integer and querying to grab specific entry
     id = int(user_brain_dump_id)
     brain_dump = User_Brain_Dump.query.filter_by(user_brain_dump_id=id).first()
 
+    # grabbing text from entry
     text = brain_dump.brain_dump_entry
 
+    # passing API key
     KEY = os.getenv("I_KEY")
     indicoio.config.api_key = KEY
 
-    # this function will return a number between 0 and 1. This number is a probability representing the likelihood that the analyzed text
-    # is positive or negative. Values greater than 0.5 indicate positive sentiment, while values less than 0.5 indicate negative sentiment.
-
+    # this  will return a number between 0 and 1. This number is a probability representing the
+    # likelihood that the analyzed text is positive or negative. Values greater than 0.5 indicate
+    #  positive sentiment, while values less than 0.5 indicate negative sentiment.
     sentiment_value = indicoio.sentiment([text])
 
+    # converts from int to float
     for value in sentiment_value:
         num_value = float(value)
 
     value = num_value
 
+    # setting positive and negative depending on the score
     positive = None
     negative = None
     if value > 0.5:
@@ -328,27 +357,32 @@ def analyze_entry(user_brain_dump_id):
 
 @app.route("/reanalyze-entry/<int:brain_dump_id>")
 def reanalyze_entry(brain_dump_id):
+    """Allows users to reanalyze their entry"""
 
     # grabs the specific brain_dump id
     brain_dump = User_Brain_Dump.query.get(brain_dump_id)
 
+    # grabs the entry's user id
     user_id = brain_dump.user_id
 
+    # empty's all analysis columns from database
     brain_dump.analysis_confirmation = None
     brain_dump.verbose_analysis = None
     brain_dump.analysis = None
 
     db.session.commit()
 
-    return redirect(f"all-brain-dumps/{user_id}")
+    return redirect(f"brain-dump-details/{brain_dump_id}")
 
 
 @app.route("/delete-brain-dump/<int:brain_dump_id>")
 def delete_brain_dump_entry(brain_dump_id):
+    """Deletes brain dump entries"""
 
     # grabs the specific brain_dump id
     brain_dump = User_Brain_Dump.query.get(brain_dump_id)
 
+    # grabs the entry's user id
     user_id = brain_dump.user_id
 
     # removes a brain_dump_entry from the database
@@ -383,6 +417,7 @@ def line_chart(user_id):
 
     has_entries = True
 
+    # if a user only has one entry do not display chart
     if len(user.moods) <= 1:
         has_entries = False
 
@@ -398,6 +433,7 @@ def line_chart(user_id):
 
 @app.route("/donut-chart/<int:user_id>")
 def doughnut_chart(user_id):
+    """"Shows donut chart of user's mood over time"""
 
     # TOTAL MOOD COUNT
 
@@ -441,6 +477,7 @@ def doughnut_chart(user_id):
 
     legend = "Total Mood Count"
 
+    # if a user only has one entry do not display chart
     has_entries = True
     if len(user.moods) <= 1:
         has_entries = False
@@ -466,10 +503,8 @@ def delete_entry(entry_id):
     user_id = session.get("user_id")
 
     # prevents the public for accessing user specific information
-    if session["user_id"] is not user_id:
+    if not session.get("user_id") or session["user_id"] != user_id:
         return redirect("/")
-    # if session["user_id"] != user_id:
-    #     return redirect("/")
 
     # removes an entry from the database
     db.session.delete(entry)
@@ -487,6 +522,10 @@ def modify_activitiy(entry_id):
 
     # grabs user id in the session
     user_id = session.get("user_id")
+
+    # prevents the public for accessing user specific information
+    if not session.get("user_id") or session["user_id"] != user_id:
+        return redirect("/")
 
     # grabs information for the form
     user_activities = request.form.getlist("activity_category")
@@ -528,11 +567,8 @@ def show_update_form(entry_id):
     entry = Entry.query.get(entry_id)
 
     # prevents the public for accessing user specific information
-    # if session["user_id"] is not entry.user.user_id:
-    #     return redirect("/")
-
-    # if session["user_id"] != entry.user.user_id:
-    #     return redirect("/")
+    if not session.get("user_id") or session["user_id"] != user_id:
+        return redirect("/")
 
     # grabs the user's information
     user = User.query.get(entry.user.user_id)
@@ -551,11 +587,9 @@ def show_update_form(entry_id):
 def update_entry(entry_id):
     """Confirmation that a user has added an activity or updated their mood on their entry"""
 
-    # grabs user id in the session
-
-    # prevents the public from accessing user specific information
-    # if session["user_id"] is not entry.user.user_id:
-    #     return redirect("/")
+    # prevents the public for accessing user specific information
+    if not session.get("user_id") or session["user_id"] != user_id:
+        return redirect("/")
 
     # grabs entry id
     entry = Entry.query.get(entry_id)
@@ -658,6 +692,7 @@ def add_entry():
 
 @app.route("/mood-enhancers", methods=["POST", "GET"])
 def mood_enhancer_input():
+    """Allows users to add mood enhancers"""
 
     user_id = session.get("user_id")
 
@@ -665,35 +700,23 @@ def mood_enhancer_input():
 
     entry = Entry.query.filter_by(user_id=user_id)
 
-
-    # make form reactive such that you only show one text back and you enter one and it adds a new one 
+    # make form reactive such that you only show one text back and you enter one and it adds a new one
     user_mood_enhancer_1 = request.form.get("mood_enhancer_1")
     user_mood_enhancer_2 = request.form.get("mood_enhancer_2")
     user_mood_enhancer_3 = request.form.get("mood_enhancer_3")
 
-    # TODO
-    # write a function to add mood enhancer to database
+    # function to add mood enhancer to database
+    def add_mood_enhancer(user_mood_enhancer):
+        mood_enhancer = Mood_Enhancer(user_id=user_id, mood_enhancer=user_mood_enhancer)
+        db.session.add(mood_enhancer)
+        db.session.commit()
 
     if user_mood_enhancer_1:
-        mood_enhancer_entry_1 = Mood_Enhancer(
-            user_id=user_id, mood_enhancer=user_mood_enhancer_1
-        )
-        db.session.add(mood_enhancer_entry_1)
-        db.session.commit()
+        add_mood_enhancer(user_mood_enhancer_1)
     if user_mood_enhancer_2:
-        mood_enhancer_entry_2 = Mood_Enhancer(
-            user_id=user_id, mood_enhancer=user_mood_enhancer_2
-        )
-        db.session.add(mood_enhancer_entry_2)
-        db.session.commit()
-
+        add_mood_enhancer(user_mood_enhancer_2)
     if user_mood_enhancer_3:
-        mood_enhancer_entry_3 = Mood_Enhancer(
-            user_id=user_id, mood_enhancer=user_mood_enhancer_3
-        )
-        db.session.add(mood_enhancer_entry_3)
-
-        db.session.commit()
+        add_mood_enhancer(user_mood_enhancer_3)
 
     mood_enhancers = user.mood_enhancers
 
@@ -702,6 +725,7 @@ def mood_enhancer_input():
 
 @app.route("/update-mood-enhancers/<int:user_id>", methods=["POST", "GET"])
 def show_mood_enhancers(user_id):
+    """Shows all user's mood enhancers"""
 
     user = User.query.get(user_id)
     mood_enhancers = user.mood_enhancers
@@ -715,6 +739,7 @@ def show_mood_enhancers(user_id):
 
 @app.route("/update-mood-enhancer/<int:user_id>", methods=["POST", "GET"])
 def update_mood_enhancer(user_id):
+    """Allows users to update their mood enhancers"""
 
     user = User.query.get(user_id)
 
@@ -735,6 +760,7 @@ def update_mood_enhancer(user_id):
 
 @app.route("/associated-moods/<int:user_id>")
 def show_associated_moods_form(user_id):
+    """Allows users to view all activities with a mood"""
 
     # grabs all moods and activities
     moods = Mood.query.all()
@@ -744,6 +770,7 @@ def show_associated_moods_form(user_id):
 
 @app.route("/associated-moods", methods=["GET", "POST"])
 def redirect_associated_mood():
+    """Grabs the mood inputted from the user"""
 
     # grab the mood_id from the form
     user_mood_id = request.form.get("mood")
@@ -756,6 +783,7 @@ def redirect_associated_mood():
 
 @app.route("/moods/<int:mood_id>/entries", methods=["GET", "POST"])
 def show_mood(mood_id):
+    """Shows all the associated activities depending on the mood"""
 
     user_id = session.get("user_id")
     user = User.query.get(user_id)

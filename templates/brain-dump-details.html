@@ -15,7 +15,7 @@
 
 {% if brain_dump.brain_dump_entry %}
 <form action="/update-brain-dump/{{ brain_dump.user_brain_dump_id }}" method="POST">
-    <h4>Update your entry:</h4>
+    <h3>Update your entry:</h3>
 
     <textarea name="brain_dump" value="brain-dump">{{ brain_dump.brain_dump_entry }}</textarea>
 
@@ -49,12 +49,12 @@
 
 </form>
 
-
+<br>
 {% if value %}
 <h3>Probability: {{ value }} </h3>
 {% if positive %}
 <h4>Positively Skewed</h4>
-{% elif negative %}
+{% else %}
 <h4>Negatively Skewed</h4>
 {% endif %}
 <form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">

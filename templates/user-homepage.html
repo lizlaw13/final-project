@@ -10,8 +10,8 @@
 
         {% for mood in moods %}
 
-        {{ mood.verbose_mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
-
+        <input type="radio" name="mood" value="{{ mood.mood_id }}"> {{ mood.verbose_mood }}
+        <br>
         {% endfor %}
 
         <br> <br>
@@ -19,19 +19,23 @@
 
         {% for activity in activities %}
 
-        {{ activity.verbose_category }} <input type="checkbox" name="activity_category"
-            value="{{ activity.activity_category_id }}">
+        <input type="checkbox" name="activity_category" value="{{ activity.activity_category_id }}">
+        {{ activity.verbose_category }}
+        <br>
 
         {% endfor %}
 
         <br> <br>
-        Optional Note: <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends"
+        Optional Note:
+        <br> <br> <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends"
             size="40">
 
         <br> <br>
         <input type="submit" name="submit">
 
+
     </form>
+    <br>
     {% elif show_form == False %}
     <h1>You have already entered info for this date!</h1>
     {% endif %}

@@ -20,16 +20,18 @@
 
     {% for activity in entry.activities %}
 
-    {{ activity.verbose_category }}
+
     <input type="checkbox" name="activity_category" value="{{activity.activity_category_id }}">
+    {{ activity.verbose_category }}
+    <br>
     {% endfor %}
 
-    <br> <br>
+    <br>
 
     <input type="submit" name="submit">
 </form>
 {% else %}
-<h4>Looks like you don't have any activities...</h4>
+<h4>Looks like you don't have any activities....</h4>
 {% endif %}
 
 
@@ -40,7 +42,7 @@
     {{ entry.description }}
     <input type="submit" name="Delete" name="description" value="Delete">
     {% else %}
-    <h4>Looks like you do not have a note...</h4>
+    <h4>Looks like you do not have a note for this entry...</h4>
     {% endif %}
     <br> <br>
 
@@ -53,7 +55,8 @@
 
     {% for mood in moods %}
 
-    {{ mood.verbose_mood }} <input type="radio" name="mood" value="{{ mood.mood_id }}">
+    <input type="radio" name="mood" value="{{ mood.mood_id }}"> {{ mood.verbose_mood }}
+    <br>
 
     {% endfor %}
 
@@ -62,16 +65,19 @@
 
     {% for activity in activities %}
 
+    <input type="checkbox" name="activity_category" value="{{ activity.activity_category_id }}">
     {{ activity.verbose_category }}
-    <input type="checkbox" name="activity_category" value="{{activity.activity_category_id }}">
+    <br>
     {% endfor %}
 
     <br> <br>
-    Optional Note: <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends"
-        size="40">
+    Optional Note:
+    <br> <br> <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends" size="40">
 
     <br> <br>
     <input type="submit" name="submit">
 
 </form>
+<br>
+<a href="/all-entries">View All Entries</a> <br> <br>
 {% endblock %}

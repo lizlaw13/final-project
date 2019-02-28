@@ -5,11 +5,11 @@
 <form action="/associated-moods" method="POST">
     <h3>Select a mood to view all associated entries:</h3>
     {% for mood in moods %}
-    {{ mood.verbose_mood }}: <input type="radio" name="mood" value="{{ mood.mood_id }}">
+    <input type="radio" name="mood" value="{{ mood.mood_id }}"> {{ mood.verbose_mood }}
+    <br>
     {% endfor %}
-    <br> <br>
+    <br>
     <input type="submit" name="submit">
-
 </form>
 
 {% endblock %}
