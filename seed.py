@@ -104,19 +104,8 @@ entryEight.activities.append(social)
 entryEight.activities.append(leisureRelaxation)
 entryEight.activities.append(exercise)
 entryNine = Entry(mood_id=2, user_id=1, date_created="2019-02-09 19:33:54.99179+00")
-entryNine.activities.append(schoolWork)
-entryNine = Entry(
-    mood_id=3,
-    user_id=1,
-    date_created="2019-02-10 19:33:54.99179+00",
-    description="hiking with my me",
-)
-entryNine.activities.append(exercise)
-entryNine.activities.append(social)
-entryNine.activities.append(leisureRelaxation)
-entryNine.activities.append(exercise)
-entryTen = Entry(mood_id=2, user_id=1, date_created="2019-02-11 19:33:54.99179+00")
-entryTen.activities.append(schoolWork)
+
+
 entryEleven = Entry(
     mood_id=1,
     user_id=1,
@@ -147,29 +136,6 @@ entryFourteen = Entry(
 entryFourteen.activities.append(exercise)
 
 
-# entryOne = Entry(mood_id= 1, user_id= 1, date_created='2019-02-1 20:31:05.974887')
-# entryOne.activities.append(leisureRelaxation)
-# entryOne.activities.append(exercise)
-# entryTwo = Entry(mood_id= 4, user_id= 1, date_created='2019-02-2 20:31:05.974887')
-# entryTwo.activities.append(houseWork)
-# entryTwo.activities.append(exercise)
-# entryThree = Entry(mood_id= 3, user_id= 1, date_created='2019-02-3 20:31:05.974887')
-# entryThree.activities.append(social)
-# entryThree.activities.append(leisureRelaxation)
-# entryThree.activities.append(exercise)
-# entryFour = Entry(mood_id= 2, user_id= 1, date_created='2019-02-4 20:31:05.974887')
-# entryFour.activities.append(schoolWork)
-# entryFive = Entry(mood_id= 4, user_id= 1, date_created='2019-02-5 20:31:05.974887')
-# entryFive.activities.append(exercise)
-# Entry_Six = Entry(mood_id= 5, user_id= 1, date_created='2019-02-6 20:31:05.974887')
-# Entry_Seven = Entry(mood_id= 3, user_id= 1, date_created='2019-02-7 20:31:05.974887')
-# Entry_Seven = Entry(mood_id= 4, user_id= 1, date_created='2019-02-8 20:31:05.974887')
-# Entry_Eight = Entry(mood_id= 1, user_id= 1, date_created='2019-02-9 20:31:05.974887')
-# Entry_Nine = Entry(mood_id= 2, user_id= 1, date_created='2019-02-10 20:31:05.974887')
-# Entry_Ten = Entry(mood_id= 2, user_id= 1, date_created='2019-02-11 20:31:05.974887')
-# Entry_Eleven = Entry(mood_id= 1, user_id= 1, date_created='2019-02-12 20:31:05.974887')
-# Entry_Twelve =Entry(mood_id=1, user_id= 1,date_created='2019-02-13 20:31:05.974887')
-
 db.session.add(entryTwo)
 db.session.add(entryOne)
 db.session.add(entryThree)
@@ -178,8 +144,6 @@ db.session.add(entryFive)
 db.session.add(entrySix)
 db.session.add(entrySeven)
 db.session.add(entryEight)
-db.session.add(entryNine)
-db.session.add(entryTen)
 db.session.add(entryEleven)
 db.session.add(entryTwelve)
 db.session.add(entryThirteen)

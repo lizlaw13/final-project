@@ -115,7 +115,16 @@ def user_homepage(user_id):
     # generating today's date
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
+    time = datetime.datetime.now()
+    compare_time = time.date()
+
     brain_dumps = User_Brain_Dump.query.filter_by(user_id=user.user_id).all()
+
+    show_form = True
+    entries = Entry.query.filter_by(user_id=user_id)
+    for entry in entries:
+        if entry.date_created.date() == compare_time:
+            show_form = False
 
     return render_template(
         "user-homepage.html",
@@ -124,6 +133,7 @@ def user_homepage(user_id):
         activities=activities,
         now=now,
         brain_dumps=brain_dumps,
+        show_form=show_form,
     )
 
 
@@ -316,6 +326,41 @@ def analyze_entry(user_brain_dump_id):
     )
 
 
+@app.route("/reanalyze-entry/<int:brain_dump_id>")
+def reanalyze_entry(brain_dump_id):
+
+    # grabs the specific brain_dump id
+    brain_dump = User_Brain_Dump.query.get(brain_dump_id)
+
+    user_id = brain_dump.user_id
+
+    brain_dump.analysis_confirmation = None
+    brain_dump.verbose_analysis = None
+    brain_dump.analysis = None
+
+    db.session.commit()
+
+    return redirect(f"all-brain-dumps/{user_id}")
+
+
+@app.route("/delete-brain-dump/<int:brain_dump_id>")
+def delete_brain_dump_entry(brain_dump_id):
+
+    # grabs the specific brain_dump id
+    brain_dump = User_Brain_Dump.query.get(brain_dump_id)
+
+    user_id = brain_dump.user_id
+
+    # removes a brain_dump_entry from the database
+    db.session.delete(brain_dump)
+    db.session.commit()
+
+    # flash a message to show confirmation for the user
+    flash("You have successfully deleted a brain dump entry!")
+
+    return redirect(f"all-brain-dumps/{user_id}")
+
+
 @app.route("/line-chart/<int:user_id>")
 def line_chart(user_id):
     """"Shows line chart of user's mood over time"""
@@ -324,6 +369,8 @@ def line_chart(user_id):
 
     # grab user in the session
     user_id = session.get("user_id")
+
+    user = User.query.get(user_id)
 
     # grab all the users entries
     entries = Entry.query.filter_by(user_id=user_id).order_by(Entry.date_created).all()
@@ -334,8 +381,18 @@ def line_chart(user_id):
     # create values to pass to the tempplate
     legend = "Mood Data"
 
+    has_entries = True
+
+    if len(user.moods) <= 1:
+        has_entries = False
+
     return render_template(
-        "line-chart.html", values=values, labels=sorted_dates, legend=legend
+        "line-chart.html",
+        values=values,
+        labels=sorted_dates,
+        legend=legend,
+        user=user,
+        has_entries=has_entries,
     )
 
 
@@ -346,6 +403,8 @@ def doughnut_chart(user_id):
 
     # grab user in the session
     user_id = session.get("user_id")
+
+    user = User.query.get(user_id)
 
     # grab all the users entries
     entries = Entry.query.filter_by(user_id=user_id).all()
@@ -382,8 +441,17 @@ def doughnut_chart(user_id):
 
     legend = "Total Mood Count"
 
+    has_entries = True
+    if len(user.moods) <= 1:
+        has_entries = False
+
     return render_template(
-        "/donut-chart.html", labels=json_moods, values=json_count, legend=legend
+        "/donut-chart.html",
+        labels=json_moods,
+        user=user,
+        values=json_count,
+        legend=legend,
+        has_entries=has_entries,
     )
 
 
@@ -411,7 +479,6 @@ def delete_entry(entry_id):
     flash("You have successfully deleted an entry!")
 
     return redirect(f"all-entries/{user_id}")
-    # return render_template("delete-entry.html")
 
 
 @app.route("/modified-entry/<int:entry_id>", methods=["POST", "GET"])
@@ -565,8 +632,27 @@ def add_entry():
     # pass the information the user submitted to the template
     activities = entry.activities
 
+    int_user_mood = int(user_mood)
+
+    prompt_mood_enhancer = False
+    if int_user_mood == 4 or int_user_mood == 5:
+        prompt_mood_enhancer = True
+
+    # genereate today's date in object form
+    now = datetime.datetime.today().strftime("%A, %B %d, %Y")
+
+    entries = Entry.query.filter_by(user_id=user_id).all()
+
     return render_template(
-        "add-entry.html", user=user, entry=entry, activities=activities, mood=mood
+        "add-entry.html",
+        user=user,
+        entry=entry,
+        activities=activities,
+        mood=mood,
+        prompt_mood_enhancer=prompt_mood_enhancer,
+        user_id=user_id,
+        now=now,
+        entries=entries,
     )
 
 
@@ -579,28 +665,39 @@ def mood_enhancer_input():
 
     entry = Entry.query.filter_by(user_id=user_id)
 
+
+    # make form reactive such that you only show one text back and you enter one and it adds a new one 
     user_mood_enhancer_1 = request.form.get("mood_enhancer_1")
     user_mood_enhancer_2 = request.form.get("mood_enhancer_2")
     user_mood_enhancer_3 = request.form.get("mood_enhancer_3")
 
-    mood_enhancer_entry_1 = Mood_Enhancer(
-        user_id=user_id, mood_enhancer=user_mood_enhancer_1
-    )
-    mood_enhancer_entry_2 = Mood_Enhancer(
-        user_id=user_id, mood_enhancer=user_mood_enhancer_2
-    )
-    mood_enhancer_entry_3 = Mood_Enhancer(
-        user_id=user_id, mood_enhancer=user_mood_enhancer_3
-    )
+    # TODO
+    # write a function to add mood enhancer to database
 
-    db.session.add(mood_enhancer_entry_1)
-    db.session.add(mood_enhancer_entry_2)
-    db.session.add(mood_enhancer_entry_3)
+    if user_mood_enhancer_1:
+        mood_enhancer_entry_1 = Mood_Enhancer(
+            user_id=user_id, mood_enhancer=user_mood_enhancer_1
+        )
+        db.session.add(mood_enhancer_entry_1)
+        db.session.commit()
+    if user_mood_enhancer_2:
+        mood_enhancer_entry_2 = Mood_Enhancer(
+            user_id=user_id, mood_enhancer=user_mood_enhancer_2
+        )
+        db.session.add(mood_enhancer_entry_2)
+        db.session.commit()
 
-    db.session.commit()
+    if user_mood_enhancer_3:
+        mood_enhancer_entry_3 = Mood_Enhancer(
+            user_id=user_id, mood_enhancer=user_mood_enhancer_3
+        )
+        db.session.add(mood_enhancer_entry_3)
+
+        db.session.commit()
+
     mood_enhancers = user.mood_enhancers
 
-    return render_template("mood-enhancers.html", mood_enhancers=mood_enhancers)
+    return redirect(f"update-mood-enhancers/{user_id}")
 
 
 @app.route("/update-mood-enhancers/<int:user_id>", methods=["POST", "GET"])

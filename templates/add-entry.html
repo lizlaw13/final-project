@@ -10,19 +10,20 @@
 
 <h3>Activity/ Activities Added:</h3>
 <ul>
-{% for activity in activities %}
-<li>{{ activity.verbose_category }}</li>
-{% endfor %}
+    {% for activity in activities %}
+    <li>{{ activity.verbose_category }}</li>
+    {% endfor %}
 </ul>
 
-{% if user.mood_enhancers %} 
+{% if user.mood_enhancers %}
 <h3>Comeplete your mood enhancers to have a better day!</h3>
 <ul>
-{% for mood in user.mood_enhancers %}
-<li>{{ mood.mood_enhancer }}</li>
-{% endfor %}
+    {% for mood in user.mood_enhancers %}
+    <li>{{ mood.mood_enhancer }}</li>
+    {% endfor %}
 </ul>
-{% else %}
+<a href="/update-mood-enhancers/{{ user_id }}">Update Mood Enhancers</a> <br>
+{% elif prompt_mood_enhancer == True %}
 <form action="/mood-enhancers" method="POST">
     <h3>Please input three ways you can enhance your mood:</h3>
     1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.."> <br>
@@ -31,6 +32,7 @@
     <br>
     <input type="submit" name="submit">
 </form>
+<br>
 {% endif %}
 
 

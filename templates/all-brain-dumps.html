@@ -7,7 +7,7 @@
 {% for brain_dump in brain_dumps %}
 <a href="/brain-dump-details/{{ brain_dump.user_brain_dump_id }}">
     <p>Date: {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}</p>
-</a> <br>
+</a>
 <p>Brain Dump Entry: {{ brain_dump.brain_dump_entry }}</p>
 {% if brain_dump.analysis_confirmation == 'yes' and brain_dump.verbose_analysis == 'positive' %}
 <img src="https://image.flaticon.com/icons/png/512/70/70420.png" height="42" width="42">

@@ -2,6 +2,7 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
+{% if show_form == True %}
 <h2>Add an entry for today!</h2>
 <h3>Today's Date: {{ now }}</h5>
     <form action="/add-entry" method="POST">
@@ -31,7 +32,10 @@
         <input type="submit" name="submit">
 
     </form>
-    <br>
+    {% elif show_form == False %}
+    <h1>You have already entered info for this date!</h1>
+    {% endif %}
+
     <a href="/all-entries">View All Entries</a> <br> <br>
     <a href="/brain-dump/{{ user.user_id }}">Add New Brain Dump</a> <br> <br>
 
@@ -40,6 +44,13 @@
     {% else %}
     {% endif %}
 
+    <a href="/update-mood-enhancers/{{ user.user_id }}">View Mood Enhancers</a> <br><br>
+    {% if user.moods %}
+    <a href="/associated-moods/{{ user.user_id }}">Associated Activities and Mood</a> <br><br>
+    <a href="/line-chart/{{ user.user_id }}">View Mood Over Time</a> <br><br>
+    <a href="/donut-chart/{{ user.user_id }}">View Total Mood Count</a> <br> <br>
+    {% else %}
+    {% endif %}
     <a href="/logout">Log Out</a>
 
     {% endblock %}

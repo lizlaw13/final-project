@@ -2,13 +2,19 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
+
+{% if has_entries == True %}
 <h1>Total Mood Count</h1>
 <!-- doughnut chart canvas element -->
 <canvas data-labels='{{ labels | tojson }}' data-label="{{ legend }}" data-data="{{ values | tojson}}"
     id="myDoughnutChart" width="600" height="400"></canvas>
 
 <p id="caption">The chart is displaying your total mood count.</p>
+{% else %}
+<h1>Looks like you do not have enough entries to generate a chart.</h1>
+{% endif %}
 
+<a href="/user/{{ user.user_id }}">Homepage</a> <br> <br>
 <script src="/static/donut-chart.js"></script>
 
 
