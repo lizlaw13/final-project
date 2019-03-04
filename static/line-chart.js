@@ -40,10 +40,19 @@ var myChart = new Chart(ctx, {
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Mood (Scale 1- 5)'
+                    labelString: 'Mood (Scale 1- 5)',
+                    // labels: JSON.parse(document.querySelector('#myChart').dataset.labels),
                 }
             }],
             xAxes: [{
+                type: 'time',
+                distribution: 'linear',
+                time: {
+                    unit: 'day',
+                    displayFormats: {
+                        day: "MMM D",
+                    },
+                },
                 scaleLabel: {
                     display: true,
                     labelString: 'Date'

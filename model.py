@@ -43,7 +43,7 @@ class Mood(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"<Mood mood_id={self.mood_id} mood={self.mood}>"
+        return f"<Mood mood_id={self.mood_id} mood={self.mood} verbose_mood={self.verbose_mood}>"
 
 
 class Activity_Category(db.Model):

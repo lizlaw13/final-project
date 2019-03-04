@@ -13,17 +13,18 @@ connect_to_db(app)
 # add functions
 
 # Add moods
-fantastic = Mood(mood="fantastic", verbose_mood="Fantastic")
-good = Mood(mood="good", verbose_mood="Good")
-neutral = Mood(mood="neutral", verbose_mood="Neutral")
-bad = Mood(mood="sad_bad", verbose_mood="Sad/Bad")
-terrible = Mood(mood="terrible", verbose_mood="Terrible")
+fantastic = Mood(mood="fantastic", verbose_mood="Fantastic", mood_id=5)
+good = Mood(mood="good", verbose_mood="Good", mood_id=4)
+neutral = Mood(mood="neutral", verbose_mood="Neutral", mood_id=3)
+bad = Mood(mood="sad_bad", verbose_mood="Sad/Bad", mood_id=2)
+terrible = Mood(mood="terrible", verbose_mood="Terrible", mood_id=1)
 
 db.session.add(fantastic)
 db.session.add(good)
 db.session.add(neutral)
 db.session.add(bad)
 db.session.add(terrible)
+
 
 db.session.commit()
 
@@ -68,69 +69,69 @@ db.session.commit()
 
 # Add entries for users
 
-entryOne = Entry(mood_id=1, user_id=1, date_created="2019-02-01 19:33:54.99179+00")
+entryOne = Entry(mood_id=1, user_id=1, date_created="2019-02-16 19:33:54.99179+00")
 entryOne.activities.append(leisureRelaxation)
 entryOne.activities.append(exercise)
-entryTwo = Entry(mood_id=2, user_id=1, date_created="2019-02-02 19:33:54.99179+00")
+entryTwo = Entry(mood_id=2, user_id=1, date_created="2019-02-17 19:33:54.99179+00")
 entryTwo.activities.append(houseWork)
 entryTwo.activities.append(exercise)
 entryThree = Entry(
     mood_id=3,
     user_id=1,
-    date_created="2019-02-03 19:33:54.99179+00",
+    date_created="2019-02-18 19:33:54.99179+00",
     description="drinks with friends, 2 hour spin class",
 )
 entryThree.activities.append(social)
 entryThree.activities.append(leisureRelaxation)
 entryThree.activities.append(exercise)
-entryFour = Entry(mood_id=2, user_id=1, date_created="2019-02-04 19:33:54.99179+00")
+entryFour = Entry(mood_id=2, user_id=1, date_created="2019-02-19 19:33:54.99179+00")
 entryFour.activities.append(schoolWork)
-entryFive = Entry(mood_id=3, user_id=1, date_created="2019-02-05 19:33:54.99179+00")
+entryFive = Entry(mood_id=3, user_id=1, date_created="2019-02-20 19:33:54.99179+00")
 entryFive.activities.append(exercise)
 
-entrySix = Entry(mood_id=1, user_id=1, date_created="2019-02-06 19:33:54.99179+00")
+entrySix = Entry(mood_id=1, user_id=1, date_created="2019-02-21 19:33:54.99179+00")
 entrySix.activities.append(leisureRelaxation)
 entrySix.activities.append(exercise)
-entrySeven = Entry(mood_id=2, user_id=1, date_created="2019-02-07 19:33:54.99179+00")
+entrySeven = Entry(mood_id=2, user_id=1, date_created="2019-02-22 19:33:54.99179+00")
 entrySeven.activities.append(houseWork)
 entrySeven.activities.append(exercise)
 entryEight = Entry(
     mood_id=3,
     user_id=1,
-    date_created="2019-02-08 19:33:54.99179+00",
+    date_created="2019-02-23 19:33:54.99179+00",
     description="drinks with no one",
 )
 entryEight.activities.append(social)
 entryEight.activities.append(leisureRelaxation)
 entryEight.activities.append(exercise)
-entryNine = Entry(mood_id=2, user_id=1, date_created="2019-02-09 19:33:54.99179+00")
+entryNine = Entry(mood_id=2, user_id=1, date_created="2019-02-24 19:33:54.99179+00")
 
 
 entryEleven = Entry(
     mood_id=1,
     user_id=1,
-    date_created="2019-02-12 19:33:54.99179+00",
+    date_created="2019-02-25 19:33:54.99179+00",
     description="hiking with my dog",
 )
 entryEleven.activities.append(exercise)
 entryTwelve = Entry(
     mood_id=1,
     user_id=1,
-    date_created="2019-02-13 19:33:54.99179+00",
+    date_created="2019-02-26 19:33:54.99179+00",
     description="hiking with my cat",
 )
 entryTwelve.activities.append(exercise)
 entryThirteen = Entry(
     mood_id=2,
     user_id=1,
-    date_created="2019-02-14 19:33:54.99179+00",
+    date_created="2019-02-27 19:33:54.99179+00",
     description="hiking with maddie",
 )
 entryThirteen.activities.append(exercise)
 entryFourteen = Entry(
     mood_id=4,
     user_id=1,
-    date_created="2019-02-15 19:33:54.99179+00",
+    date_created="2019-02-28 19:33:54.99179+00",
     description="hiking with myself",
 )
 entryFourteen.activities.append(exercise)

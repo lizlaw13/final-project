@@ -2,8 +2,18 @@ import datetime
 import hashlib
 
 from flask_debugtoolbar import DebugToolbarExtension
-from flask import Flask, render_template, redirect, request, flash, session, url_for
+from flask import (
+    Flask,
+    render_template,
+    redirect,
+    request,
+    flash,
+    session,
+    url_for,
+    jsonify,
+)
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from jinja2 import StrictUndefined
 from sqlalchemy import func, asc
 
@@ -14,6 +24,7 @@ from database import connect_to_db, db
 from model import *
 
 app = Flask(__name__)
+CORS(app)
 
 app.secret_key = "ZILWAL"
 
@@ -410,7 +421,8 @@ def line_chart(user_id):
     entries = Entry.query.filter_by(user_id=user_id).order_by(Entry.date_created).all()
 
     values = [entry.mood.mood_id for entry in entries]
-    sorted_dates = [entry.date_created.day for entry in entries]
+
+    sorted_dates = [entry.date_created.strftime("%m-%d") for entry in entries]
 
     # create values to pass to the tempplate
     legend = "Mood Data"
@@ -565,10 +577,11 @@ def show_update_form(entry_id):
 
     # grabs the specific entry id
     entry = Entry.query.get(entry_id)
+    mood_id = entry.mood_id
 
     # prevents the public for accessing user specific information
-    if not session.get("user_id") or session["user_id"] != user_id:
-        return redirect("/")
+    # if not session.get("user_id") or session["user_id"] != user_id:
+    #     return redirect("/")
 
     # grabs the user's information
     user = User.query.get(entry.user.user_id)
@@ -576,22 +589,54 @@ def show_update_form(entry_id):
     # grabs all moods and activities
     moods = Mood.query.all()
     activities = Activity_Category.query.all()
-    print(entry.activities)
 
-    return render_template(
-        "update-entry.html", entry=entry, user=user, moods=moods, activities=activities
+    user_mood_info = Mood.query.filter_by(mood_id=mood_id).first()
+    entry_mood = user_mood_info.verbose_mood
+
+    entry_date = entry.date_created.strftime("%B %d, %Y")
+
+    entry_activities = entry.activities
+
+    entry_description = entry.description
+    return jsonify(
+        {
+            "moods": [
+                {"mood_id": mood.mood_id, "verbose_mood": mood.verbose_mood}
+                for mood in moods
+            ],
+            "activities": [
+                {
+                    "activity_category_id": activity.activity_category_id,
+                    "verbose_category": activity.verbose_category,
+                }
+                for activity in activities
+            ],
+            "entry": [
+                {
+                    "entry_mood": entry_mood,
+                    "entry_date": entry_date,
+                    "entry_description": entry_description,
+                }
+            ],
+            "entry_activities": [
+                {
+                    "activity": activity.verbose_category,
+                    "activity_id": activity.activity_category_id,
+                }
+                for activity in entry.activities
+            ],
+        }
     )
+
+    # return render_template(
+    #     "update-entry.html", entry=entry, user=user, moods=moods, activities=activities
+    # )
 
 
 @app.route("/updated-entry/<int:entry_id>", methods=["POST", "GET"])
 def update_entry(entry_id):
     """Confirmation that a user has added an activity or updated their mood on their entry"""
 
-    # prevents the public for accessing user specific information
-    if not session.get("user_id") or session["user_id"] != user_id:
-        return redirect("/")
-
-    # grabs entry id
     entry = Entry.query.get(entry_id)
     user_id = session["user_id"]
     if user_id != entry.user.user_id:
@@ -610,12 +655,11 @@ def update_entry(entry_id):
     description = request.form.get("description")
     if description is None and entry.description is None:
         pass
-    elif description is None and entry.description is None:
-        entry.description = description
-    elif description is None and entry.description is None:
+    elif description and entry.description:
         entry.description += ", " + description
+    elif description and entry.description is None:
+        entry.description = description
 
-    # appends each acitivity to a list
     form_activities = []
     for activity_id in user_activities:
         form_activities.append(Activity_Category.query.get(int(activity_id)))
@@ -669,7 +713,7 @@ def add_entry():
     int_user_mood = int(user_mood)
 
     prompt_mood_enhancer = False
-    if int_user_mood == 4 or int_user_mood == 5:
+    if int_user_mood == 1 or int_user_mood == 2:
         prompt_mood_enhancer = True
 
     # genereate today's date in object form
