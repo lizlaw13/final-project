@@ -97,7 +97,12 @@ class App extends React.Component {
                 <h4>Delete Note: </h4>
                 <div key={entry.entry_id}>
                   {entry.entry_description} <br /> <br />
-                  <input type="submit" name="Delete" value="Delete" />
+                  <input
+                    type="submit"
+                    name="Delete"
+                    value="Delete"
+                    onSubmit={e => onActivity()}
+                  />
                   <br />
                 </div>
               </form>

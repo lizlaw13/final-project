@@ -1,10 +1,30 @@
 {% extends 'base.html' %}
+
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
+<link rel="stylesheet" href="/static/homepage.css">
+<header>
+    <nav class="sidebar">
+        <a href="#" class="close">x</a>
+        <ul>
+            <li><a href="/all-entries">View All Entries</a></li>
+            <li><a href="/brain-dump/{{ user.user_id }}">Add New Brain Dump</a></li>
+            <li><a href="/all-brain-dumps/{{ user.user_id }}">All Brain Dumps</a></li>
+            <li><a href="/update-mood-enhancers/{{ user.user_id }}">View Mood Enhancers</a></li>
+            <li> <a href="/associated-moods/{{ user.user_id }}">Associated Activities and Mood</a></li>
+            <li><a href="/line-chart/{{ user.user_id }}">View Mood Over Time</a></li>
+            <li><a href="/donut-chart/{{ user.user_id }}">View Total Mood Count</a></li>
+            <li><a href="/logout">Log Out</a></li>
+        </ul>
+    </nav>
+    <button type='button' class="hamburger">Menu</button>
+
+    <h1>Track Your Mood and Activities</h1>
+</header>
 {% if show_form == True %}
 <h2>Add an entry for today!</h2>
-<h3>Today's Date: {{ now }}</h5>
+<h3>Today's Date: <br>{{ now }}</h5>
     <form action="/add-entry" method="POST">
         Select a mood: <br> <br>
 
@@ -15,7 +35,7 @@
         {% endfor %}
 
         <br> <br>
-        Select activities: <br> <br>
+        Select activity category: <br> <br>
 
         {% for activity in activities %}
 
@@ -40,21 +60,8 @@
     <h1>You have already entered info for this date!</h1>
     {% endif %}
 
-    <a href="/all-entries">View All Entries</a> <br> <br>
-    <a href="/brain-dump/{{ user.user_id }}">Add New Brain Dump</a> <br> <br>
 
-    {% if brain_dumps %}
-    <a href="/all-brain-dumps/{{ user.user_id }}">All Brain Dumps</a> <br><br>
-    {% else %}
-    {% endif %}
-
-    <a href="/update-mood-enhancers/{{ user.user_id }}">View Mood Enhancers</a> <br><br>
-    {% if user.moods %}
-    <a href="/associated-moods/{{ user.user_id }}">Associated Activities and Mood</a> <br><br>
-    <a href="/line-chart/{{ user.user_id }}">View Mood Over Time</a> <br><br>
-    <a href="/donut-chart/{{ user.user_id }}">View Total Mood Count</a> <br> <br>
-    {% else %}
-    {% endif %}
-    <a href="/logout">Log Out</a>
+    
+      <script src="/static/homepage.js"></script>
 
     {% endblock %}

@@ -1,0 +1,58 @@
+/* NAVIGATION */
+nav {
+  width: 351px;
+  height: 66%;
+  background-color: #68c3d4;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px 0;
+  border-radius: 20px;
+}
+button {
+  position: relative;
+  top: 4px;
+  left: -5px;
+  padding: 15px;
+  border-radius: 20px;
+  font-family: "Roboto";
+  font-size: 15px;
+}
+li {
+  border-top: 1px solid #ffffff;
+  list-style: none;
+  transition: all 300ms ease-in-out;
+  text-decoration: none;
+}
+nav li:hover {
+  background-color: #2196f3;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 15px;
+  display: block;
+}
+
+nav li:first-child {
+  margin-top: 2em;
+}
+.close {
+  position: absolute;
+  top: -4px;
+  right: 4px;
+  z-index: 1;
+  text-decoration: none;
+  color: #ffffff;
+}
+.sidebar {
+  position: fixed;
+  transform: translateX(-150%);
+  transition: all 0.5s ease-in-out;
+  z-index: 1;
+}
+.active {
+  transform: translateX(-11%);
+  z-index: 1;
+}
