@@ -571,8 +571,17 @@ def delete_note(entry_id):
     return redirect(f"/update-entry/{entry.entry_id}")
 
 
-@app.route("/update-entry/<int:entry_id>")
+@app.route("/update-entry/<int:entry_id>", methods=["GET"])
+def update_form(entry_id):
+    id = entry_id
+    print("testing")
+
+    return render_template("update-entry.html", entry_id=id)
+
+
+@app.route("/update/<int:entry_id>", methods=["GET"])
 def show_update_form(entry_id):
+    print("hi")
     """Displays the update form for a user"""
 
     # grabs the specific entry id
@@ -611,13 +620,12 @@ def show_update_form(entry_id):
                 }
                 for activity in activities
             ],
-            "entry": [
-                {
-                    "entry_mood": entry_mood,
-                    "entry_date": entry_date,
-                    "entry_description": entry_description,
-                }
-            ],
+            "entry": {
+                "entry_mood": entry_mood,
+                "entry_date": entry_date,
+                "entry_description": entry_description,
+                "entry_id": entry_id,
+            },
             "entry_activities": [
                 {
                     "activity": activity.verbose_category,

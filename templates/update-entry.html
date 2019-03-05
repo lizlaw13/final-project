@@ -1,83 +1,8 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
 
-<h2>Update Your Entry:</h2>
+<div id="entry_id" style="visibility: hidden">{{ entry_id }}</div>
+<div id="root"></div>
+<script src="/static/app.jsx" type="text/jsx"></script>
 
-<h3>Your mood for {{ entry.date_created.strftime("%A, %B %d, %Y") }} was {{ entry.mood.verbose_mood }}!</h3>
-
-
-{% if entry.activities %}
-<p>Your activity/ activities:</p>
-<ul>
-    {% for activity in entry.activities %}
-    <li><strong>{{ activity.verbose_category}}</strong></li>
-    {% endfor %}
-</ul>
-
-<form action="/modified-entry/{{ entry.entry_id}}" method="POST">
-    <h4>Delete Activity/ Activities: </h4>
-
-    {% for activity in entry.activities %}
-
-
-    <input type="checkbox" name="activity_category" value="{{activity.activity_category_id }}">
-    {{ activity.verbose_category }}
-    <br>
-    {% endfor %}
-
-    <br>
-
-    <input type="submit" name="submit">
-</form>
-{% else %}
-<h4>Looks like you don't have any activities....</h4>
-{% endif %}
-
-
-<form action="/delete-note-entry/{{ entry.entry_id}}" method="POST">
-
-    {% if entry.description %}
-    <h4>Delete Note:</h4>
-    {{ entry.description }}
-    <input type="submit" name="Delete" name="description" value="Delete">
-    {% else %}
-    <h4>Looks like you do not have a note for this entry...</h4>
-    {% endif %}
-    <br> <br>
-
-</form>
-
-<hr>
-<h4>Update Entry:</h4>
-<form action="/updated-entry/{{ entry.entry_id }}" method="POST">
-    Select a mood: <br> <br>
-
-    {% for mood in moods %}
-
-    <input type="radio" name="mood" value="{{ mood.mood_id }}"> {{ mood.verbose_mood }}
-    <br>
-
-    {% endfor %}
-
-    <br> <br>
-    Select activities: <br> <br>
-
-    {% for activity in activities %}
-
-    <input type="checkbox" name="activity_category" value="{{ activity.activity_category_id }}">
-    {{ activity.verbose_category }}
-    <br>
-    {% endfor %}
-
-    <br> <br>
-    Optional Note:
-    <br> <br> <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends" size="40">
-
-    <br> <br>
-    <input type="submit" name="submit">
-
-</form>
-<br>
-<a href="/all-entries">View All Entries</a> <br> <br>
 {% endblock %}

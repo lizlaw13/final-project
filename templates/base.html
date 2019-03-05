@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>{% block title %} TITLE GOES HERE {% endblock %}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/static/moment.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="http://unpkg.com/babel-standalone"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+  </head>
 
-</head>
-
-<body>
-    {% with messages = get_flashed_messages() %}
-    {% for message in messages %}
+  <body>
+    {% with messages = get_flashed_messages() %} {% for message in messages %}
     <div class="alert alert-warning">{{ message }}</div>
-    {% endfor %}
-    {% endwith %}
-
-    {% block content %} BODY CONTENT GOES HERE {% endblock %}
-</body>
-
+    {% endfor %} {% endwith %} {% block content %} BODY CONTENT GOES HERE {%
+    endblock %}
+  </body>
 </html>
