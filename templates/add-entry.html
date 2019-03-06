@@ -1,42 +1,48 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
 
 <h2>The following entry has been added!</h2>
 
-<p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }}</p>
+<p>Date: {{ entry.date_created.strftime('%A, %B %d, %Y') }}</p>
 
 <p> Mood: {{ entry.mood.verbose_mood }}</p>
 
 <h3>Activity/ Activities Added:</h3>
 <ul>
-    {% for activity in activities %}
-    <li>{{ activity.verbose_category }}</li>
-    {% endfor %}
+  {% for activity in activities %}
+  <li>{{ activity.verbose_category }}</li>
+  {% endfor %}
 </ul>
 
 {% if user.mood_enhancers %}
 <h3>Comeplete your mood enhancers to have a better day!</h3>
 <ul>
-    {% for mood in user.mood_enhancers %}
-    <li>{{ mood.mood_enhancer }}</li>
-    {% endfor %}
+  {% for mood in user.mood_enhancers %}
+  <li>{{ mood.mood_enhancer }}</li>
+  {% endfor %}
 </ul>
-<a href="/update-mood-enhancers/{{ user_id }}">Update Mood Enhancers</a> <br>
+<a href="/update-mood-enhancers/{{ user_id }}">Update Mood Enhancers</a> <br />
 {% elif prompt_mood_enhancer == True %}
 <form action="/mood-enhancers" method="POST">
-    <h3>Please input three ways you can enhance your mood:</h3>
-    1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.."> <br>
-    2) <input type="text" name="mood_enhancer_2" placeholder="watch netflix.."> <br>
-    3) <input type="text" name="mood_enhancer_3" placeholder="listen to one direction.."> <br>
-    <br>
-    <input type="submit" name="submit">
+  <h3>Please input three ways you can enhance your mood:</h3>
+  1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.." />
+  <br />
+  2) <input type="text" name="mood_enhancer_2" placeholder="watch netflix.." />
+  <br />
+  3)
+  <input
+    type="text"
+    name="mood_enhancer_3"
+    placeholder="listen to one direction.."
+  />
+  <br />
+  <br />
+  <input type="submit" name="submit" />
 </form>
-<br>
+<br />
 {% endif %}
 
-
-<br>
+<br />
 <a href="/all-entries">View All Entries</a>
 
 {% endblock %}

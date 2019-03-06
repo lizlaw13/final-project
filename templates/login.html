@@ -2,14 +2,61 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<form action="/login" method="POST">
-    Email: <input type="text" name="email">
-    Password: <input type="password" name="password">
-
-    <br> <br>
-    Submit: <input type="submit" name="submit">
-
-
-</form>
+<div class="container">
+  <h3 class="text-center bc-welcome">Mood and Activity Tracker</h3> 
+</div> <!--.container-->
+<div class="container bc-inputs">
+  <div class="row">
+      <div class="col">
+          <form class="bc-login" action="/login" method="post">
+              <h2 >Login:</h2>
+              <div class="form-group text-left">
+                  <label for="exampleInputEmail1">Email Address:</label>
+                  <input type="email" class="form-control text-left" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+              </div> <!--.form-group-->
+              <div class="form-group bc-landing-input text-left">
+                  <label for="exampleInputPassword1">Password:</label>
+                  <input type="password" class="form-control text-left" id="exampleInputPassword1" name="password" placeholder="Password">
+              </div> <!--.form-group-->
+              <button type="submit" class="btn btn-primary bc-welcome-enter bc-button" value="submit">Submit</button>
+              <!-- button trigger modal -->
+              <button type="button" class="btn btn-primary bc-button" data-toggle="modal" data-target="#exampleModalCenter">
+                  Sign Up Now
+              </button> <!--.btn btn-primary-->
+          </form>
+      </div> <!--.col-->
+  </div> <!--.row-->
+</div> <!--.container-->
+  
+<!-- modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <form class="modal-content" action="/register" method="post" id="registerForm">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Register Now!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button> <!--.close-->
+        </div> <!--.modal-header-->
+        <div class="modal-body">
+          <div class="form-row bc-register-bottom">
+              <div class="form-group col-md-6 bc-button">
+                  <label for="inputEmail4">Email</label>
+                  <input type="email" class="form-control" id="inputEmail4" name="inputEmail4" placeholder="Email">
+              </div> <!--.form-group col-md-6-->
+              <div class="form-group col-md-6 bc-button">
+                  <label for="inputPassword4">Password</label>
+                  <input type="password" class="form-control" id="inputPassword4" name="inputPassword4" placeholder="Password">
+              </div>  <!--.form-group col-md-6-->
+          </div> <!--.form-row-->
+        </div> <!--.modal-body-->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary bc-button" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary bc-register bc-button" id="registerButton"value="submit">Register</button>
+        </div> <!--.modal-footer-->
+      </form> <!--form.modal-content-->
+  </div> <!--."modal-dialog modal-dialog-centered-->
+</div> <!--.modal fade-->
 
 {% endblock %}

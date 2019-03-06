@@ -3,25 +3,50 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<link rel="stylesheet" href="/static/homepage.css">
 <header>
-    <nav class="sidebar">
-        <a href="#" class="close">x</a>
-        <ul>
-            <li><a href="/all-entries">View All Entries</a></li>
-            <li><a href="/brain-dump/{{ user.user_id }}">Add New Brain Dump</a></li>
-            <li><a href="/all-brain-dumps/{{ user.user_id }}">All Brain Dumps</a></li>
-            <li><a href="/update-mood-enhancers/{{ user.user_id }}">View Mood Enhancers</a></li>
-            <li> <a href="/associated-moods/{{ user.user_id }}">Associated Activities and Mood</a></li>
-            <li><a href="/line-chart/{{ user.user_id }}">View Mood Over Time</a></li>
-            <li><a href="/donut-chart/{{ user.user_id }}">View Total Mood Count</a></li>
-            <li><a href="/logout">Log Out</a></li>
-        </ul>
-    </nav>
-    <button type='button' class="hamburger">Menu</button>
-
-    <h1>Track Your Mood and Activities</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Mood/ Activity Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/all-entries">All Entries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/update-mood-enhancers/{{ user.user_id }}">Mood Enhancers</a>
+              </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Stats
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="/line-chart/{{ user.user_id }}">Mood Over Time</a>
+                  <a class="dropdown-item" href="/donut-chart/{{ user.user_id }}">Total Mood Count</a>
+                  <a class="dropdown-item" href="/associated-moods/{{ user.user_id }}">Associated Activities</a>
+                </div>
+              </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Brain Dumps
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="/brain-dump/{{ user.user_id }}">Add A Brain Dump</a>
+                <a class="dropdown-item" href="/all-brain-dumps/{{ user.user_id }}">View All Brain Dumps</a>
+              </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Log Out</a>
+              </li>
+          </ul>
+        </div>
+      </nav>
 </header>
+
 {% if show_form == True %}
 <h2>Add an entry for today!</h2>
 <h3>Today's Date: <br>{{ now }}</h5>
@@ -47,15 +72,13 @@
 
         <br> <br>
         Optional Note:
-        <br> <br> <input type="text" name="description" placeholder="2 hour excercise class, drinks with friends"
+        <br> <br> <input type="text" name="description" placeholder="2 hour exercise class, drinks with friends"
             size="40">
 
         <br> <br>
-        <input type="submit" name="submit">
-
-
+        <input type="submit" name="submit" id="entry-submit">
     </form>
-    <br>
+
     {% elif show_form == False %}
     <h1>You have already entered info for this date!</h1>
     {% endif %}

@@ -1,3 +1,26 @@
+class DeleteNoteForm extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { entry, deleteNoteBaseUrl } = this.props;
+    if (entry.entry_description) {
+      return (
+        <form
+          action={`${deleteNoteBaseUrl}${entry.entry_id}`}
+          method="POST"
+          onSubmit={e => e.target.submit()}
+        >
+          <h4>Delete Note: </h4>
+          <p>{entry.entry_description}</p>
+          <input type="submit" name="Delete" value="Delete" />
+        </form>
+      );
+    }
+    return null;
+  }
+}
+
 class App extends React.Component {
   constructor() {
     super();
@@ -13,9 +36,7 @@ class App extends React.Component {
 
   componentDidMount() {
     let entry_id = $("#entry_id").text();
-    console.log(entry_id);
     $.get("/update/" + entry_id, results => {
-      console.log(results);
       this.setState({
         entry_id: entry_id,
         moods: results.moods,
@@ -23,6 +44,7 @@ class App extends React.Component {
         entry: results.entry,
         entry_activities: results.entry_activities
       });
+      console.log(this.state.entry_activities);
     });
   }
 
@@ -37,83 +59,64 @@ class App extends React.Component {
       return "Looks like you do not have a note for this entry...";
     }
   }
-  onActivity(event) {
-    event.preventDefault();
-    console.log(this.refs.check_me.value);
-    this.setState({ activity_id: this.refs.check_me.value });
-  }
-
   render() {
-    const entry = this.state.entry;
+    const { entry, entry_activities } = this.state;
+    let activities = <h4>Looks like you don't have any activities...</h4>;
+    let description;
+
+    if (entry_activities.length > 0) {
+      let entry_activities_lis = entry_activities.map(entry_activity => {
+        return (
+          <li key={entry_activity.activity_id}>{entry_activity.activity}</li>
+        );
+      });
+      // Reassign activities if there are activities in the list
+      activities = (
+        <ul className="entry-activities-list">{entry_activities_lis}</ul>
+      );
+    }
+
+    if (entry.entry_description) {
+      description = (
+        <p>
+          <strong>Note: </strong>
+          {entry.entry_description}
+        </p>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Update Your Entry</h1>
-        <div key={entry.entry_mood}>
+        <section className="moods" key={entry.entry_mood}>
           <strong>
             <p>
               Your mood for {entry.entry_date} was {entry.entry_mood}!
             </p>
           </strong>
-        </div>
-        <h4>{this.render_no_activities()}</h4>
+        </section>
+
+        <section className="activities">{activities}</section>
+
+        <section className="description">{description}</section>
+
+        <section className="delete-description">
+          <DeleteNoteForm
+            entry={entry}
+            deleteNoteBaseUrl="http://localhost:5000/delete-note-entry/"
+          />
+        </section>
+
         <div>
           {this.state.entry_activities.length >= 1 && (
-            <div>
-              {" "}
-              {this.state.entry_activities.map(function(entry_activitiy) {
-                return (
-                  <div key={entry_activitiy.activity_id}>
-                    <li>{entry_activitiy.activity}</li>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-        <div>
-          {entry.entry_description !== null && (
-            <div>
-              {" "}
-              <div key={entry.entry_description}>
-                <p>
-                  <strong>Note: </strong>
-                  {entry.entry_description}
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-        <div>
-          {entry.entry_description && (
             <div>
               {" "}
               <form
-                action={`http://localhost:5000/delete-note-entry/${
+                action={`http://localhost:5000/modified-entry/${
                   entry.entry_id
                 }`}
                 method="POST"
-                onSubmit={e => e.target.submit()}
               >
-                <h4>Delete Note: </h4>
-                <div key={entry.entry_id}>
-                  {entry.entry_description} <br /> <br />
-                  <input
-                    type="submit"
-                    name="Delete"
-                    value="Delete"
-                    onSubmit={e => onActivity()}
-                  />
-                  <br />
-                </div>
-              </form>
-            </div>
-          )}
-        </div>
-        <div>
-          {this.state.entry_activities.length >= 1 && (
-            <div>
-              {" "}
-              <form>
                 <h4>Delete Activity/ Activities: </h4>
                 {this.state.entry_activities.map(function(entry_activitiy) {
                   return (
@@ -121,6 +124,7 @@ class App extends React.Component {
                       <input
                         ref="check_me"
                         type="checkbox"
+                        label="check box"
                         name="activity_category"
                         value={entry_activitiy.activity_id}
                       />
@@ -130,17 +134,13 @@ class App extends React.Component {
                   );
                 })}
                 <br />
-                <input
-                  type="submit"
-                  name="submit"
-                  onClick={this.onActivity.bind(this)}
-                />
+                <input type="submit" name="submit" />
               </form>
             </div>
           )}
         </div>
         <hr />
-        <form method="POST">
+        <form action={`/updated-entry/${entry.user_id}`} method="POST">
           Select a mood:
           <br />
           <br />
@@ -162,7 +162,7 @@ class App extends React.Component {
             return (
               <div key={activity.activity_category_id}>
                 <input
-                  type="radio"
+                  type="checkbox"
                   name="activity_category"
                   value={activity.activity_category_id}
                 />
@@ -186,6 +186,8 @@ class App extends React.Component {
           <br />
           <input type="submit" name="submit" />
         </form>
+        <br />
+        <a href={`/user/${entry.user_id}`}>Homepage</a>
       </div>
     );
   }

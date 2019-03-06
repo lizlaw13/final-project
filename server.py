@@ -50,8 +50,8 @@ def register_new_user():
     """Registers new user"""
 
     # grab the email and password from the form
-    new_user_email = request.form.get("new_email")
-    new_user_password = request.form.get("new_password")
+    new_user_email = request.form.get("inputEmail4")
+    new_user_password = request.form.get("inputPassword4")
 
     # hash the password
     hash_object = hashlib.md5(new_user_password.encode())
@@ -428,6 +428,7 @@ def line_chart(user_id):
     legend = "Mood Data"
 
     has_entries = True
+    print("hello:", sorted_dates)
 
     # if a user only has one entry do not display chart
     if len(user.moods) <= 1:
@@ -536,8 +537,8 @@ def modify_activitiy(entry_id):
     user_id = session.get("user_id")
 
     # prevents the public for accessing user specific information
-    if not session.get("user_id") or session["user_id"] != user_id:
-        return redirect("/")
+    # if not session.get("user_id") or session["user_id"] != user_id:
+    #     return redirect("/")
 
     # grabs information for the form
     user_activities = request.form.getlist("activity_category")
@@ -625,6 +626,7 @@ def show_update_form(entry_id):
                 "entry_date": entry_date,
                 "entry_description": entry_description,
                 "entry_id": entry_id,
+                "user_id": user.user_id,
             },
             "entry_activities": [
                 {
