@@ -21,6 +21,104 @@ class DeleteNoteForm extends React.Component {
   }
 }
 
+class DeleteActivityForm extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { entry_activities, deleteActivityBaseUrl, entry } = this.props;
+    if (entry_activities) {
+      return (
+        <form
+          action={`${deleteActivityBaseUrl}${entry.entry_id}`}
+          method="POST"
+          onSubmit={e => e.target.submit()}
+        >
+          <h4>Delete Activity/ Activities: </h4>
+          {entry_activities.map(function(entry_activitiy) {
+            return (
+              <div key={entry_activitiy.activity_id}>
+                <input
+                  type="checkbox"
+                  label="check box"
+                  name="activity_category"
+                  value={entry_activitiy.activity_id}
+                />
+                {entry_activitiy.activity}
+                <br />
+              </div>
+            );
+          })}
+          <br />
+          <input type="submit" name="submit" />
+        </form>
+      );
+    }
+    return null;
+  }
+}
+
+class UpdateEntryForm extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { entry, moods, activities, updateEntryBaseUrl } = this.props;
+    return (
+      <form
+        action={`${updateEntryBaseUrl}${entry.user_id}`}
+        method="POST"
+        onSubmit={e => e.target.submit()}
+      >
+        Select a mood:
+        <br />
+        <br />
+        {moods.map(function(mood) {
+          return (
+            <div key={mood.mood_id}>
+              <input type="radio" name="mood" value={mood.mood_id} />
+              {mood.verbose_mood}
+              <br />
+            </div>
+          );
+        })}
+        <br />
+        <br />
+        Select activities:
+        <br />
+        <br />
+        {activities.map(function(activity) {
+          return (
+            <div key={activity.activity_category_id}>
+              <input
+                type="checkbox"
+                name="activity_category"
+                value={activity.activity_category_id}
+              />
+              {activity.verbose_category}
+              <br />
+            </div>
+          );
+        })}
+        <br />
+        <br />
+        Optional Note:
+        <br />
+        <br />
+        <input
+          type="text"
+          name="description"
+          placeholder="2 hour exercise class, drinks with friends"
+          size="40"
+        />
+        <br />
+        <br />
+        <input type="submit" name="submit" />
+      </form>
+    );
+  }
+}
+
 class App extends React.Component {
   constructor() {
     super();
@@ -62,7 +160,7 @@ class App extends React.Component {
   render() {
     const { entry, entry_activities } = this.state;
     let activities = <h4>Looks like you don't have any activities...</h4>;
-    let description;
+    let description = <h4>Looks like you don't have a note...</h4>;
 
     if (entry_activities.length > 0) {
       let entry_activities_lis = entry_activities.map(entry_activity => {
@@ -107,85 +205,25 @@ class App extends React.Component {
           />
         </section>
 
-        <div>
-          {this.state.entry_activities.length >= 1 && (
-            <div>
-              {" "}
-              <form
-                action={`http://localhost:5000/modified-entry/${
-                  entry.entry_id
-                }`}
-                method="POST"
-              >
-                <h4>Delete Activity/ Activities: </h4>
-                {this.state.entry_activities.map(function(entry_activitiy) {
-                  return (
-                    <div key={entry_activitiy.activity_id}>
-                      <input
-                        ref="check_me"
-                        type="checkbox"
-                        label="check box"
-                        name="activity_category"
-                        value={entry_activitiy.activity_id}
-                      />
-                      {entry_activitiy.activity}
-                      <br />
-                    </div>
-                  );
-                })}
-                <br />
-                <input type="submit" name="submit" />
-              </form>
-            </div>
-          )}
-        </div>
-        <hr />
-        <form action={`/updated-entry/${entry.user_id}`} method="POST">
-          Select a mood:
-          <br />
-          <br />
-          {this.state.moods.map(function(mood) {
-            return (
-              <div key={mood.mood_id}>
-                <input type="radio" name="mood" value={mood.mood_id} />
-                {mood.verbose_mood}
-                <br />
-              </div>
-            );
-          })}
-          <br />
-          <br />
-          Select activities:
-          <br />
-          <br />
-          {this.state.activities.map(function(activity) {
-            return (
-              <div key={activity.activity_category_id}>
-                <input
-                  type="checkbox"
-                  name="activity_category"
-                  value={activity.activity_category_id}
-                />
-                {activity.verbose_category}
-                <br />
-              </div>
-            );
-          })}
-          <br />
-          <br />
-          Optional Note:
-          <br />
-          <br />
-          <input
-            type="text"
-            name="description"
-            placeholder="2 hour exercise class, drinks with friends"
-            size="40"
+        <section className="delete-description">
+          <DeleteActivityForm
+            entry_activities={entry_activities}
+            deleteActivityBaseUrl="http://localhost:5000/modified-entry/"
+            entry={entry}
           />
-          <br />
-          <br />
-          <input type="submit" name="submit" />
-        </form>
+        </section>
+
+        <hr />
+        <section className="update-entry">
+          <UpdateEntryForm
+            entry={entry}
+            moods={this.state.moods}
+            activities={this.state.activities}
+            updateEntryBaseUrl="http://localhost:5000/updated-entry/"
+          />
+        </section>
+
+        <hr />
         <br />
         <a href={`/user/${entry.user_id}`}>Homepage</a>
       </div>
