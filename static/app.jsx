@@ -145,18 +145,6 @@ class App extends React.Component {
       console.log(this.state.entry_activities);
     });
   }
-
-  render_no_activities() {
-    if (this.state.entry_activities.length === 0) {
-      return "Looks like you don't have any activities....";
-    }
-  }
-
-  render_no_note() {
-    if (this.state.entry.entry_description == null) {
-      return "Looks like you do not have a note for this entry...";
-    }
-  }
   render() {
     const { entry, entry_activities } = this.state;
     let activities = <h4>Looks like you don't have any activities...</h4>;

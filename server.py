@@ -749,6 +749,7 @@ def mood_enhancer_input():
     """Allows users to add mood enhancers"""
 
     user_id = session.get("user_id")
+    id = user_id
 
     user = User.query.get(user_id)
 
@@ -774,10 +775,11 @@ def mood_enhancer_input():
 
     mood_enhancers = user.mood_enhancers
 
-    return redirect(f"update-mood-enhancers/{user_id}")
+    # return redirect(f"update-mood-enhancers/{user_id}")
+    return render_template("update-mood-enhancers.html", user_id=user_id)
 
 
-@app.route("/update-mood-enhancers/<int:user_id>", methods=["POST", "GET"])
+@app.route("/update-mood-enhancers/<int:user_id>", methods=["GET"])
 def show_mood_enhancers(user_id):
     """Shows all user's mood enhancers"""
 
@@ -786,18 +788,31 @@ def show_mood_enhancers(user_id):
 
     user = User.query.get(user_id)
 
-    return render_template(
-        "update-mood-enhancers.html", mood_enhancers=mood_enhancers, user=user
+    return jsonify(
+        {
+            "user": user.user_id,
+            "mood_enhancers": [
+                {
+                    "mood_enhancer": mood_enhancer.mood_enhancer,
+                    "mood_enhancer_id": mood_enhancer.mood_enhancer_id,
+                }
+                for mood_enhancer in mood_enhancers
+            ],
+        }
     )
 
+    # return render_template(
+    #     "update-mood-enhancers.html", mood_enhancers=mood_enhancers, user=user
+    # )
 
-@app.route("/update-mood-enhancer/<int:user_id>", methods=["POST", "GET"])
+
+@app.route("/delete-mood-enhancer/<int:user_id>", methods=["POST"])
 def update_mood_enhancer(user_id):
     """Allows users to update their mood enhancers"""
 
     user = User.query.get(user_id)
 
-    delete_enhancer = request.form.getlist("delete_mood_enhancer")
+    delete_enhancer = request.form.getlist("mood_enhancer")
 
     to_delete = []
     for enhancer in delete_enhancer:
@@ -809,7 +824,7 @@ def update_mood_enhancer(user_id):
 
     db.session.commit()
 
-    return redirect("/update-mood-enhancers/{}".format(user.user_id))
+    return render_template("update-mood-enhancers.html", user_id=user.user_id)
 
 
 @app.route("/associated-moods/<int:user_id>")
