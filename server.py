@@ -14,6 +14,7 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_paginate import Pagination, get_page_args
 from jinja2 import StrictUndefined
 from sqlalchemy import func, asc
 
@@ -183,7 +184,28 @@ def show_all_entries(user_id):
     user = User.query.get(user_id)
     entries = Entry.query.filter_by(user_id=user_id).order_by("date_created").all()
 
-    return render_template("all-entries.html", entries=entries, user=user)
+    page, per_page, offset = get_page_args(
+        page_parameter="page", per_page_parameter="per_page"
+    )
+
+    per_page =5
+
+    offset = (page - 1) * per_page
+    total = len(entries)
+
+    pagination_entries = entries[offset : offset + per_page]
+    pagination = Pagination(
+        page=page, per_page=per_page, total=total, css_framework="bootstrap4"
+    )
+
+    return render_template(
+        "all-entries.html",
+        entries=pagination_entries,
+        user=user,
+        page=page,
+        per_page=per_page,
+        pagination=pagination,
+    )
 
 
 @app.route("/brain-dump/<int:user_id>", methods=["POST", "GET"])

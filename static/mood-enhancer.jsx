@@ -59,7 +59,7 @@ class UpdateMoodEnhancerForm extends React.Component {
         <input
           type="text"
           name="mood_enhancer_3"
-          placeholder="call bset friend..."
+          placeholder="call best friend..."
         />
         <br />
         <input type="submit" name="submit" />
@@ -105,6 +105,7 @@ class Mood_Enhancer extends React.Component {
         <section className="update-mood-enhancers">
           <UpdateMoodEnhancerForm updateBaseUrl="http://localhost:5000/mood-enhancers" />
         </section>
+        <a href={`/user/${user}`}>Homepage</a>
       </div>
     );
   }
