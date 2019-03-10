@@ -1,0 +1,14 @@
+.bc-form {
+  padding: 20px;
+  width: 350px;
+  margin-top: 5px;
+  margin: 0 auto;
+  box-shadow: 0 15px 35px 0 rgba(60, 66, 87, 0.1),
+    0 5px 15px 0 rgba(0, 0, 0, 0.07);
+}
+.img {
+  height: auto;
+  width: 100%;
+  /* even more control with max-width */
+  max-width: 720px;
+}

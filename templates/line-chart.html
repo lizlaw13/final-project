@@ -1,22 +1,28 @@
-{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
-content %} {% if has_entries == True %}
-<h1>Mood Over Time</h1>
-<!-- bar chart canvas element -->
-<canvas
-  data-labels='{{ labels | tojson }}'
-  data-label='{{ legend }}'
-  data-data='{{ values | tojson }}'
-  id='myChart'
-  width='600'
-  height='400'
-></canvas>
+{% extends 'base.html' %}
+{% block title %} Mood Over Time {% endblock %} 
+{% block content %} 
 
-<p id='caption'>The chart is displaying your mood over time.</p>
-{% else %}
-<h1>Looks like you do not have enough entries to generate a chart.</h1>
-{% endif %}
+{% if has_entries == True %}
 
-<a href='/user/{{ user.user_id }}'>Homepage</a> <br />
-<br />
-<script src='/static/line-chart.js'></script>
-{% endblock %}
+<div class="container-fluid">
+  <div class="row bc-chart"></div>
+  <div class="col text-center">
+    <h1>Mood Over Time</h1>
+    <canvas
+      data-labels='{{ labels | tojson }}'
+      data-label='{{ legend }}'
+      data-data='{{ values | tojson }}'
+      id='myChart'
+      width='600'
+      height='400'
+      class="text-center"
+    ></canvas>
+
+    {% else %}
+    <h1>Looks like you do not have enough entries to generate a chart.</h1>
+    {% endif %}
+
+    <script src='/static/line-chart.js'></script>
+    {% endblock %}
+  </div>
+</div>

@@ -15,7 +15,7 @@ content %}
 </ul>
 
 {% if user.mood_enhancers %}
-<h3>Comeplete your mood enhancers to have a better day!</h3>
+<h3>Complete your mood enhancers to have a better day!</h3>
 <ul>
   {% for mood in user.mood_enhancers %}
   <li>{{ mood.mood_enhancer }}</li>
@@ -41,8 +41,5 @@ content %}
 </form>
 <br />
 {% endif %}
-
-<br />
-<a href="/all-entries">View All Entries</a>
 
 {% endblock %}

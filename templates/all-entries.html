@@ -2,38 +2,35 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<h1>Here are all your entries:</h1>
+<div class="container-fluid">
+    <h1>Here are all your entries:</h1>
 
-
-{% for entry in entries %}
-<p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br>
-    {% if entry.activities %}
-    <br>
-    Activity/ Activities:
-    <ul> {% for activity in entry.activities %}
-
-        <li>{{ activity.verbose_category }}</li>
-
-        {% endfor %}
-        {% else %}
-        <p>No activities recorded for this entry</p>
+    {% for entry in entries %}
+    <p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br>
+        {% if entry.activities %}
+        <br>
+        Activity/ Activities:
+        <ul> {% for activity in entry.activities %}
+    
+            <li>{{ activity.verbose_category }}</li>
+    
+            {% endfor %}
+            {% else %}
+            <p>No activities recorded for this entry</p>
+            {% endif %}
+        </ul>
+    
+        {% if entry.description %}
+        <p>Note:</p>
+        <p> {{ entry.description }}</p>
         {% endif %}
-    </ul>
+        <a href="/update-entry/{{entry.entry_id}}">Update Entry</a> <br>
+        <a href="/delete-entry/{{entry.entry_id}}">Delete Entry</a>
+    
+    </p>
+    <hr>
+    {% endfor %}
+    {{ pagination.links }}
+    {% endblock %}
+</div>
 
-    {% if entry.description %}
-    <p>Note:</p>
-    <p> {{ entry.description }}</p>
-    {% endif %}
-    <a href="/update-entry/{{entry.entry_id}}">Update Entry</a> <br>
-    <a href="/delete-entry/{{entry.entry_id}}">Delete Entry</a>
-
-</p>
-<hr>
-{% endfor %}
-{{ pagination.links }}
-
-
-
-<a href="/user/{{ user.user_id }}">Homepage</a> <br> <br>
-
-{% endblock %}

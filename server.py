@@ -32,7 +32,14 @@ app.secret_key = "ZILWAL"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route("/")
+@app.context_processor
+def get_user():
+    user_id = None
+    if session.get("user_id"):
+        user_id = session.get("user_id")
+    return dict(user_id=user_id)
+
+@app.route("/", methods=["POST", "GET"])
 def index():
     """Homepage"""
 
@@ -53,6 +60,9 @@ def register_new_user():
     # grab the email and password from the form
     new_user_email = request.form.get("inputEmail4")
     new_user_password = request.form.get("inputPassword4")
+    if not new_user_email or not new_user_password:
+            flash("Please resubmit your information correctly.")
+            return redirect("/")
 
     # hash the password
     hash_object = hashlib.md5(new_user_password.encode())
@@ -84,6 +94,11 @@ def login_form():
     # retrieving email and password from user
     email = request.form.get("email")
     form_password = request.form.get("password")
+
+    if not email or not form_password:
+        flash("Please resubmit your information correctly.")
+        return redirect("/")
+
 
     # hash the password provided
     hash_object = hashlib.md5(form_password.encode())
@@ -188,7 +203,7 @@ def show_all_entries(user_id):
         page_parameter="page", per_page_parameter="per_page"
     )
 
-    per_page =5
+    per_page = 5
 
     offset = (page - 1) * per_page
     total = len(entries)
@@ -233,6 +248,10 @@ def add_brain_dump():
 
     # grab the user text from form
     user_brain_dump = request.form["brain_dump"]
+
+    if not user_brain_dump:
+        flash("Please resubmit your information correctly.")
+        return redirect(f"/brain-dump/{user_id}")
 
     # add brain dump to database
     brain_dump = User_Brain_Dump(user_id=user_id, brain_dump_entry=user_brain_dump)
@@ -282,8 +301,26 @@ def show_all_brain_dumps(user_id):
         User_Brain_Dump.query.filter_by(user_id=user_id).order_by("date_created").all()
     )
 
+    page, per_page, offset = get_page_args(
+        page_parameter="page", per_page_parameter="per_page"
+    )
+
+    per_page = 5
+
+    offset = (page - 1) * per_page
+    total = len(brain_dumps)
+
+    pagination_brain_dumps = brain_dumps[offset : offset + per_page]
+    pagination = Pagination(
+        page=page, per_page=per_page, total=total, css_framework="bootstrap4"
+    )
+
     return render_template(
-        "all-brain-dumps.html", brain_dumps=brain_dumps, user_id=user_id
+        "all-brain-dumps.html",
+        brain_dumps=pagination_brain_dumps,
+        user_id=user_id,
+        per_page=per_page,
+        pagination=pagination,
     )
 
 
@@ -373,6 +410,8 @@ def analyze_entry(user_brain_dump_id):
             """We are sorry your analysis does not reflect how you feel. Your analysis will not be saved. If you update your entry, 
             feel free to analyze again."""
         )
+        return redirect(f"brain-dump-details/{id}")
+
 
     db.session.commit()
 
@@ -671,8 +710,9 @@ def update_entry(entry_id):
 
     entry = Entry.query.get(entry_id)
     user_id = session["user_id"]
-    if user_id != entry.user.user_id:
-        return redirect("/")
+    print(entry)
+    # if user_id != entry.user.user_id:
+    #     return redirect("/")
 
     # grabs information for the form
     user_mood = request.form.get("mood")
@@ -683,6 +723,8 @@ def update_entry(entry_id):
         entry.mood = mood
 
     user_activities = request.form.getlist("activity_category")
+
+    
 
     description = request.form.get("description")
     if description is None and entry.description is None:
@@ -704,7 +746,8 @@ def update_entry(entry_id):
 
     flash("You have successfully updated an entry!")
 
-    return redirect(f"/all-entries/{user_id}")
+    # return redirect(f"/all-entries/{user_id}")
+    return redirect(f"/update-entry/{entry.entry_id}")
 
 
 @app.route("/add-entry", methods=["POST", "GET"])

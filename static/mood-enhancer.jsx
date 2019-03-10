@@ -4,7 +4,7 @@ class DeleteMoodEnhancerForm extends React.Component {
   }
   render() {
     const { user, mood_enhancers, deleteMoodEnhancerBaseUrl } = this.props;
-    if (mood_enhancers) {
+    if (mood_enhancers.length > 1) {
       return (
         <form
           action={`${deleteMoodEnhancerBaseUrl}${user}`}
@@ -30,8 +30,11 @@ class DeleteMoodEnhancerForm extends React.Component {
           <input type="submit" name="submit" />
         </form>
       );
+    } else {
+      return (
+        <h4>Looks like you don't have any mood enhancers! Add some below!</h4>
+      );
     }
-    return null;
   }
 }
 
@@ -105,7 +108,6 @@ class Mood_Enhancer extends React.Component {
         <section className="update-mood-enhancers">
           <UpdateMoodEnhancerForm updateBaseUrl="http://localhost:5000/mood-enhancers" />
         </section>
-        <a href={`/user/${user}`}>Homepage</a>
       </div>
     );
   }

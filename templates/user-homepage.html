@@ -1,108 +1,75 @@
 {% extends 'base.html' %}
 
-{% block title %} Homepage {% endblock %}
+{% block title %} Homepage 
+
+{% endblock %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="/static/css/add-entry.css">
 
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Mood/ Activity Tracker</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/all-entries">All Entries</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/mood-enhancers">Mood Enhancers</a>
-              </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Stats
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="/line-chart/{{ user.user_id }}">Mood Over Time</a>
-                  <a class="dropdown-item" href="/donut-chart/{{ user.user_id }}">Total Mood Count</a>
-                  <a class="dropdown-item" href="/associated-moods/{{ user.user_id }}">Associated Activities</a>
-                </div>
-              </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Brain Dumps
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="/brain-dump/{{ user.user_id }}">Add A Brain Dump</a>
-                <a class="dropdown-item" href="/all-brain-dumps/{{ user.user_id }}">View All Brain Dumps</a>
+<div class="container-fluid">
+  <div class="d-flex flex-row">
+    <div class="p-2">
+        <img src="/static/img/cool.png" class="img"/>
+    </div>
+    <div class="p-2 bc-form">
+    {% if show_form == True %}
+    <h2>Add an entry for today!</h2>
+    <h3>Today's Date: <br>{{ now }}</h3>
+      <div  >
+        <form action="/add-entry" method="POST">
+
+            Select a mood: <br>
+
+            {% for mood in moods %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="mood" id="exampleRadios1" value="{{ mood.mood_id }}">
+                  {{ mood.verbose_mood }}
               </div>
-            </li>  
-          </ul>
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/logout">Log Out</a>
-            </li>
-          </ul>    
+            {% endfor %}
+
+            <br> <br>
+            Select activity category: <br> 
+            {% for activity in activities %}
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="activity_category" value="{{ activity.activity_category_id }}" >
+                {{ activity.verbose_category }}
+              </div>
+            {% endfor %}
+
+            <br> 
+            <div class="form-group">
+                <label for="formGroupExampleInput">Optional Note:</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="2 hour exercise class, drinks with friends" name="description" size="40">
+              </div>
+            <input type="submit" name="submit" id="entry-submit">
+        </form>
+      </div>
+
+        {% elif show_form == False %}
+        <h1>You have already entered info for this date!</h1>
+        <h2>Don't forget to come back tomorrow to track your mood and activities!</h2>
+        <h3>Here are 5 reasons you should be using a mood and activitiy tracker:</h3>
+        <ol>
+          <li> Triggers and warning signs. By using a mood diary you can monitor the patterns in your life and identify negative influences 
+            (or “triggers”) that you need to avoid, and early warning signs that your health is deteriorating.</li>
+          <li>Wellness strategies. A mood diary can help you to find the small things, as well as the big, that help you to stay well. It can
+            show you the impact of the positive strategies that you adopt on your well-being.</li>
+          <li>Planning for health.  It gives them a better understanding of their health and helps them to develop a plan for remaining well. 
+            That is the key. The purpose of a mood diary should be to plan for wellness, not just keep a record of illness.</li>
+          <li>Actively participate. In general people achieve better health outcomes when they educate themselves and are proactive about their health.</li>
+          <li>A health professional’s dream. By keeping a mood diary you can provide your health professional with a precise, detailed history. 
+            It removes the problem of memory recall and gives an accurate picture of what has been happening</li>
+        </ol>
+        {% endif %}
+
+        
+    </div>
+
+  </div>
+</div>
 
 
-
-        </div>
-      </nav>
-</header>
-
-{% if show_form == True %}
-<h2>Add an entry for today!</h2>
-<h3>Today's Date: <br>{{ now }}</h5>
-    <form action="/add-entry" method="POST">
-        Select a mood: <br> <br>
-
-        {% for mood in moods %}
-
-        <input type="radio" name="mood" value="{{ mood.mood_id }}"> {{ mood.verbose_mood }}
-        <br>
-        {% endfor %}
-
-        <br> <br>
-        Select activity category: <br> <br>
-
-        {% for activity in activities %}
-
-        <input type="checkbox" name="activity_category" value="{{ activity.activity_category_id }}">
-        {{ activity.verbose_category }}
-        <br>
-
-        {% endfor %}
-
-        <br> <br>
-        Optional Note:
-        <br> <br> <input type="text" name="description" placeholder="2 hour exercise class, drinks with friends"
-            size="40">
-
-        <br> <br>
-        <input type="submit" name="submit" id="entry-submit">
-    </form>
-
-    {% elif show_form == False %}
-    <h1>You have already entered info for this date!</h1>
-    <h2>Don't forget to come back tomorrow to track your mood and activities!</h2>
-    <h3>Here are 5 reasons you should be using a mood and activitiy tracker:</h3>
-    <ol>
-      <li> Triggers and warning signs. By using a mood diary you can monitor the patterns in your life and identify negative influences 
-        (or “triggers”) that you need to avoid, and early warning signs that your health is deteriorating.</li>
-      <li>Wellness strategies. A mood diary can help you to find the small things, as well as the big, that help you to stay well. It can
-        show you the impact of the positive strategies that you adopt on your well-being.</li>
-      <li>Planning for health.  It gives them a better understanding of their health and helps them to develop a plan for remaining well. 
-        That is the key. The purpose of a mood diary should be to plan for wellness, not just keep a record of illness.</li>
-      <li>Actively participate. In general people achieve better health outcomes when they educate themselves and are proactive about their health.</li>
-      <li>A health professional’s dream. By keeping a mood diary you can provide your health professional with a precise, detailed history. 
-        It removes the problem of memory recall and gives an accurate picture of what has been happening</li>
-    </ol>
-    {% endif %}
-
-
-    
-      <script src="/static/homepage.js"></script>
+<script src="/static/homepage.js"></script>
 
     {% endblock %}

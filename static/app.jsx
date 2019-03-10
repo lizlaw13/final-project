@@ -27,7 +27,8 @@ class DeleteActivityForm extends React.Component {
   }
   render() {
     const { entry_activities, deleteActivityBaseUrl, entry } = this.props;
-    if (entry_activities) {
+    console.log(entry_activities.length);
+    if (entry_activities.length > 0) {
       return (
         <form
           action={`${deleteActivityBaseUrl}${entry.entry_id}`}
@@ -53,8 +54,9 @@ class DeleteActivityForm extends React.Component {
           <input type="submit" name="submit" />
         </form>
       );
+    } else {
+      return <h4>Looks like you don't have any activities. Add some below!</h4>;
     }
-    return null;
   }
 }
 
@@ -66,7 +68,7 @@ class UpdateEntryForm extends React.Component {
     const { entry, moods, activities, updateEntryBaseUrl } = this.props;
     return (
       <form
-        action={`${updateEntryBaseUrl}${entry.user_id}`}
+        action={`${updateEntryBaseUrl}${entry.entry_id}`}
         method="POST"
         onSubmit={e => e.target.submit()}
       >
@@ -134,6 +136,7 @@ class App extends React.Component {
 
   componentDidMount() {
     let entry_id = $("#entry_id").text();
+
     $.get("/update/" + entry_id, results => {
       this.setState({
         entry_id: entry_id,
@@ -147,7 +150,7 @@ class App extends React.Component {
   }
   render() {
     const { entry, entry_activities } = this.state;
-    let activities = <h4>Looks like you don't have any activities...</h4>;
+    let activities;
     let description = <h4>Looks like you don't have a note...</h4>;
 
     if (entry_activities.length > 0) {
@@ -193,7 +196,7 @@ class App extends React.Component {
           />
         </section>
 
-        <section className="delete-description">
+        <section className="delete-activitiy">
           <DeleteActivityForm
             entry_activities={entry_activities}
             deleteActivityBaseUrl="http://localhost:5000/modified-entry/"
@@ -210,10 +213,6 @@ class App extends React.Component {
             updateEntryBaseUrl="http://localhost:5000/updated-entry/"
           />
         </section>
-
-        <hr />
-        <br />
-        <a href={`/user/${entry.user_id}`}>Homepage</a>
       </div>
     );
   }

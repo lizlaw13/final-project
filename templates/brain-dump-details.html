@@ -65,15 +65,13 @@ content %}
           {% endif %}
           <form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">
             Is this analysis correct? Save it to your profile! <br />
-            Yes <input type="radio" name="yesNo" value="yes" /> No
-            <input type="radio" name="yesNo" value="no" />
+            Yes <input type="radio" name="yesNo" value="yes" /> 
+            No <input type="radio" name="yesNo" value="no" />
         
             <input type="submit" name="submit" />
           </form>
           {% endif %} {% endif %}
         
-          <a href="/all-brain-dumps/{{ brain_dump.user_id }}">All Brain Dumps</a>
-          <br /><br />
           </div>
           </div>
       </div>
