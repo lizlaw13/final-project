@@ -8,17 +8,16 @@
   flex-direction: row;
   padding: 10px;
 }
+.thumb-container {
+  width: 42px;
+  height: 42px;
+  margin: 10px 20px;
+}
 
 .container-fluid {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.thumb-container {
-  width: 42px;
-  height: 42px;
-  margin: 10px 20px;
 }
 
 .text-container {

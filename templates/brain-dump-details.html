@@ -67,14 +67,15 @@ content %}
       {% endif %}
     </div>
     <div class="col">
-      {% if brain_dump.verbose_analysis %}
-      <p>Your saved analysis: {{ brain_dump.verbose_analysis }}</p>
-
-      <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
-        >Reanalyze Entry</a
-      >
-      {% else %}
       <div class="card">
+          {% if brain_dump.verbose_analysis %}
+          <h3 class="title">Saved Analysis</h3> 
+          <p>{{ brain_dump.verbose_analysis }}</p>
+    
+          <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
+            class="round-button brain-dump-submit reanalyze">Reanalyze Entry</a
+          >
+          {% else %}
         <form
           action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}"
           method="POST"

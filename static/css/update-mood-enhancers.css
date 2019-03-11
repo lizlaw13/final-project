@@ -1,0 +1,32 @@
+.card {
+  padding: 20px 20px;
+}
+.title {
+  width: 600%;
+}
+.round-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  transition: all 0.1s ease-in-out;
+}
+
+.round-button:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+.delete-note-button,
+.delete-activity-button {
+  background-color: #e22525;
+  text-align: center;
+}
+.delete-note-button:hover,
+.delete-activity-button {
+  color: white;
+  text-decoration: none;
+}
+.update-mood-enhancers .title {
+  margin-bottom: 20px;
+}

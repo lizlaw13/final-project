@@ -1,0 +1,87 @@
+.card {
+  padding: 20px 20px;
+  margin: 5px;
+}
+.left-container {
+  display: flex;
+  flex-direction: column;
+}
+.delete-description .title,
+.delete-activitiy .title {
+  margin-bottom: 20px;
+}
+.delete-activitiy .title {
+  margin-top: 20px;
+}
+.date,
+.mood,
+.activities,
+.note {
+  font-weight: 500;
+}
+.mood,
+.note,
+.activities {
+  margin: 1px;
+}
+
+.round-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  transition: all 0.1s ease-in-out;
+}
+
+.round-button:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+.delete-note-button,
+.delete-activity-button {
+  background-color: #e22525;
+  text-align: center;
+}
+.delete-note-button:hover,
+.delete-activity-button {
+  color: white;
+  text-decoration: none;
+}
+
+.bc-form {
+  padding: 20px;
+  max-width: 362px;
+}
+.img {
+  height: auto;
+}
+
+.title {
+  width: 600%;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin: 18px 18px 18px 0px;
+}
+
+.label {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.entry-submit {
+  background-color: #1da1f2;
+  width: 100%;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  transition: all 0.1s ease-in-out;
+}
+
+.entry-submit:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}

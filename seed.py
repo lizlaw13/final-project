@@ -165,25 +165,66 @@ db.session.commit()
 
 mood_entry_one = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="today i am so happy i could die",
+    brain_dump_entry="Today I am so happy I could die.",
     date_created="2019-02-01 20:31:05.974887",
 )
 mood_entry_two = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="today i am so sad",
+    brain_dump_entry="Today I am so sad.",
     date_created="2019-02-02 20:31:05.974887",
 )
 
 mood_entry_three = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="today i am feeling ok i am excited to go for a hike",
+    brain_dump_entry="Today I am feeling ok I am excited to go for a hike.",
     date_created="2019-02-03 20:31:05.974887",
+)
+mood_entry_four = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="I went to a concert and had a blast.",
+    date_created="2019-02-04 20:31:05.974887",
+)
+mood_entry_five = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="Today was ok.. I am kind of stressed.",
+    date_created="2019-02-04 20:31:05.974887",
+)
+mood_entry_six = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="I went to Disneyland today it was amazing.",
+    date_created="2019-02-04 20:31:05.974887",
+)
+mood_entry_seven = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="I did not leave the house today and cried. It was upsetting.",
+    date_created="2019-02-04 20:31:05.974887",
+)
+mood_entry_eight = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="I adopted a dog today, so excited!!!",
+    date_created="2019-02-04 20:31:05.974887",
+)
+mood_entry_nine = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="Today sucked it was the worst day of my life. Nothing went my way everything was bad. ",
+    date_created="2019-02-04 20:31:05.974887",
+)
+mood_entry_ten = User_Brain_Dump(
+    user_id=1,
+    brain_dump_entry="Today sucked again, cool.. two days in a row that sucked... ",
+    date_created="2019-02-04 20:31:05.974887",
 )
 
 
 db.session.add(mood_entry_one)
 db.session.add(mood_entry_two)
 db.session.add(mood_entry_three)
-
+db.session.add(mood_entry_four)
+db.session.add(mood_entry_five)
+db.session.add(mood_entry_six)
+db.session.add(mood_entry_seven)
+db.session.add(mood_entry_eight)
+db.session.add(mood_entry_nine)
+db.session.add(mood_entry_ten)
 
 db.session.commit()

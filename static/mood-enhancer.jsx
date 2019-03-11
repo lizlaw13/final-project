@@ -11,23 +11,31 @@ class DeleteMoodEnhancerForm extends React.Component {
           method="POST"
           onSubmit={e => e.target.submit()}
         >
-          <h4>Delete Mood Enhancers: </h4>
+          <h3 className="title">Delete Mood Enhancers</h3>
           {mood_enhancers.map(function(enhancer) {
             return (
               <div key={enhancer.mood_enhancer_id}>
-                <input
-                  type="checkbox"
-                  label="check box"
-                  name="mood_enhancer"
-                  value={enhancer.mood_enhancer_id}
-                />
-                {enhancer.mood_enhancer}
-                <br />
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    label="check box"
+                    name="mood_enhancer"
+                    value={enhancer.mood_enhancer_id}
+                    className="form-check-input"
+                  />
+                  {enhancer.mood_enhancer}
+                </div>
               </div>
             );
           })}
           <br />
-          <input type="submit" name="submit" />
+          <button
+            type="submit"
+            name="Delete"
+            className="delete-activity-button round-button"
+          >
+            Delete
+          </button>
         </form>
       );
     } else {
@@ -50,22 +58,37 @@ class UpdateMoodEnhancerForm extends React.Component {
         method="POST"
         onSubmit={e => e.target.submit()}
       >
-        <h4>Update Mood Enhancers</h4>
+        <h3 className="title">Update Mood Enhancers</h3>
         <input
           type="text"
+          className="form-control"
           name="mood_enhancer_1"
           placeholder="go for a walk.."
         />
         <br />
-        <input type="text" name="mood_enhancer_2" placeholder="watch Netlix" />
+        <input
+          type="text"
+          className="form-control"
+          id="formGroupExampleInput"
+          name="mood_enhancer_2"
+          placeholder="watch Netlix"
+        />
         <br />
         <input
           type="text"
+          className="form-control"
           name="mood_enhancer_3"
           placeholder="call best friend..."
         />
         <br />
-        <input type="submit" name="submit" />
+        <button
+          className="entry-submit"
+          type="submit"
+          name="submit"
+          id="entry-submit"
+        >
+          Submit
+        </button>
       </form>
     );
   }
@@ -92,22 +115,23 @@ class Mood_Enhancer extends React.Component {
   render() {
     const { user, mood_enhancers } = this.state;
     return (
-      <div className="App">
-        <h1>Update Mood Enhancers</h1>
-
-        <section className="delete-mood-enhancers">
-          <DeleteMoodEnhancerForm
-            user={user}
-            mood_enhancers={mood_enhancers}
-            deleteMoodEnhancerBaseUrl="http://localhost:5000/delete-mood-enhancer/"
-          />
-        </section>
-
-        <hr />
-
-        <section className="update-mood-enhancers">
-          <UpdateMoodEnhancerForm updateBaseUrl="http://localhost:5000/mood-enhancers" />
-        </section>
+      <div className="App" className="container">
+        <div className="row">
+          <div className="col">
+            <section className="card delete-mood-enhancers">
+              <DeleteMoodEnhancerForm
+                user={user}
+                mood_enhancers={mood_enhancers}
+                deleteMoodEnhancerBaseUrl="http://localhost:5000/delete-mood-enhancer/"
+              />
+            </section>
+          </div>
+          <div className="col">
+            <section className="card update-mood-enhancers">
+              <UpdateMoodEnhancerForm updateBaseUrl="http://localhost:5000/mood-enhancers" />
+            </section>
+          </div>
+        </div>
       </div>
     );
   }

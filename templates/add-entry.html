@@ -14,7 +14,7 @@ content %}
   {% endfor %}
 </ul>
 
-{% if user.mood_enhancers %}
+{% if (user.mood_enhancers and entry.mood_id == 1) or (user.mood_enhancers and entry.mood_id == 2)%}
 <h3>Complete your mood enhancers to have a better day!</h3>
 <ul>
   {% for mood in user.mood_enhancers %}

@@ -11,9 +11,15 @@ class DeleteNoteForm extends React.Component {
           method="POST"
           onSubmit={e => e.target.submit()}
         >
-          <h4>Delete Note: </h4>
+          <h4 className="title">Delete Note</h4>
           <p>{entry.entry_description}</p>
-          <input type="submit" name="Delete" value="Delete" />
+          <button
+            type="submit"
+            name="Delete"
+            className="delete-note-button round-button"
+          >
+            Delete
+          </button>
         </form>
       );
     }
@@ -35,27 +41,34 @@ class DeleteActivityForm extends React.Component {
           method="POST"
           onSubmit={e => e.target.submit()}
         >
-          <h4>Delete Activity/ Activities: </h4>
+          <h4 className="title">Delete Activity/ Activities: </h4>
           {entry_activities.map(function(entry_activitiy) {
             return (
               <div key={entry_activitiy.activity_id}>
-                <input
-                  type="checkbox"
-                  label="check box"
-                  name="activity_category"
-                  value={entry_activitiy.activity_id}
-                />
-                {entry_activitiy.activity}
-                <br />
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="activity_category"
+                    value={entry_activitiy.activity_id}
+                  />
+                  {entry_activitiy.activity}
+                </div>
               </div>
             );
           })}
           <br />
-          <input type="submit" name="submit" />
+          <button
+            type="submit"
+            name="Delete"
+            className="delete-activity-button round-button"
+          >
+            Delete
+          </button>
         </form>
       );
     } else {
-      return <h4>Looks like you don't have any activities. Add some below!</h4>;
+      return <p>Looks like you don't have any activities. Add some below!</p>;
     }
   }
 }
@@ -71,51 +84,56 @@ class UpdateEntryForm extends React.Component {
         action={`${updateEntryBaseUrl}${entry.entry_id}`}
         method="POST"
         onSubmit={e => e.target.submit()}
+        className="add-entry-form"
       >
-        Select a mood:
-        <br />
-        <br />
+        <p className="label">Select a mood</p>
         {moods.map(function(mood) {
           return (
-            <div key={mood.mood_id}>
-              <input type="radio" name="mood" value={mood.mood_id} />
+            <div key={mood.mood_id} className="form-check">
+              <input
+                type="radio"
+                name="mood"
+                value={mood.mood_id}
+                className="form-check-input"
+              />
               {mood.verbose_mood}
-              <br />
             </div>
           );
         })}
-        <br />
-        <br />
-        Select activities:
-        <br />
-        <br />
+        <p className="label">Select activity category</p>
         {activities.map(function(activity) {
           return (
-            <div key={activity.activity_category_id}>
+            <div key={activity.activity_category_id} className="form-check">
               <input
                 type="checkbox"
                 name="activity_category"
                 value={activity.activity_category_id}
+                className="form-check-input"
               />
               {activity.verbose_category}
-              <br />
             </div>
           );
         })}
         <br />
-        <br />
-        Optional Note:
-        <br />
-        <br />
-        <input
-          type="text"
-          name="description"
-          placeholder="2 hour exercise class, drinks with friends"
-          size="40"
-        />
-        <br />
-        <br />
-        <input type="submit" name="submit" />
+        <div className="form-group">
+          <label className="label">Optional Note:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="formGroupExampleInput"
+            placeholder="Ex. 2 hour exercise class, drinks with friends"
+            name="description"
+            size="40"
+          />
+        </div>
+        <button
+          className="entry-submit"
+          type="submit"
+          name="submit"
+          id="entry-submit"
+        >
+          Submit
+        </button>
       </form>
     );
   }
@@ -151,7 +169,7 @@ class App extends React.Component {
   render() {
     const { entry, entry_activities } = this.state;
     let activities;
-    let description = <h4>Looks like you don't have a note...</h4>;
+    let description = <h6>Looks like you don't have a note...</h6>;
 
     if (entry_activities.length > 0) {
       let entry_activities_lis = entry_activities.map(entry_activity => {
@@ -166,53 +184,59 @@ class App extends React.Component {
     }
 
     if (entry.entry_description) {
-      description = (
-        <p>
-          <strong>Note: </strong>
-          {entry.entry_description}
-        </p>
-      );
+      description = <p>{entry.entry_description}</p>;
     }
 
     return (
-      <div className="App">
-        <h1>Update Your Entry</h1>
-        <section className="moods" key={entry.entry_mood}>
-          <strong>
-            <p>
-              Your mood for {entry.entry_date} was {entry.entry_mood}!
-            </p>
-          </strong>
-        </section>
-
-        <section className="activities">{activities}</section>
-
-        <section className="description">{description}</section>
-
-        <section className="delete-description">
-          <DeleteNoteForm
-            entry={entry}
-            deleteNoteBaseUrl="http://localhost:5000/delete-note-entry/"
-          />
-        </section>
-
-        <section className="delete-activitiy">
-          <DeleteActivityForm
-            entry_activities={entry_activities}
-            deleteActivityBaseUrl="http://localhost:5000/modified-entry/"
-            entry={entry}
-          />
-        </section>
-
-        <hr />
-        <section className="update-entry">
-          <UpdateEntryForm
-            entry={entry}
-            moods={this.state.moods}
-            activities={this.state.activities}
-            updateEntryBaseUrl="http://localhost:5000/updated-entry/"
-          />
-        </section>
+      <div className="App container">
+        <div className="row">
+          <div className="col left-container">
+            <div className="card current-entry-card">
+              <div className="text-container">
+                <section className="moods" key={entry.entry_mood}>
+                  <p className="date">{entry.entry_date}</p>
+                  <p className="mood">Mood</p>
+                  <p>{entry.entry_mood}</p>
+                </section>
+                <section>
+                  <p className="activities">Activity/Activities</p>
+                  {activities}
+                </section>
+                <section>
+                  <p className="note">Note</p>
+                  {description}
+                </section>
+              </div>
+            </div>
+            <div className="card current-delete-form">
+              <section className="delete-description">
+                <DeleteNoteForm
+                  entry={entry}
+                  deleteNoteBaseUrl="http://localhost:5000/delete-note-entry/"
+                />
+              </section>
+              <section className="delete-activitiy">
+                <DeleteActivityForm
+                  entry_activities={entry_activities}
+                  deleteActivityBaseUrl="http://localhost:5000/modified-entry/"
+                  entry={entry}
+                />
+              </section>
+            </div>
+          </div>
+          <div className="col">
+            <div className="card">
+              <section className="update-entry">
+                <UpdateEntryForm
+                  entry={entry}
+                  moods={this.state.moods}
+                  activities={this.state.activities}
+                  updateEntryBaseUrl="http://localhost:5000/updated-entry/"
+                />
+              </section>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

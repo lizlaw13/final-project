@@ -52,6 +52,16 @@
   background-color: #1da1f2;
   margin-bottom: 10px;
 }
+.reanalyze {
+  text-decoration: none;
+  color: white;
+  text-align: center;
+  background-color: #e2a723;
+}
+.reanalyze:hover {
+  color: white;
+  text-decoration: none;
+}
 
 .brain-dump-delete {
   background-color: #e22525;

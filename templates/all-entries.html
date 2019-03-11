@@ -1,36 +1,40 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/all-entries.css" />
 
 <div class="container-fluid">
-    <h1>Here are all your entries:</h1>
+  <h1 class="title">All Entries</h1>
 
-    {% for entry in entries %}
-    <p>Date: {{ entry.date_created.strftime("%A, %B %d, %Y") }} <br> <br> Mood: {{ entry.mood.verbose_mood }} <br>
-        {% if entry.activities %}
-        <br>
-        Activity/ Activities:
-        <ul> {% for activity in entry.activities %}
-    
-            <li>{{ activity.verbose_category }}</li>
-    
-            {% endfor %}
-            {% else %}
-            <p>No activities recorded for this entry</p>
-            {% endif %}
-        </ul>
-    
-        {% if entry.description %}
-        <p>Note:</p>
-        <p> {{ entry.description }}</p>
+  {% for entry in entries %}
+  <div class="card">
+    <div class="text-container">
+      <p class="date">{{ entry.date_created.strftime("%B %d, %Y") }} </p>
+      <p class="mood">Mood:</p>
+      <p>{{ entry.mood.verbose_mood }}</p>
+      {% if entry.activities %}
+      <p class="activities">Activity/ Activities</p>
+      <ul>
+        {% for activity in entry.activities %}
+        <li>{{ activity.verbose_category }}</li>
+        {% endfor %} {% else %}
+        <p>No activities recorded for this entry</p>
         {% endif %}
-        <a href="/update-entry/{{entry.entry_id}}">Update Entry</a> <br>
-        <a href="/delete-entry/{{entry.entry_id}}">Delete Entry</a>
-    
-    </p>
-    <hr>
-    {% endfor %}
+      </ul>
+      {% if entry.description %}
+      <p class="note">Note:</p>
+      <p> {{ entry.description }}</p>
+      {% endif %}
+    </div>
+    <div class="page-links-container">
+      <a href="/update-entry/{{ entry.entry_id }}" class="update-button round-button">Update Entry</a> <br />
+      <a href="/delete-entry/{{ entry.entry_id }}" class="delete-button round-button">Delete Entry</a>
+    </div>
+  </div>
+  <!--.card-->
+  {% endfor %}
+  <div class="page-links-container">
     {{ pagination.links }}
-    {% endblock %}
-</div>
-
+  </div> </div
+><!--.container-fluid-->
+{% endblock %}
