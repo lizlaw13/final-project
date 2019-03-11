@@ -1,35 +1,40 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/all-brain-dumps.css" />
 
 <div class="container-fluid">
+  <h1 class="title">All Brain Dumps</h1>
 
-    <ul class="list-unstyled">
-        <li class="media">
-            <img class="mr-3" src="..." alt="Generic placeholder image">
-            <div class="media-body">
-            <h5 class="mt-0 mb-1">List-based media object</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-        </li>
-    </ul>
-    <h1>All Brain Dumps</h1>
-
-    {% for brain_dump in brain_dumps %}
-    <a href="/brain-dump-details/{{ brain_dump.user_brain_dump_id }}">
-        <p>Date: {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}</p>
-    </a>
-    <p>Brain Dump Entry: {{ brain_dump.brain_dump_entry }}</p>
-    {% if brain_dump.analysis_confirmation == 'yes' and brain_dump.verbose_analysis == 'positive' %}
-    <img src="https://image.flaticon.com/icons/png/512/70/70420.png" height="42" width="42">
-    {% elif brain_dump.analysis_confirmation == 'yes' and brain_dump.verbose_analysis == 'negative' %}
-    <img src="https://image.flaticon.com/icons/svg/25/25237.svg" height="42" width="42">
-    {% endif %}
-    
-    <hr>
-    
-    {% endfor %}
+  {% for brain_dump in brain_dumps %}
+  <div class="card">
+    <div class="thumb-container">
+      {% if brain_dump.analysis_confirmation == 'yes' and
+      brain_dump.verbose_analysis == 'positive' %}
+      <img
+        src="https://image.flaticon.com/icons/png/512/70/70420.png"
+        height="42"
+        width="42"
+      />
+      {% elif brain_dump.analysis_confirmation == 'yes' and
+      brain_dump.verbose_analysis == 'negative' %}
+      <img
+        src="https://image.flaticon.com/icons/svg/25/25237.svg"
+        height="42"
+        width="42"
+      />
+      {% endif %}
+    </div>
+    <div class="text-container">
+      <a href="/brain-dump-details/{{ brain_dump.user_brain_dump_id }}">
+        {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}
+      </a>
+      <p class="description">{{ brain_dump.brain_dump_entry }}</p>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="page-links-container">
     {{ pagination.links }}
-    
-    {% endblock %}
+  </div>
 </div>
+{% endblock %}

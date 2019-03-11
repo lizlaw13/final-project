@@ -1,84 +1,127 @@
 {% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
 content %}
 
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="/static/css/brain-dump-details.css"
+/>
+
 <div class="container">
-    <div class="row">
-      <div class="col">
-            <h3>Date: {{ brain_dump.date_created.strftime("%A, %B %d, %Y") }}</h3>
-            <h2>Entry:</h2>
-            <h2> {{ brain_dump.brain_dump_entry }}</h2>
-            {% if brain_dump.analysis_confirmation == 'yes' and brain_dump.verbose_analysis
-            == 'positive' %}
-            <img
-              src="https://image.flaticon.com/icons/png/512/70/70420.png"
-              height="42"
-              width="42"
-            />
-            {% elif brain_dump.analysis_confirmation == 'yes' and
-            brain_dump.verbose_analysis == 'negative' %}
-            <img
-              src="https://image.flaticon.com/icons/svg/25/25237.svg"
-              height="42"
-              width="42"
-            />
-            {% endif %}
-            {% if brain_dump.brain_dump_entry %}
-            <form action="/update-brain-dump/{{ brain_dump.user_brain_dump_id }}" method="POST">
-              <h3>Update your entry:</h3>
-              <textarea name="brain_dump" value="brain-dump">{{
-                brain_dump.brain_dump_entry
-              }}
-              </textarea>
-              <br />
-              <br />
-              <input type="submit" name="submit" />
-            </form>
-            <br />
-            {% endif %}
-            <a href="/delete-brain-dump/{{ brain_dump.user_brain_dump_id }}">Delete Brain Dump Entry</a>
+  <div class="row">
+    <div class="col">
+      <div class="card current-brain-dump-card">
+        {% if brain_dump.analysis_confirmation == 'yes' and
+        brain_dump.verbose_analysis == 'positive' %}
+        <div class="thumbs-container">
+          <img
+            src="https://image.flaticon.com/icons/png/512/70/70420.png"
+            height="42"
+            width="42"
+          />
+        </div>
+        {% elif brain_dump.analysis_confirmation == 'yes' and
+        brain_dump.verbose_analysis == 'negative' %}
+        <div class="thumbs-container">
+          <img
+            src="https://image.flaticon.com/icons/svg/25/25237.svg"
+            height="42"
+            width="42"
+          />
+        </div>
+        {% endif %}
+        <div class="text-container">
+          <p class="date">{{
+            brain_dump.date_created.strftime("%A, %B %d, %Y")
+          }}</p>
+          <h1 class="title"> {{ brain_dump.brain_dump_entry }}</h1>
+        </div>
       </div>
-      <div class="col">
-          {% if brain_dump.verbose_analysis %}
-          <p>Your saved analysis: {{ brain_dump.verbose_analysis }}</p>
-        
-          <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
-            >Reanalyze Entry</a
+      {% if brain_dump.brain_dump_entry %}
+      <div class="card update-dump-card">
+        <form
+          action="/update-brain-dump/{{ brain_dump.user_brain_dump_id }}"
+          method="POST"
+        >
+          <h3 class="title">Update your entry</h3>
+          <textarea
+            class="update-textarea form-control"
+            name="brain_dump"
+            value="brain-dump"
+            >{{ brain_dump.brain_dump_entry }}
+                </textarea
           >
-          {% else %}
-        
-          <form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">
-            Entry Analysis: <br />
-            <br />
-            Let us predict if your brain dump entry is positive or negative. <br />
-            <br />
-            Click the button below to analyze your entry:
-            <br />
-            <br />
-            <input type="submit" name="submit" value="Analyze" />
-          </form>
-        
-          <br />
-          {% if value %} {% if positive %}
-          <h4>Positive</h4>
-          {% else %}
-          <h4>Negative</h4>
-          {% endif %}
-          <form action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}" method="POST">
-            Is this analysis correct? Save it to your profile! <br />
-            Yes <input type="radio" name="yesNo" value="yes" /> 
-            No <input type="radio" name="yesNo" value="no" />
-        
-            <input type="submit" name="submit" />
-          </form>
-          {% endif %} {% endif %}
-        
+          <button
+            class="brain-dump-submit round-button"
+            type="submit"
+            name="submit"
+            >Submit</button
+          >
+        </form>
+        <a
+          class="round-button brain-dump-delete"
+          href="/delete-brain-dump/{{ brain_dump.user_brain_dump_id }}"
+          >Delete</a
+        >
+      </div>
+      {% endif %}
+    </div>
+    <div class="col">
+      {% if brain_dump.verbose_analysis %}
+      <p>Your saved analysis: {{ brain_dump.verbose_analysis }}</p>
+
+      <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
+        >Reanalyze Entry</a
+      >
+      {% else %}
+      <div class="card">
+        <form
+          action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}"
+          method="POST"
+        >
+          <h3 class="title">Entry Analysis</h3>
+
+          <p
+            >Let us predict if your brain dump entry is positive or negative.</p
+          >
+
+          <button
+            class="analysis-button round-button"
+            type="submit"
+            name="submit"
+            >Analyze</button
+          >
+        </form>
+
+        <br />
+        {% if value %} {% if positive %}
+        <h4>Positive</h4>
+        {% else %}
+        <h4>Negative</h4>
+        {% endif %}
+        <form
+          action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}"
+          method="POST"
+        >
+          <p>Is this analysis correct? </p>
+          <p>Save it to your profile!</p>
+          <div>
+            <input id="yes" type="radio" name="yesNo" value="yes" />
+            <label for="yes">Yes</label>
           </div>
+          <div>
+            <input id="no" type="radio" name="yesNo" value="no" />
+            <label for="no">No</label>
           </div>
+
+          <button class="save-button round-button" type="submit" name="submit"
+            >Save</button
+          >
+        </form>
+        {% endif %} {% endif %}
       </div>
     </div>
   </div>
-  
-
-
+</div>
 
 {% endblock %}

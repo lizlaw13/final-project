@@ -1,75 +1,108 @@
-{% extends 'base.html' %}
-
-{% block title %} Homepage 
-
-{% endblock %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="/static/css/add-entry.css">
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
+<link rel="stylesheet" type="text/css" href="/static/css/add-entry.css" />
 
 <div class="container-fluid">
-  <div class="d-flex flex-row">
-    <div class="p-2">
-        <img src="/static/img/cool.png" class="img"/>
+  <div class="d-flex flex-row justify-content-center">
+    <div class="image-container">
+      <img src="/static/img/cool.png" class="img" />
     </div>
-    <div class="p-2 bc-form">
-    {% if show_form == True %}
-    <h2>Add an entry for today!</h2>
-    <h3>Today's Date: <br>{{ now }}</h3>
-      <div  >
-        <form action="/add-entry" method="POST">
+    <div class="bc-form">
+      {% if show_form == True %}
+      <h1 class="title">Add an entry for today!</h2>
+      <p class="subtitle">Today's Date: {{ now }}</p>
+      <div>
+        <form class="add-entry-form" action="/add-entry" method="POST">
+          <p class="label">Select a mood</p>
+          {% for mood in moods %}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="mood"
+              id="exampleRadios1"
+              value="{{ mood.mood_id }}"
+            />
+            {{ mood.verbose_mood }}
+          </div>
+          {% endfor %}
 
-            Select a mood: <br>
+          <p class="label">Select activity category</p>
+          {% for activity in activities %}
 
-            {% for mood in moods %}
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="mood" id="exampleRadios1" value="{{ mood.mood_id }}">
-                  {{ mood.verbose_mood }}
-              </div>
-            {% endfor %}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="activity_category"
+              value="{{ activity.activity_category_id }}"
+            />
+            {{ activity.verbose_category }}
+          </div>
+          {% endfor %}
 
-            <br> <br>
-            Select activity category: <br> 
-            {% for activity in activities %}
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="activity_category" value="{{ activity.activity_category_id }}" >
-                {{ activity.verbose_category }}
-              </div>
-            {% endfor %}
-
-            <br> 
-            <div class="form-group">
-                <label for="formGroupExampleInput">Optional Note:</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="2 hour exercise class, drinks with friends" name="description" size="40">
-              </div>
-            <input type="submit" name="submit" id="entry-submit">
+          <br />
+          <div class="form-group">
+            <label for="formGroupExampleInput">Optional Note:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="formGroupExampleInput"
+              placeholder="2 hour exercise class, drinks with friends"
+              name="description"
+              size="40"
+            />
+          </div>
+          <button class="entry-submit" type="submit" name="submit" id="entry-submit">Submit</button>
         </form>
       </div>
 
-        {% elif show_form == False %}
-        <h1>You have already entered info for this date!</h1>
-        <h2>Don't forget to come back tomorrow to track your mood and activities!</h2>
-        <h3>Here are 5 reasons you should be using a mood and activitiy tracker:</h3>
-        <ol>
-          <li> Triggers and warning signs. By using a mood diary you can monitor the patterns in your life and identify negative influences 
-            (or “triggers”) that you need to avoid, and early warning signs that your health is deteriorating.</li>
-          <li>Wellness strategies. A mood diary can help you to find the small things, as well as the big, that help you to stay well. It can
-            show you the impact of the positive strategies that you adopt on your well-being.</li>
-          <li>Planning for health.  It gives them a better understanding of their health and helps them to develop a plan for remaining well. 
-            That is the key. The purpose of a mood diary should be to plan for wellness, not just keep a record of illness.</li>
-          <li>Actively participate. In general people achieve better health outcomes when they educate themselves and are proactive about their health.</li>
-          <li>A health professional’s dream. By keeping a mood diary you can provide your health professional with a precise, detailed history. 
-            It removes the problem of memory recall and gives an accurate picture of what has been happening</li>
-        </ol>
-        {% endif %}
-
-        
+      {% elif show_form == False %}
+      <h1>You have already entered info for this date!</h1>
+      <h2
+        >Don't forget to come back tomorrow to track your mood and
+        activities!</h2
+      >
+      <h3
+        >Here are 5 reasons you should be using a mood and activitiy
+        tracker:</h3
+      >
+      <ol>
+        <li>
+          Triggers and warning signs. By using a mood diary you can monitor the
+          patterns in your life and identify negative influences (or “triggers”)
+          that you need to avoid, and early warning signs that your health is
+          deteriorating.</li
+        >
+        <li
+          >Wellness strategies. A mood diary can help you to find the small
+          things, as well as the big, that help you to stay well. It can show
+          you the impact of the positive strategies that you adopt on your
+          well-being.</li
+        >
+        <li
+          >Planning for health. It gives them a better understanding of their
+          health and helps them to develop a plan for remaining well. That is
+          the key. The purpose of a mood diary should be to plan for wellness,
+          not just keep a record of illness.</li
+        >
+        <li
+          >Actively participate. In general people achieve better health
+          outcomes when they educate themselves and are proactive about their
+          health.</li
+        >
+        <li
+          >A health professional’s dream. By keeping a mood diary you can
+          provide your health professional with a precise, detailed history. It
+          removes the problem of memory recall and gives an accurate picture of
+          what has been happening</li
+        >
+      </ol>
+      {% endif %}
     </div>
-
   </div>
 </div>
 
-
 <script src="/static/homepage.js"></script>
 
-    {% endblock %}
+{% endblock %}

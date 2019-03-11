@@ -2,20 +2,21 @@
 {% block title %} Mood Over Time {% endblock %} 
 {% block content %} 
 
+<link rel="stylesheet" type="text/css" href="/static/css/line-chart.css" />
 {% if has_entries == True %}
 
 <div class="container-fluid">
   <div class="row bc-chart"></div>
   <div class="col text-center">
-    <h1>Mood Over Time</h1>
+    <h1 class="title">Mood Over Time</h1>
     <canvas
       data-labels='{{ labels | tojson }}'
       data-label='{{ legend }}'
       data-data='{{ values | tojson }}'
       id='myChart'
-      width='600'
-      height='400'
-      class="text-center"
+      width='800'
+      height='500'
+      class="canvas-chart"
     ></canvas>
 
     {% else %}

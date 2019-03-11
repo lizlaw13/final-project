@@ -1,14 +1,32 @@
 .bc-form {
   padding: 20px;
-  width: 350px;
-  margin-top: 5px;
-  margin: 0 auto;
-  box-shadow: 0 15px 35px 0 rgba(60, 66, 87, 0.1),
-    0 5px 15px 0 rgba(0, 0, 0, 0.07);
+  max-width: 362px;
 }
 .img {
   height: auto;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.label {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.entry-submit {
+  background-color: #1da1f2;
   width: 100%;
-  /* even more control with max-width */
-  max-width: 720px;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  transition: all 0.1s ease-in-out;
+}
+
+.entry-submit:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 }
