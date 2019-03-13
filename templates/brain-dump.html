@@ -2,16 +2,27 @@
 {% block title %} Homepage {% endblock %}
 {% block content %}
 
-<form action="/brain-dump" method="POST">
-    <h2>Date: {{ now }}</h2>
-    <h3>How was your day?</h3>
-    <h4>Dump every and any feelings you may have and save them to your profile.
-    </h4>
+<link rel="stylesheet" type="text/css" href="/static/css/brain-dump.css" />
 
-    <textarea name="brain_dump" placeholder="Enter text here..."></textarea>
-
-    <br> <br>
-    <input type="submit" name="submit">
-
-</form>
+<div class="container-fluid">
+    <h1 class="title">Brain Dump</h1>
+    <div class="card">
+        <div class="text-container">
+                <p class="date">{{ now }} </p>
+            <form action="/brain-dump" method="POST">
+                <h3 class="question">How was your day?</h3>
+                <textarea
+                class="update-textarea form-control"
+                name="brain_dump"
+                placeholder="Enter text here...">
+            </textarea>
+              <button
+                class="brain-dump-submit round-button"
+                type="submit"
+                name="submit"
+                >Submit</button
+              >
+        </div>
+    </div>
+</div>
 {% endblock %}

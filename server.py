@@ -217,7 +217,7 @@ def show_brain_dump_form(user_id):
     user_id = session.get("user_id")
 
     # generate today's date
-    now = datetime.datetime.today().strftime("%A, %B %d, %Y")
+    now = datetime.datetime.today().strftime("%B %d, %Y")
 
     # grab infomration from params to check if a user is updating or created a new entry
     updated = request.args.get("updated")
