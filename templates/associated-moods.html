@@ -1,17 +1,36 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
 
-<form action="/associated-moods" method="POST">
-    <h3>Select a mood to view all associated entries:</h3>
-    {% for mood in moods %}
-    <input type="radio" name="mood" value="{{ mood.mood_id }}"> {{ mood.verbose_mood }}
-    <br>
-    {% endfor %}
-    <br>
-    <input type="submit" name="submit">
-</form>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="/static/css/associated-moods.css"
+/>
 
-
+<div class="container-fluid">
+  <h1 class="title">Associated Activities</h1>
+  <div class="card">
+    <section class="text-container">
+      <form action="/associated-moods" method="POST">
+        <p class="label">Select a mood</p>
+        {% for mood in moods %}
+        <div class="form-check">
+          <input
+            type="radio"
+            name="mood"
+            value="{{ mood.mood_id }}"
+            class="form-check-input"
+          />
+          {{ mood.verbose_mood }}
+        </div>
+        {% endfor %}
+        <br />
+        <div class="link-container">
+            <button class="entry-submit round-button" type="submit" name="submit" id="entry-submit">Submit</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
 
 {% endblock %}

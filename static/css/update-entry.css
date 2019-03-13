@@ -1,3 +1,10 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #e0dede;
+}
+
 .card {
   padding: 20px 20px;
   margin: 5px;
@@ -7,11 +14,10 @@
   flex-direction: column;
 }
 .delete-description .title,
-.delete-activitiy .title {
+.delete-activitiy .title,
+.add-entry-form .title,
+.text-container .title {
   margin-bottom: 20px;
-}
-.delete-activitiy .title {
-  margin-top: 20px;
 }
 .date,
 .mood,

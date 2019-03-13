@@ -24,6 +24,7 @@
 
 .page-links-container {
   display: flex;
+  margin: 20px;
 }
 
 .round-button {
@@ -50,7 +51,4 @@
 }
 .delete-button {
   background-color: #e22525;
-}
-.page-links-container {
-  margin: 20px;
 }

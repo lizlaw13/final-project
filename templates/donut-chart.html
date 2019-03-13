@@ -8,13 +8,14 @@ content %}
 <!-- doughnut chart canvas element -->
 <canvas
   data-labels='{{ labels | tojson }}'
-  data-label='{{ legend }}'
+  
   data-data='{{ values | tojson }}'
   id='myDoughnutChart'
   width='600'
   height='400'
   class="canvas-chart"
 ></canvas>
+<div id="lineLegend" data-label='{{ legend }}' class="chart-legend"></div>
 
 {% else %}
 <h1>Looks like you do not have enough entries to generate a chart.</h1>

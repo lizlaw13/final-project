@@ -4,12 +4,23 @@ body {
   overflow-x: hidden;
   background-color: #e0dede;
 }
-.card {
-  padding: 20px 20px;
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .title {
-  width: 600%;
+  margin: 20px;
 }
+.card {
+  width: 40%;
+  padding: 10px;
+}
+.label {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
 .round-button {
   width: 100%;
   padding: 10px;
@@ -22,19 +33,6 @@ body {
 
 .round-button:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-}
-.delete-note-button,
-.delete-activity-button {
-  background-color: #e22525;
-  text-align: center;
-}
-.delete-note-button:hover,
-.delete-activity-button {
-  color: white;
-  text-decoration: none;
-}
-.update-mood-enhancers .title {
-  margin-bottom: 20px;
 }
 
 .entry-submit {
@@ -50,4 +48,7 @@ body {
 
 .entry-submit:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+.link-container {
+  margin: 10px;
 }

@@ -40,3 +40,4 @@ var myDoughnutChart = new Chart(ctx, {
     }
   }
 });
+$("#chart-legend").html(myDoughnutChart.generateLegend());

@@ -1,0 +1,49 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #e0dede;
+}
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title {
+  margin: 20px;
+}
+.card {
+  width: 40%;
+  padding: 10px;
+}
+
+.label {
+  margin: 10px 0;
+  font-weight: bold;
+}
+.brain-dump-submit {
+  background-color: #1da1f2;
+  margin-bottom: 10px;
+}
+
+.brain-dump-submit:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.round-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  transition: all 0.1s ease-in-out;
+}
+
+.round-button:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+.link-container {
+  margin: 20px;
+}

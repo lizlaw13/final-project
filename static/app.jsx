@@ -41,7 +41,7 @@ class DeleteActivityForm extends React.Component {
           method="POST"
           onSubmit={e => e.target.submit()}
         >
-          <h4 className="title">Delete Activity/ Activities: </h4>
+          <h4 className="title">Delete Activity/ Activities </h4>
           {entry_activities.map(function(entry_activitiy) {
             return (
               <div key={entry_activitiy.activity_id}>
@@ -86,6 +86,7 @@ class UpdateEntryForm extends React.Component {
         onSubmit={e => e.target.submit()}
         className="add-entry-form"
       >
+        <h4 className="title">Update Your Entry </h4>
         <p className="label">Select a mood</p>
         {moods.map(function(mood) {
           return (
@@ -193,6 +194,7 @@ class App extends React.Component {
           <div className="col left-container">
             <div className="card current-entry-card">
               <div className="text-container">
+                <h4 className="title">Current Entry </h4>
                 <section className="moods" key={entry.entry_mood}>
                   <p className="date">{entry.entry_date}</p>
                   <p className="mood">Mood</p>

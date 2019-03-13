@@ -71,7 +71,7 @@ class UpdateMoodEnhancerForm extends React.Component {
           className="form-control"
           id="formGroupExampleInput"
           name="mood_enhancer_2"
-          placeholder="watch Netlix"
+          placeholder="watch Netlix..."
         />
         <br />
         <input
@@ -82,7 +82,7 @@ class UpdateMoodEnhancerForm extends React.Component {
         />
         <br />
         <button
-          className="entry-submit"
+          className="entry-submit round-button"
           type="submit"
           name="submit"
           id="entry-submit"

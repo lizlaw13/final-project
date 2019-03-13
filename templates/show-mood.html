@@ -1,20 +1,34 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
 
-<h1>{{ verbose_mood }}</h1>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="/static/css/show-mood.css"
+/>
 
-{% if activities %}
-<ul>
-    {% for activity in activities %}
-    <li>{{activity}}</li>
-    {% endfor %}
-</ul>
-{% else %}
-<h4>Looks like you have not inputted any activities for this particular mood! </h4>
-{% endif %}
-
-<a href="/associated-moods/{{ user.user_id }}">Back to form</a>
-
+<div class="container-fluid">
+  <h1 class="title">Associated Activities</h1>
+  <div class="card">
+    <section class="text-container">
+      <h4 class="title">{{ verbose_mood }}</h4>
+      {% if activities %}
+      <ul>
+        {% for activity in activities %}
+        <li>{{ activity }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <h4
+        >Looks like you have not inputted any activities for this particular
+        mood!
+      </h4>
+      {% endif %}
+      <div class="link-container">
+        <a class="brain-dump-submit round-button" href="/associated-moods/{{ user.user_id }}" >Back to form</a>
+      </div>
+    </section>
+  </div>
+</div>
 
 {% endblock %}

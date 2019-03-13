@@ -8,7 +8,6 @@ content %}
       <img src="/static/img/cool.png" class="img" />
     </div>
     <div class="bc-form">
-      {% if show_form == True %}
       <h1 class="title">Add an entry for today!</h2>
       <p class="subtitle">Today's Date: {{ now }}</p>
       <div>
@@ -57,48 +56,7 @@ content %}
         </form>
       </div>
 
-      {% elif show_form == False %}
-      <h1>You have already entered info for this date!</h1>
-      <h2
-        >Don't forget to come back tomorrow to track your mood and
-        activities!</h2
-      >
-      <h3
-        >Here are 5 reasons you should be using a mood and activitiy
-        tracker:</h3
-      >
-      <ol>
-        <li>
-          Triggers and warning signs. By using a mood diary you can monitor the
-          patterns in your life and identify negative influences (or “triggers”)
-          that you need to avoid, and early warning signs that your health is
-          deteriorating.</li
-        >
-        <li
-          >Wellness strategies. A mood diary can help you to find the small
-          things, as well as the big, that help you to stay well. It can show
-          you the impact of the positive strategies that you adopt on your
-          well-being.</li
-        >
-        <li
-          >Planning for health. It gives them a better understanding of their
-          health and helps them to develop a plan for remaining well. That is
-          the key. The purpose of a mood diary should be to plan for wellness,
-          not just keep a record of illness.</li
-        >
-        <li
-          >Actively participate. In general people achieve better health
-          outcomes when they educate themselves and are proactive about their
-          health.</li
-        >
-        <li
-          >A health professional’s dream. By keeping a mood diary you can
-          provide your health professional with a precise, detailed history. It
-          removes the problem of memory recall and gives an accurate picture of
-          what has been happening</li
-        >
-      </ol>
-      {% endif %}
+      
     </div>
   </div>
 </div>

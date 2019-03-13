@@ -39,6 +39,7 @@ def get_user():
         user_id = session.get("user_id")
     return dict(user_id=user_id)
 
+
 @app.route("/", methods=["POST", "GET"])
 def index():
     """Homepage"""
@@ -61,8 +62,8 @@ def register_new_user():
     new_user_email = request.form.get("inputEmail4")
     new_user_password = request.form.get("inputPassword4")
     if not new_user_email or not new_user_password:
-            flash("Please resubmit your information correctly.")
-            return redirect("/")
+        flash("Please resubmit your information correctly.")
+        return redirect("/")
 
     # hash the password
     hash_object = hashlib.md5(new_user_password.encode())
@@ -98,7 +99,6 @@ def login_form():
     if not email or not form_password:
         flash("Please resubmit your information correctly.")
         return redirect("/")
-
 
     # hash the password provided
     hash_object = hashlib.md5(form_password.encode())
@@ -147,21 +147,8 @@ def user_homepage(user_id):
     # generating today's date to display on the page
     now = datetime.datetime.today().strftime("%A, %B %d, %Y")
 
-    # if a user has already entered an entry for today's date- do not let then add another entry
-    # >>
-    # generate today's date to use as a compare date
-    time = datetime.datetime.now()
-    compare_time = time.date()
-
     # query to find all brain dumps
     brain_dumps = User_Brain_Dump.query.filter_by(user_id=user.user_id).all()
-
-    # if there is an entry that exists with todays date set show_form to false
-    show_form = True
-    entries = Entry.query.filter_by(user_id=user_id)
-    for entry in entries:
-        if entry.date_created.date() == compare_time:
-            show_form = False
 
     return render_template(
         "user-homepage.html",
@@ -170,7 +157,6 @@ def user_homepage(user_id):
         activities=activities,
         now=now,
         brain_dumps=brain_dumps,
-        show_form=show_form,
     )
 
 
@@ -411,7 +397,6 @@ def analyze_entry(user_brain_dump_id):
             feel free to analyze again."""
         )
         return redirect(f"brain-dump-details/{id}")
-
 
     db.session.commit()
 
@@ -724,8 +709,6 @@ def update_entry(entry_id):
 
     user_activities = request.form.getlist("activity_category")
 
-    
-
     description = request.form.get("description")
     if description is None and entry.description is None:
         pass
@@ -756,6 +739,24 @@ def add_entry():
 
     # retreive logged in user_id from the database
     user_id = session.get("user_id")
+    # get user_id from the database
+    user = User.query.get(user_id)
+    # if a user has already entered an entry for today's date- do not let then add another entry
+    # >>
+    # generate today's date to use as a compare date
+    time = datetime.datetime.now()
+    compare_time = time.date()
+
+    # if there is an entry that exists with todays date set show_form to false
+    show_form = True
+    entries = Entry.query.filter_by(user_id=user_id)
+    for entry in entries:
+        if entry.date_created.date() == compare_time:
+            show_form = False
+
+    if not show_form:
+        flash("Sorry! It looks like you have already submitted an entry for today. Come back tomorrow to submit a new one!")
+        return redirect(f"/user/{user_id}")
 
     # retrieving mood and activities from the user
     user_mood = request.form.get("mood")
@@ -767,9 +768,6 @@ def add_entry():
     activities = []
     for activity_id in user_activities:
         activities.append(Activity_Category.query.get(int(activity_id)))
-
-    # get user_id from the database
-    user = User.query.get(user_id)
 
     # grab the mood and activities from the database
     mood = Mood.query.get(int(user_mood))
