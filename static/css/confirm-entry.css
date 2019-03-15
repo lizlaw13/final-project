@@ -1,12 +1,18 @@
-html,
-body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
 .container-fluid {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.date,
+.mood,
+.activities,
+.note {
+  font-weight: 500;
+}
+.mood,
+.note,
+.activities {
+  margin: 1px;
 }
 .title {
   margin: 20px;
@@ -15,13 +21,8 @@ body {
   width: 40%;
   padding: 10px;
 }
-.label {
-  margin: 10px 0;
-  font-weight: bold;
-}
-
 .round-button {
-  width: 100%;
+  width: 50%;
   padding: 10px;
   border-radius: 50px;
   border: none;
@@ -29,11 +30,11 @@ body {
   font-weight: bold;
   transition: all 0.1s ease-in-out;
 }
-
 .round-button:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  color: white;
 }
-
 .entry-submit {
   background-color: #1da1f2;
   width: 100%;
@@ -43,11 +44,9 @@ body {
   color: white;
   font-weight: bold;
   transition: all 0.1s ease-in-out;
+  text-align: center;
 }
 
 .entry-submit:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-}
-.link-container {
-  margin: 10px;
 }

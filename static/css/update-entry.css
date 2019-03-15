@@ -2,7 +2,6 @@ html,
 body {
   max-width: 100%;
   overflow-x: hidden;
-  background-color: #e0dede;
 }
 
 .card {
@@ -61,10 +60,6 @@ body {
 }
 .img {
   height: auto;
-}
-
-.title {
-  width: 600%;
 }
 
 .subtitle {

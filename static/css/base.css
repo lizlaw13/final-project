@@ -1,0 +1,24 @@
+.title,
+h1,
+h2,
+h3,
+h4,
+h5,
+label {
+  font-family: "Source Sans Pro", sans-serif;
+}
+p {
+  font-family: "Open Sans", sans-serif;
+}
+h4 {
+  font-size: 27px;
+}
+h5 {
+  font-size: 30px;
+}
+.myModal {
+  background-color: #1da1f2;
+}
+body {
+  background-color: #f1f0f0;
+}

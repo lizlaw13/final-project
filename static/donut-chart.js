@@ -1,4 +1,8 @@
 // do not resize the chart canvas when its container does (keep at 600x400px)
+Chart.Legend.prototype.afterFit = function() {
+  this.height = this.height + 50;
+};
+
 Chart.defaults.global.responsive = false;
 // define the chart data
 let chartData = {
@@ -40,4 +44,5 @@ var myDoughnutChart = new Chart(ctx, {
     }
   }
 });
+
 $("#chart-legend").html(myDoughnutChart.generateLegend());

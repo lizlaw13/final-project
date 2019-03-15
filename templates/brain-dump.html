@@ -1,28 +1,28 @@
-{% extends 'base.html' %}
-{% block title %} Homepage {% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/brain-dump.css" />
 
 <div class="container-fluid">
-    <h1 class="title">Brain Dump</h1>
-    <div class="card">
-        <div class="text-container">
-                <p class="date">{{ now }} </p>
-            <form action="/brain-dump" method="POST">
-                <h3 class="question">How was your day?</h3>
-                <textarea
-                class="update-textarea form-control"
-                name="brain_dump"
-                placeholder="Enter text here...">
-            </textarea>
-              <button
-                class="brain-dump-submit round-button"
-                type="submit"
-                name="submit"
-                >Submit</button
-              >
-        </div>
+  <h1 class="title">Brain Dump</h1>
+  <div class="card">
+    <div class="text-container">
+      <p class="date">{{ now }} </p>
+      <form action="/brain-dump" method="POST">
+        <h3 class="question">How was your day?</h3>
+        <textarea
+          class="update-textarea form-control"
+          name="brain_dump"
+          placeholder="Enter text here..."
+        ></textarea>
+        <button
+          class="brain-dump-submit round-button"
+          type="submit"
+          name="submit"
+          >Submit</button
+        >
+      </form>
     </div>
+  </div>
 </div>
 {% endblock %}

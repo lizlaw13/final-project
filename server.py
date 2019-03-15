@@ -16,7 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_paginate import Pagination, get_page_args
 from jinja2 import StrictUndefined
-from sqlalchemy import func, asc
+from sqlalchemy import func, asc, desc
 
 import indicoio
 import os
@@ -183,7 +183,9 @@ def show_all_entries(user_id):
 
     # grab all the users entries
     user = User.query.get(user_id)
-    entries = Entry.query.filter_by(user_id=user_id).order_by("date_created").all()
+    entries = (
+        Entry.query.filter_by(user_id=user_id).order_by(desc("date_created")).all()
+    )
 
     page, per_page, offset = get_page_args(
         page_parameter="page", per_page_parameter="per_page"
@@ -284,7 +286,7 @@ def show_all_brain_dumps(user_id):
 
     # grabs all the brain dumps from the user and order them by date created
     brain_dumps = (
-        User_Brain_Dump.query.filter_by(user_id=user_id).order_by("date_created").all()
+        User_Brain_Dump.query.filter_by(user_id=user_id).order_by(desc("date_created")).all()
     )
 
     page, per_page, offset = get_page_args(
@@ -755,7 +757,9 @@ def add_entry():
             show_form = False
 
     if not show_form:
-        flash("Sorry! It looks like you have already submitted an entry for today. Come back tomorrow to submit a new one!")
+        flash(
+            "Sorry! It looks like you have already submitted an entry for today. Come back tomorrow to submit a new one!"
+        )
         return redirect(f"/user/{user_id}")
 
     # retrieving mood and activities from the user

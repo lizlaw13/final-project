@@ -39,9 +39,7 @@ class DeleteMoodEnhancerForm extends React.Component {
         </form>
       );
     } else {
-      return (
-        <h4>Looks like you don't have any mood enhancers! Add some below!</h4>
-      );
+      return <h4>Looks like you don't have any mood enhancers!</h4>;
     }
   }
 }

@@ -2,7 +2,6 @@ html,
 body {
   max-width: 100%;
   overflow-x: hidden;
-  background-color: #e0dede;
 }
 .card {
   padding: 20px 20px;

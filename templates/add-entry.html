@@ -1,45 +1,90 @@
 {% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
 content %}
 
-<h2>The following entry has been added!</h2>
+<link rel="stylesheet" type="text/css" href="/static/css/confirm-entry.css" />
 
-<p>Date: {{ entry.date_created.strftime('%A, %B %d, %Y') }}</p>
 
-<p> Mood: {{ entry.mood.verbose_mood }}</p>
+<div class="container-fluid">
+  <h1 class="title">The following entry has been added!</h1>
+  <div class="card">
+    <p class="date">{{ entry.date_created.strftime("%B %d, %Y") }}</p>
 
-<h3>Activity/ Activities Added:</h3>
-<ul>
-  {% for activity in activities %}
-  <li>{{ activity.verbose_category }}</li>
-  {% endfor %}
-</ul>
+    <p class="mood">Mood</p>
+      <p>{{ entry.mood.verbose_mood }}</p>
 
-{% if (user.mood_enhancers and entry.mood_id == 1) or (user.mood_enhancers and entry.mood_id == 2)%}
-<h3>Complete your mood enhancers to have a better day!</h3>
-<ul>
-  {% for mood in user.mood_enhancers %}
-  <li>{{ mood.mood_enhancer }}</li>
-  {% endfor %}
-</ul>
-<a href="/update-mood-enhancers/{{ user_id }}">Update Mood Enhancers</a> <br />
-{% elif prompt_mood_enhancer == True %}
-<form action="/mood-enhancers" method="POST">
-  <h3>Please input three ways you can enhance your mood:</h3>
-  1) <input type="text" name="mood_enhancer_1" placeholder="go for a walk.." />
-  <br />
-  2) <input type="text" name="mood_enhancer_2" placeholder="watch netflix.." />
-  <br />
-  3)
-  <input
-    type="text"
-    name="mood_enhancer_3"
-    placeholder="listen to one direction.."
-  />
-  <br />
-  <br />
-  <input type="submit" name="submit" />
-</form>
-<br />
-{% endif %}
 
+      {% if entry.activities %}
+      <p class="activities">Activity/ Activities</p>
+      <ul>
+          {% for activity in activities %}
+          <li>{{ activity.verbose_category }}</li>
+        {% endfor %} {% else %}
+        {% endif %}
+      </ul>
+
+      {% if entry.description %}
+      <p class="note">Note</p>
+      <p>{{ entry.description }}</p>
+      {% endif %}
+
+      <a class="entry-submit round-button" href="/all-entries/{{ user_id }}">View All Entries</a>
+
+  </div>
+  {% if (user.mood_enhancers and entry.mood_id == 1) or (user.mood_enhancers
+    and entry.mood_id == 2)%}
+  <div class="card">
+        <h5 class="title">Complete your mood enhancers to have a better day!</h5>
+        <ul>
+          {% for mood in user.mood_enhancers %}
+          <li>{{ mood.mood_enhancer }}</li>
+          {% endfor %}
+        </ul>
+
+        <a class="entry-submit round-button" href="/mood-enhancers">Update Mood Enhancers</a>
+        <br />
+    </div>
+    {% elif prompt_mood_enhancer == True %}
+    <div class="card">
+        <form action="/mood-enhancers" method="POST">
+          <h5 class="title">Please input three ways you can enhance your mood:</h5>
+            <input
+            type="text"
+            class="form-control"
+            name="mood_enhancer_1"
+            placeholder="go for a walk.."
+          />
+          <br>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput"
+            name="mood_enhancer_2"
+            placeholder="watch Netlix..."
+          />
+          <br>
+          <input
+            type="text"
+            class="form-control"
+            name="mood_enhancer_3"
+            placeholder="call best friend..."
+          />
+          <br>
+          <button
+            class="entry-submit round-button"
+            type="submit"
+            name="submit"
+            id="entry-submit"
+          >
+            Submit
+          </button>
+        <br />
+        {% endif %}
+    </div>
+
+        
+        
+      
+  </div>
+
+    
 {% endblock %}
