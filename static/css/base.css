@@ -7,7 +7,8 @@ h5,
 label {
   font-family: "Source Sans Pro", sans-serif;
 }
-p {
+p,
+input {
   font-family: "Open Sans", sans-serif;
 }
 h4 {

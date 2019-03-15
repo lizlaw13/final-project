@@ -10,10 +10,10 @@ content %}
   <div class="card">
     <div class="text-container">
       <p class="date">{{ entry.date_created.strftime("%B %d, %Y") }} </p>
-      <p class="mood">Mood:</p>
-      <p>{{ entry.mood.verbose_mood }}</p>
+      <p class="mood"></p>
+      <p>Mood: {{ entry.mood.verbose_mood }}</p>
       {% if entry.activities %}
-      <p class="activities">Activity/ Activities</p>
+      <p class="activities">Activities</p>
       <ul>
         {% for activity in entry.activities %}
         <li>{{ activity.verbose_category }}</li>

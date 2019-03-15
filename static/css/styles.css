@@ -6,9 +6,12 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   height: 100%;
-  font-family: "Libre Franklin", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
+input {
+  font-family: "Open Sans", sans-serif;
+}
 .container {
   height: 100%;
   align-content: center;

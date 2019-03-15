@@ -22,8 +22,9 @@ class DeleteNoteForm extends React.Component {
           </button>
         </form>
       );
+    } else {
+      return <p>Looks like you don't have a note.</p>;
     }
-    return null;
   }
 }
 
@@ -68,7 +69,7 @@ class DeleteActivityForm extends React.Component {
         </form>
       );
     } else {
-      return <p>Looks like you don't have any activities. Add some below!</p>;
+      return <p>Looks like you don't have any activities.</p>;
     }
   }
 }
@@ -170,7 +171,7 @@ class App extends React.Component {
   render() {
     const { entry, entry_activities } = this.state;
     let activities;
-    let description = <h6>Looks like you don't have a note...</h6>;
+    let description;
 
     if (entry_activities.length > 0) {
       let entry_activities_lis = entry_activities.map(entry_activity => {
@@ -180,12 +181,20 @@ class App extends React.Component {
       });
       // Reassign activities if there are activities in the list
       activities = (
-        <ul className="entry-activities-list">{entry_activities_lis}</ul>
+        <div>
+          <p className="activities">Activities</p>
+          <ul className="entry-activities-list">{entry_activities_lis}</ul>
+        </div>
       );
     }
-
     if (entry.entry_description) {
-      description = <p>{entry.entry_description}</p>;
+      description = (
+        <p>
+          {" "}
+          Note: <br />
+          {entry.entry_description}
+        </p>
+      );
     }
 
     return (
@@ -197,17 +206,11 @@ class App extends React.Component {
                 <h4 className="title">Current Entry </h4>
                 <section className="moods" key={entry.entry_mood}>
                   <p className="date">{entry.entry_date}</p>
-                  <p className="mood">Mood</p>
-                  <p>{entry.entry_mood}</p>
+                  <p className="mood" />
+                  <p>Mood: {entry.entry_mood}</p>
                 </section>
-                <section>
-                  <p className="activities">Activity/Activities</p>
-                  {activities}
-                </section>
-                <section>
-                  <p className="note">Note</p>
-                  {description}
-                </section>
+                <section>{activities}</section>
+                <section>{description}</section>
               </div>
             </div>
             <div className="card current-delete-form">

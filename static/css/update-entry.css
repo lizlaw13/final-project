@@ -86,3 +86,7 @@ body {
 .entry-submit:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 }
+
+.delete-note-button {
+  margin-bottom: 19px;
+}

@@ -68,9 +68,17 @@ content %}
     </div>
     <div class="col">
       <div class="card">
-          {% if brain_dump.verbose_analysis %}
+          {% if brain_dump.verbose_analysis == 'positive' %}
           <h3 class="title">Saved Analysis</h3> 
-          <p>{{ brain_dump.verbose_analysis }}</p>
+          <p>Positive</p>
+    
+          <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
+            class="round-button brain-dump-submit reanalyze">Reanalyze Entry</a
+          >
+          {% elif brain_dump.verbose_analysis == 'nehative' %}
+
+          <h3 class="title">Saved Analysis</h3> 
+          <p>Negative</p>
     
           <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
             class="round-button brain-dump-submit reanalyze">Reanalyze Entry</a
