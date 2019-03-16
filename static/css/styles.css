@@ -17,8 +17,8 @@ input {
   align-content: center;
 }
 .card {
-  height: 388px;
-  margin-top: 6%;
+  height: 347px;
+  margin-top: 8%;
   margin-bottom: auto;
   width: 400px;
   background-color: rgba(93, 93, 93, 0.5) !important;
@@ -87,4 +87,25 @@ input:focus {
 
 .links a {
   margin-left: 4px;
+}
+#registerButton {
+  background-color: #ffc312;
+  color: black;
+  padding: 10px;
+  margin: 10px;
+  width: 100px;
+  border-color: #ffc312;
+}
+.bc-button {
+  background-color: #1da1f2;
+  padding: 10px;
+  margin: 10px;
+  border-color: #1da1f2;
+}
+.card-header h4 {
+  font-size: 43px;
+}
+.myModal {
+  width: 125px;
+  height: 42px;
 }

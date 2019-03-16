@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: row;
   flex: 1;
-  align-items: center;
 }
 
 .card {
@@ -29,6 +28,7 @@
 
 .update-dump-card {
   margin-top: 22px;
+  margin-bottom: 20px;
 }
 
 .update-dump-card .title {

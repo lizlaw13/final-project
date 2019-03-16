@@ -1,10 +1,18 @@
 # Over The Mood
 
-Over The Mood's main feature allows users to keep a log of moods and activities. Users are also able to view how their mood fluctuates over time and save journal entires to their profile. Over The Mood is meant to help others because made this app with the intention of become more self aware of their actions and emotions while also encouraging them to be more proactive of their own happiness.
+## Description
+
+Over The Mood's main feature allows users to keep a log of moods and associated activities. Users are also able to view how their mood fluctuates over time and save journal entires to their profile. Over The Mood was made with the intention of helping others become more self aware of how their actions can influence their emotions.
 
 ## How It Works
 
 Upon registering, users will be prompted to add an entry which includes a mood and any number of selected activities from a form. If a user entered a negative mood- they will be prompted to fill out three ways that would enhance their mood and save it to their profile. Users are then able to view a log of all their entires and two visualizations- one for mood over time and another for total mood count. Users are also able to view the activities associated with specfic moods. Lastly, users are able to navigate to a journal entry page where they can dump their feelings, have it analyzed by a sentiment analyzer and later save them to their profile.
+
+## Technology Stack
+
+Application: Python, Flask, Jinja, SQLAlchemy, PostgreSQL <br>
+API: Indico Sentiment Analysis <br>
+Front-End: HTML/ CSS, Bootstrap, jQuery, JavaScript, React, AJAX
 
 ## Getting Started
 
@@ -53,6 +61,12 @@ Run Over The Mood via the command line:
 
 ```
 $ python3 server.py
+```
+
+Open your browser and navigate to:
+
+```
+http://localhost:5000/
 ```
 
 # Usage

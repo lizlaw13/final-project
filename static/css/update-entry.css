@@ -90,3 +90,7 @@ body {
 .delete-note-button {
   margin-bottom: 19px;
 }
+
+.current-delete-form {
+  margin-bottom: 30px;
+}

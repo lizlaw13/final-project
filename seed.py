@@ -1,5 +1,3 @@
-"""Seed default moods and activities to  database"""
-
 from sqlalchemy import func
 
 
@@ -8,9 +6,9 @@ from server import app
 
 import hashlib
 
-
 connect_to_db(app)
-# add functions
+
+"""Seed default moods and activities to  database"""
 
 # Add moods
 fantastic = Mood(mood="fantastic", verbose_mood="Fantastic", mood_id=5)
@@ -25,10 +23,9 @@ db.session.add(neutral)
 db.session.add(bad)
 db.session.add(terrible)
 
-
 db.session.commit()
 
-# Add categories
+# Add activity categories
 work = Activity_Category(category="work", verbose_category="Work")
 schoolWork = Activity_Category(category="school_work", verbose_category="School Work")
 social = Activity_Category(category="social", verbose_category="Social")
@@ -46,95 +43,98 @@ db.session.add(houseWork)
 
 db.session.commit()
 
-# Add users and hash user passwords
+# Add user and hash user passwords
 liz_password = "abc123"
 hash_object = hashlib.md5(liz_password.encode())
 liz_password = hash_object.hexdigest()
 liz = User(email="liz@gmail.com", password=liz_password)
 db.session.add(liz)
 
-ash_password = "corg123"
-hash_object = hashlib.md5(ash_password.encode())
-ash_password = hash_object.hexdigest()
-ashley = User(email="ashley@gmail.com", password=ash_password)
-db.session.add(ashley)
-
-jess_password = "hm123"
-hash_object = hashlib.md5(jess_password.encode())
-jess_password = hash_object.hexdigest()
-jess = User(email="jess@gmail.com", password=jess_password)
-db.session.add(jess)
-
 db.session.commit()
 
-# Add entries for users
+# Add entries for user
 
-entryOne = Entry(mood_id=1, user_id=1, date_created="2019-02-16 19:33:54.99179+00")
+entryOne = Entry(mood_id=5, user_id=1, date_created="2019-02-16 14:33:54.99179+00")
 entryOne.activities.append(leisureRelaxation)
 entryOne.activities.append(exercise)
-entryTwo = Entry(mood_id=2, user_id=1, date_created="2019-02-17 19:33:54.99179+00")
+
+entryTwo = Entry(mood_id=3, user_id=1, date_created="2019-02-17 10:33:54.99179+00")
 entryTwo.activities.append(houseWork)
 entryTwo.activities.append(exercise)
+
 entryThree = Entry(
-    mood_id=3,
+    mood_id=4,
     user_id=1,
-    date_created="2019-02-18 19:33:54.99179+00",
-    description="drinks with friends, 2 hour spin class",
+    date_created="2019-02-18 22:33:54.99179+00",
+    description="""I took a two hour spin class in the morning and in the evening I went downtown to 
+                grab drinks with a couple of friends.""",
 )
 entryThree.activities.append(social)
 entryThree.activities.append(leisureRelaxation)
 entryThree.activities.append(exercise)
-entryFour = Entry(mood_id=2, user_id=1, date_created="2019-02-19 19:33:54.99179+00")
-entryFour.activities.append(schoolWork)
-entryFive = Entry(mood_id=3, user_id=1, date_created="2019-02-20 19:33:54.99179+00")
-entryFive.activities.append(exercise)
 
-entrySix = Entry(mood_id=1, user_id=1, date_created="2019-02-21 19:33:54.99179+00")
-entrySix.activities.append(leisureRelaxation)
-entrySix.activities.append(exercise)
-entrySeven = Entry(mood_id=2, user_id=1, date_created="2019-02-22 19:33:54.99179+00")
-entrySeven.activities.append(houseWork)
-entrySeven.activities.append(exercise)
-entryEight = Entry(
-    mood_id=3,
-    user_id=1,
-    date_created="2019-02-23 19:33:54.99179+00",
-    description="drinks with no one",
-)
-entryEight.activities.append(social)
-entryEight.activities.append(leisureRelaxation)
-entryEight.activities.append(exercise)
-entryNine = Entry(mood_id=2, user_id=1, date_created="2019-02-24 19:33:54.99179+00")
-
-
-entryEleven = Entry(
-    mood_id=1,
-    user_id=1,
-    date_created="2019-02-25 19:33:54.99179+00",
-    description="hiking with my dog",
-)
-entryEleven.activities.append(exercise)
-entryTwelve = Entry(
-    mood_id=1,
-    user_id=1,
-    date_created="2019-02-26 19:33:54.99179+00",
-    description="hiking with my cat",
-)
-entryTwelve.activities.append(exercise)
-entryThirteen = Entry(
+entryFour = Entry(
     mood_id=2,
     user_id=1,
-    date_created="2019-02-27 19:33:54.99179+00",
-    description="hiking with maddie",
+    date_created="2019-02-19 17:33:54.99179+00",
+    description="""
+                I spent most of my day at Starbucks tweaking my resume. I also spent
+                a little time solving some coding challengings and prepped for my behavoiral interview.""",
 )
-entryThirteen.activities.append(exercise)
-entryFourteen = Entry(
-    mood_id=4,
+entryFour.activities.append(schoolWork)
+entryFour.activities.append(work)
+
+
+entryFive = Entry(
+    mood_id=1,
     user_id=1,
-    date_created="2019-02-28 19:33:54.99179+00",
-    description="hiking with myself",
+    date_created="2019-02-19 10:33:54.99179+00",
+    description="""
+                All I have gotten done today was some major house work. I ended up cleaning
+                my entire room and bathroom. I  also did three loads of laundry and went to
+                Pet Express to give my dog a much needed bath.""",
 )
-entryFourteen.activities.append(exercise)
+entryFive.activities.append(houseWork)
+
+entrySix = Entry(
+    mood_id=5,
+    user_id=1,
+    date_created="2019-02-21 18:33:54.99179+00",
+    description="""
+                I went to get brunch with my best friend at a café called Home in the Sunset. After we
+                decided to go window shopping in the Marina. I then came home and applied for jobs.""",
+)
+entrySix.activities.append(leisureRelaxation)
+entrySix.activities.append(work)
+entrySix.activities.append(social)
+
+
+entrySeven = Entry(mood_id=3, user_id=1, date_created="2019-02-22 19:33:54.99179+00")
+entrySeven.activities.append(houseWork)
+entrySeven.activities.append(exercise)
+
+
+entryEight = Entry(
+    mood_id=2,
+    user_id=1,
+    date_created="2019-02-23 12:33:54.99179+00",
+    description="""Today I went on a hike with my dog but my dog somehow got out of her harness and
+                I had to chase her all over the beach. She got so busy so I had to give her a bath.
+                In an attempt to make myself feel better I ended up going to an evening spin class.""",
+)
+entryEight.activities.append(social)
+entryEight.activities.append(exercise)
+
+
+entryNine = Entry(mood_id=5, user_id=1, date_created="2019-02-24 22:33:54.99179+00")
+entryNine.activities.append(social)
+entryNine.activities.append(exercise)
+entryNine.activities.append(schoolWork)
+
+
+entryTen = Entry(mood_id=1, user_id=1, date_created="2019-02-25 23:33:54.99179+00")
+entryTen.activities.append(houseWork)
+entryTen.activities.append(work)
 
 
 db.session.add(entryTwo)
@@ -145,76 +145,44 @@ db.session.add(entryFive)
 db.session.add(entrySix)
 db.session.add(entrySeven)
 db.session.add(entryEight)
-db.session.add(entryEleven)
-db.session.add(entryTwelve)
-db.session.add(entryThirteen)
-db.session.add(entryFourteen)
-
-
-mood_enhancer_entry_1 = Mood_Enhancer(user_id=1, mood_enhancer="Go for a walk")
-mood_enhancer_entry_2 = Mood_Enhancer(user_id=1, mood_enhancer="Call best friend")
-mood_enhancer_entry_3 = Mood_Enhancer(user_id=1, mood_enhancer="Listen to music")
-
-db.session.add(mood_enhancer_entry_1)
-db.session.add(mood_enhancer_entry_2)
-db.session.add(mood_enhancer_entry_3)
-
+db.session.add(entryNine)
+db.session.add(entryTen)
 
 db.session.commit()
 
+# # Added brain dumps
 
 mood_entry_one = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="Today I am so happy I could die.",
-    date_created="2019-02-01 20:31:05.974887",
+    brain_dump_entry="""What a busy day today!  I never had a moment’s rest. The day started with my alarm clock blaring at 7am.  I had to be at the Smith’s house by 8am to baby-sit. I really didn’t want to wake up so early on a Saturday, but I’m saving money to buy a new laptop and couldn’t say no to an all-day babysitting job.""",
+    date_created="2019-02-01 23:31:05.974887",
 )
 mood_entry_two = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="Today I am so sad.",
-    date_created="2019-02-02 20:31:05.974887",
+    brain_dump_entry="""Today I am going to Disneyland for the first time. I am so excited- I am going with my niece, nephew, and cousin. They've also never been to Disneyland so we are not sure what to expect. But, they do love roller coasters and Star Wars so I expect it to be a good time no matter what. I heard they also have a fireworks show in the evening!""",
+    date_created="2019-02-27 10:31:05.974887",
 )
 
 mood_entry_three = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="Today I am feeling ok I am excited to go for a hike.",
-    date_created="2019-02-03 20:31:05.974887",
+    brain_dump_entry="""I am so upset because today is my last day at Disneyland with my family. We all had such a good time- there is so much to do. I think the next time we visit we need more than just two days. We could not get around to going on every ride or seeing every show. I think my favorite ride was Matterhorn or even Haunted Mansion. My poor niece was so scared on Haunted Mansion so we had to buy her some ice cream right after to cheer her up.""",
+    date_created="2019-02-27 10:31:05.974887",
 )
 mood_entry_four = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="I went to a concert and had a blast.",
-    date_created="2019-02-04 20:31:05.974887",
+    brain_dump_entry="""It is only 9am but I have already deemed today being the worst day of my life. I was planning on taking a flight to Oregon so I could visit my best friend but my flight ended up being cancelled- which is so upsetting because I haven't seen my best friend in over 6 months. We had a lot of thigns planned but now I can't go. Apparently there is a tornado which is so weird because tornados do not normally happed in California???""",
+    date_created="2019-03-10 18:33:54.99179+00",
 )
 mood_entry_five = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="Today was ok.. I am kind of stressed.",
-    date_created="2019-02-04 20:31:05.974887",
+    brain_dump_entry="""I got food poisoning today- or so I thought. I ate In N Out for lunch and some time after I was puking. It was embarassing because I had invited my friend over to watch a movie. But instead- I started puking from food poisoning. My friend ended up having to leave. I tried to take a nap but I was in too much pain. I ended up getting a call from my boss warning me that the the Noro Virus had been spreading around at work. So it looks like I contracted the Noro Virus......""",
+    date_created="2019-03-14 21:33:54.99179+00",
 )
 mood_entry_six = User_Brain_Dump(
     user_id=1,
-    brain_dump_entry="I went to Disneyland today it was amazing.",
-    date_created="2019-02-04 20:31:05.974887",
+    brain_dump_entry="I am so happy I could die.",
+    date_created="2019-03-15 23:33:54.99179+00",
 )
-mood_entry_seven = User_Brain_Dump(
-    user_id=1,
-    brain_dump_entry="I did not leave the house today and cried. It was upsetting.",
-    date_created="2019-02-04 20:31:05.974887",
-)
-mood_entry_eight = User_Brain_Dump(
-    user_id=1,
-    brain_dump_entry="I adopted a dog today, so excited!!!",
-    date_created="2019-02-04 20:31:05.974887",
-)
-mood_entry_nine = User_Brain_Dump(
-    user_id=1,
-    brain_dump_entry="Today sucked it was the worst day of my life. Nothing went my way everything was bad. ",
-    date_created="2019-02-04 20:31:05.974887",
-)
-mood_entry_ten = User_Brain_Dump(
-    user_id=1,
-    brain_dump_entry="Today sucked again, cool.. two days in a row that sucked... ",
-    date_created="2019-02-04 20:31:05.974887",
-)
-
 
 db.session.add(mood_entry_one)
 db.session.add(mood_entry_two)
@@ -222,9 +190,5 @@ db.session.add(mood_entry_three)
 db.session.add(mood_entry_four)
 db.session.add(mood_entry_five)
 db.session.add(mood_entry_six)
-db.session.add(mood_entry_seven)
-db.session.add(mood_entry_eight)
-db.session.add(mood_entry_nine)
-db.session.add(mood_entry_ten)
 
 db.session.commit()

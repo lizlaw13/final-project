@@ -29,12 +29,13 @@ content %}
             width="42"
           />
         </div>
+        
         {% endif %}
         <div class="text-container">
           <p class="date">{{
             brain_dump.date_created.strftime("%A, %B %d, %Y")
           }}</p>
-          <h1 class="title"> {{ brain_dump.brain_dump_entry }}</h1>
+          <h4 class="title"> {{ brain_dump.brain_dump_entry }}</h4>
         </div>
       </div>
       {% if brain_dump.brain_dump_entry %}
@@ -45,11 +46,10 @@ content %}
         >
           <h3 class="title">Update your entry</h3>
           <textarea
-            class="update-textarea form-control"
+            class="update-textarea"
             name="brain_dump"
             value="brain-dump"
-            >{{ brain_dump.brain_dump_entry }}
-                </textarea
+            >{{ brain_dump.brain_dump_entry }}</textarea
           >
           <button
             class="brain-dump-submit round-button"
@@ -68,22 +68,26 @@ content %}
     </div>
     <div class="col">
       <div class="card">
-          {% if brain_dump.verbose_analysis == 'positive' %}
-          <h3 class="title">Saved Analysis</h3> 
-          <p>Positive</p>
-    
-          <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
-            class="round-button brain-dump-submit reanalyze">Reanalyze Entry</a
-          >
-          {% elif brain_dump.verbose_analysis == 'nehative' %}
+        {% if brain_dump.verbose_analysis == 'positive' %}
+        <h3 class="title">Saved Analysis</h3>
+        <p>Positive</p>
 
-          <h3 class="title">Saved Analysis</h3> 
-          <p>Negative</p>
-    
-          <a href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
-            class="round-button brain-dump-submit reanalyze">Reanalyze Entry</a
-          >
-          {% else %}
+        <a
+          href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
+          class="round-button brain-dump-submit reanalyze"
+          >Reanalyze Entry</a
+        >
+        {% elif brain_dump.verbose_analysis == 'nehative' %}
+
+        <h3 class="title">Saved Analysis</h3>
+        <p>Negative</p>
+
+        <a
+          href="/reanalyze-entry/{{ brain_dump.user_brain_dump_id }}"
+          class="round-button brain-dump-submit reanalyze"
+          >Reanalyze Entry</a
+        >
+        {% else %}
         <form
           action="/analyze-entry/{{ brain_dump.user_brain_dump_id }}"
           method="POST"

@@ -61,6 +61,8 @@ def register_new_user():
     # grab the email and password from the form
     new_user_email = request.form.get("inputEmail4")
     new_user_password = request.form.get("inputPassword4")
+
+    print(new_user_password)
     if not new_user_email or not new_user_password:
         flash("Please resubmit your information correctly.")
         return redirect("/")
@@ -715,7 +717,7 @@ def update_entry(entry_id):
     if description is None and entry.description is None:
         pass
     elif description and entry.description:
-        entry.description += ", " + description
+        entry.description = description
     elif description and entry.description is None:
         entry.description = description
 
