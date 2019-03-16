@@ -6,35 +6,39 @@ content %}
 <div class="container-fluid">
   <h1 class="title">All Brain Dumps</h1>
 
-  {% for brain_dump in brain_dumps %}
-  <div class="card">
-    <div class="thumb-container">
-      {% if brain_dump.analysis_confirmation == 'yes' and
-      brain_dump.verbose_analysis == 'positive' %}
-      <img
-        src="https://image.flaticon.com/icons/png/512/70/70420.png"
-        height="42"
-        width="42"
-      />
-      {% elif brain_dump.analysis_confirmation == 'yes' and
-      brain_dump.verbose_analysis == 'negative' %}
-      <img
-        src="https://image.flaticon.com/icons/svg/25/25237.svg"
-        height="42"
-        width="42"
-      />
-      {% endif %}
+  {% if brain_dumps %}
+    {% for brain_dump in brain_dumps %}
+    <div class="card">
+      <div class="thumb-container">
+        {% if brain_dump.analysis_confirmation == 'yes' and
+        brain_dump.verbose_analysis == 'positive' %}
+        <img
+          src="https://image.flaticon.com/icons/png/512/70/70420.png"
+          height="42"
+          width="42"
+        />
+        {% elif brain_dump.analysis_confirmation == 'yes' and
+        brain_dump.verbose_analysis == 'negative' %}
+        <img
+          src="https://image.flaticon.com/icons/svg/25/25237.svg"
+          height="42"
+          width="42"
+        />
+        {% endif %}
+      </div>
+      <div class="text-container">
+        <a href="/brain-dump-details/{{ brain_dump.user_brain_dump_id }}">
+          {{ brain_dump.date_created.strftime("%B %d, %Y") }}
+        </a>
+        <p class="description">{{ brain_dump.brain_dump_entry }}</p>
+      </div>
     </div>
-    <div class="text-container">
-      <a href="/brain-dump-details/{{ brain_dump.user_brain_dump_id }}">
-        {{ brain_dump.date_created.strftime("%B %d, %Y") }}
-      </a>
-      <p class="description">{{ brain_dump.brain_dump_entry }}</p>
+    {% endfor %}
+    <div class="page-links-container">
+      {{ pagination.links }}
     </div>
-  </div>
-  {% endfor %}
-  <div class="page-links-container">
-    {{ pagination.links }}
-  </div>
-</div>
+    </div>
+  {% else %}
+  <h4>Looks like you don't have any brain dump entires.</h4>
+  {% endif %}
 {% endblock %}

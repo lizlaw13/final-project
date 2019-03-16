@@ -1,22 +1,45 @@
 # Over The Mood
 
-## Description
+Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activitities. By tracking your mood and and activity history, you can then determine which activities illicit positive moods which trigger negative moods.
 
-Over The Mood's main feature allows users to keep a log of moods and associated activities. Users are also able to view how their mood fluctuates over time and save journal entires to their profile. Over The Mood was made with the intention of helping others become more self aware of how their actions can influence their emotions.
+## Navigation
 
-## How It Works
+- [How It Works](#how-it-works)
+- [Tech Stack](#tech-stack)
+- [Setup and Installation](#setup)
+- [Usage](#usage)
 
-Upon registering, users will be prompted to add an entry which includes a mood and any number of selected activities from a form. If a user entered a negative mood- they will be prompted to fill out three ways that would enhance their mood and save it to their profile. Users are then able to view a log of all their entires and two visualizations- one for mood over time and another for total mood count. Users are also able to view the activities associated with specfic moods. Lastly, users are able to navigate to a journal entry page where they can dump their feelings, have it analyzed by a sentiment analyzer and later save them to their profile.
+## <a name="how-it-works"></a>How It Works
 
-## Technology Stack
+Upon registering, users will be prompted to add an entry by filling out a form which includes a mood and any number of selected activities. If a user enters a negative mood- they will be prompted to fill out three ways that would enhance their mood and save it to their profile. Users are then able to view a log of all their entires and two visualizations generated using chart.js- one for mood over time and another for total mood count. Users are also able to view the activities associated with specfic moods.
 
-Application: Python, Flask, Jinja, SQLAlchemy, PostgreSQL <br>
-API: Indico Sentiment Analysis <br>
-Front-End: HTML/ CSS, Bootstrap, jQuery, JavaScript, React, AJAX
+Upon navigating to the "brain dump" page, users can dump their feelings and save it to their profile- similar to jounral entries. With the help of Indico's Sentiment Analysis API, users can have their entry analyzed - which will predict if the entry was positive or negative. Users are then able to save the analysis to their profile.
 
-## Getting Started
+Users can update and delete previously entered information such as previous entires (including mood and activities) and previous brain dumps. Users can also update their sentiment analysis for each brain dump entry.
 
-These instructions will get you a copy of the project up and running on your local machine. See deployment for notes on how to deploy the project on a live system.
+**Register**
+
+<img src="static/img/register.gif">
+
+**Login/ Add New Entry**
+
+<img src="static/img/login-add-entry.gif">
+
+**Data Visualization**
+
+<img src="static/img/chart.gif">
+
+**Brain Dump Sentiment Analysis**
+
+<img src="static/img/brain-dump.gif">
+
+## <a name="tech-stack"></a>Tech Stack
+
+<strong>Front-End:</strong> HTML/ CSS, Bootstrap, jQuery, JavaScript, , AJAX, React, Chart.js <br>
+<strong>API:</strong> Indico Sentiment Analysis <br>
+<strong>Back-End:</strong> Python, Flask, Jinja, SQLAlchemy, PostgreSQL
+
+## <a name="set-up"></a>Set Up/ Installation
 
 ### Prerequisites
 
@@ -24,12 +47,16 @@ Please be sure to have Python 3.6 and PostgreSQL downloaded before you clone thi
 
 ### Installing
 
-To run Over The Mood on your local computer, please follow the below steps:
-
-Create an OverTheMood folder and clone repository in folder:
+On local machine, go to a directory where you want to work and clone Over The Mood repository:
 
 ```
 git clone https://github.com/lizlaw13/final-project.git
+```
+
+Get an API Key from <a href="https://indico.io/blog/docs/indico-api/installation/getting-your-api-key/">Indico</a> and save it to a file called `secrets.sh`:
+
+```
+export I_KEY="YOUR_KEY"
 ```
 
 Create a virtual environment:
@@ -57,7 +84,16 @@ $ python3 model.py
 $ python3 seed.py
 ```
 
-Run Over The Mood via the command line:
+### Running Locally via the Command Line
+
+Be sure your virtual environment and `secrests.sh` file is activated:
+
+```
+source virtual env/bin/activate
+source secrets.sh
+```
+
+Run Over The Mood:
 
 ```
 $ python3 server.py
@@ -69,38 +105,6 @@ Open your browser and navigate to:
 http://localhost:5000/
 ```
 
-# Usage
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-- [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-- [Maven](https://maven.apache.org/) - Dependency Management
-- [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
-## Authors
-
-- **Billie Thompson** - _Initial work_ - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
 ## Acknowledgments
 
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
+Add Entry Icon made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> and is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
