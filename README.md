@@ -7,7 +7,6 @@ Over The Mood is a full stack web application that aims to improve mental health
 - [How It Works](#how-it-works)
 - [Tech Stack](#tech-stack)
 - [Setup and Installation](#setup)
-- [Usage](#usage)
 
 ## <a name="how-it-works"></a>How It Works
 
