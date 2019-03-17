@@ -1,6 +1,6 @@
 # Over The Mood
 
-Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activitities. By tracking your mood and and activity history, you can then determine which activities illicit positive moods and which trigger negative moods.
+Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activities. By tracking your mood and and activity history, you can then determine which activities illicit positive moods and which trigger negative moods.
 
 ## Navigation
 
@@ -34,7 +34,7 @@ Users can update and delete previously entered information including previous en
 
 ## <a name="tech-stack"></a>Tech Stack
 
-<strong>Front-End:</strong> HTML/ CSS, Bootstrap, jQuery, JavaScript, , AJAX, React, Chart.js <br>
+<strong>Front-End:</strong> HTML/ CSS, Bootstrap, jQuery, JavaScript, AJAX, React, Chart.js <br>
 <strong>API:</strong> Indico Sentiment Analysis <br>
 <strong>Back-End:</strong> Python, Flask, Jinja, SQLAlchemy, PostgreSQL
 
@@ -49,7 +49,7 @@ Please be sure to have Python 3.6 and PostgreSQL downloaded before you clone thi
 On local machine, go to a directory where you want to work and clone Over The Mood repository:
 
 ```
-git clone https://github.com/lizlaw13/final-project.git
+$ git clone https://github.com/lizlaw13/final-project.git
 ```
 
 Get an API Key from <a href="https://indico.io/blog/docs/indico-api/installation/getting-your-api-key/">Indico</a> and save it to a file called `secrets.sh`:
@@ -61,7 +61,7 @@ export I_KEY="YOUR_KEY"
 Create a virtual environment:
 
 ```
-virtualenv env
+$ virtualenv env
 ```
 
 Install dependencies:
@@ -89,7 +89,7 @@ Create .gitignore file:
 $ touch .gitignore
 ```
 
-Access .gitignore file in terminal to ignore 1secrets.sh` file:
+Access .gitignore file in terminal to ignore `secrets.sh` file:
 
 ```
 $ nano .gitignore
