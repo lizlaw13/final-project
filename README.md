@@ -34,7 +34,7 @@ Users can update and delete previously entered information including previous en
 
 ## <a name="tech-stack"></a>Tech Stack
 
-<strong>Front-End:</strong> HTML/ CSS, Bootstrap, jQuery, JavaScript, AJAX, React, Chart.js <br>
+<strong>Front-End:</strong> HTML/ CSS, Bootstrap, jQuery, JavaScript, AJAX, JSON, React, Chart.js <br>
 <strong>API:</strong> Indico Sentiment Analysis <br>
 <strong>Back-End:</strong> Python, Flask, Jinja, SQLAlchemy, PostgreSQL
 
@@ -81,24 +81,6 @@ Build database tables and fill database with seed file:
 ```
 $ python3 model.py
 $ python3 seed.py
-```
-
-Create .gitignore file:
-
-```
-$ touch .gitignore
-```
-
-Access .gitignore file in terminal to ignore `secrets.sh` file:
-
-```
-$ nano .gitignore
-```
-
-Store `secrets.sh` file in .gitignore file:
-
-```
-secrets.sh
 ```
 
 ### Running Locally via the Command Line
