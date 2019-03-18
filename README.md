@@ -1,6 +1,6 @@
 # Over The Mood
 
-Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activities. By tracking your mood and and activity history, you can then determine which activities illicit positive moods and which trigger negative moods.
+Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activities. By tracking your mood and activity history, you can then determine which activities illicit positive moods and which trigger negative moods.
 
 ## Navigation
 
@@ -10,9 +10,9 @@ Over The Mood is a full stack web application that aims to improve mental health
 
 ## <a name="how-it-works"></a>How It Works
 
-Upon registering, users will be prompted to add an entry by filling out a form which includes a mood and any number of selected activities. If a user enters a negative mood- they will be prompted to fill out three ways that would enhance their mood and save it to their profile. Users are then able to view a log of all their entries including two visualizations generated using chart.js- one for mood over time and another for total mood count. Users are also able to view activities associated with specfic moods.
+Upon registering, users will be prompted to add an entry by filling out a form which includes a mood and any number of selected activities. If a user enters a negative mood- they will be prompted to fill out three ways that would enhance their mood and save it to their profile. Users are then able to view a log of all their entries including two visualizations generated using chart.js- one for mood over time and another for total mood count. Users are also able to view activities associated with specific moods.
 
-Users can dump their feelings and save it to their profile- similar to jounral entries. With the help of Indico's Sentiment Analysis API, users can have their entry analyzed - which will predict if the entry was positive or negative. Users are then able to save the analysis to their profile.
+Users can dump their feelings and save it to their profile- similar to journal entries. With the help of Indico's Sentiment Analysis API, users can have their entry analyzed - which will predict if the entry was positive or negative. Users are then able to save the analysis to their profile.
 
 Users can update and delete previously entered information including previous entries (mood and activities) and previous brain dumps. Users can also update their sentiment analysis for each brain dump entry.
 
@@ -103,7 +103,7 @@ secrets.sh
 
 ### Running Locally via the Command Line
 
-Be sure your virtual environment and `secrests.sh` file is activated:
+Be sure your virtual environment and `secrests.sh` file are activated:
 
 ```
 source virtual env/bin/activate

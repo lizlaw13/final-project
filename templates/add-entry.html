@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Homepage {% endblock %} {% block
+{% extends 'base.html' %} {% block title %} Add Entry {% endblock %} {% block
 content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/confirm-entry.css" />
@@ -9,9 +9,7 @@ content %}
   <div class="card">
     <p class="date">{{ entry.date_created.strftime("%B %d, %Y") }}</p>
 
-    <p class="mood">Mood</p>
-      <p>{{ entry.mood.verbose_mood }}</p>
-
+    <p class="mood">Mood: {{ entry.mood.verbose_mood }}</p> <br>
 
       {% if entry.activities %}
       <p class="activities">Activity/ Activities</p>

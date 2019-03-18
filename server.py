@@ -113,9 +113,8 @@ def login_form():
     # log user in and create a session
     if hash_object.hexdigest() == password:
 
-        # created a session to store the user id
+       # created a session to store the user id
         session["user_id"] = user.user_id
-
         return redirect(f"/user/{user.user_id}")
 
     else:
@@ -288,7 +287,9 @@ def show_all_brain_dumps(user_id):
 
     # grabs all the brain dumps from the user and order them by date created
     brain_dumps = (
-        User_Brain_Dump.query.filter_by(user_id=user_id).order_by(desc("date_created")).all()
+        User_Brain_Dump.query.filter_by(user_id=user_id)
+        .order_by(desc("date_created"))
+        .all()
     )
 
     page, per_page, offset = get_page_args(
@@ -698,7 +699,7 @@ def update_entry(entry_id):
     """Confirmation that a user has added an activity or updated their mood on their entry"""
 
     entry = Entry.query.get(entry_id)
-    user_id = session["user_id"]
+    user_id = session.get("user_id")
     print(entry)
     # if user_id != entry.user.user_id:
     #     return redirect("/")

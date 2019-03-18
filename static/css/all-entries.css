@@ -20,11 +20,12 @@
 .card {
   width: 40%;
   padding: 20px 30px;
-  margin: 5px 0;
+  margin: 5px 20px;
 }
 
 .page-links-container {
   display: flex;
+  margin: 20px;
 }
 
 .round-button {
