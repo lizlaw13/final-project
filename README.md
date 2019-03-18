@@ -1,6 +1,6 @@
 # Over The Mood
 
-Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activities. By tracking your mood and activity history, you can then determine which activities illicit positive moods and which trigger negative moods.
+Over The Mood is a full stack web application that aims to improve mental health by allowing users to keep a log of their moods and associated activities. By tracking your mood and activity history, you can then determine which activities elicit positive moods and which trigger negative moods.
 
 ## Navigation
 
