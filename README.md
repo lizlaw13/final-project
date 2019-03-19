@@ -104,6 +104,12 @@ Open your browser and navigate to:
 http://localhost:5000/
 ```
 
+## Future Features
+
+- Create a visualization for association between activities and moods
+- Implement D3 visualizations
+- Build own sentiment analysis tool
+
 ## Acknowledgments
 
 Add Entry Icon made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> and is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
